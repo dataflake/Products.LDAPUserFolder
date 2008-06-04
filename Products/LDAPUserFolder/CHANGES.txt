@@ -6,7 +6,7 @@ This file contains change information for the LDAPUserFolder product.
 To see changes made to revisions prior to the latest version see
 HISTORY.txt.
 
-2.9 (unreleased)
+2.9 (2008-06-04)
 ----------------
 
 - Bug: LDAPUserFolder.getUserByAttr: The negative login cache used for 
