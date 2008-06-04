@@ -38,7 +38,11 @@ setup(name='Products.LDAPUserFolder',
       include_package_data=True,
       namespace_packages=['Products'],
       zip_safe=False,
-      #install_requires=['Zope >= 2.8']
+      install_requires=[
+        #"Zope >= 2.8",
+        "setuptools",
+        "python-ldap >= 2.0.6",
+        ],
       entry_points="""
       [zope2.initialize]
       Products.LDAPUserFolder = Products.LDAPUserFolder:initialize
