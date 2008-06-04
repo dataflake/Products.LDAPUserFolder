@@ -1,0 +1,36 @@
+LDAPUserFolder - Caches: View Available Groups and Cached Users
+
+    Description
+
+        This view shows the cache of currently authenticated users and the 
+        groups exposed by your LDAP server for authentication purposes.
+
+        Users that can be cached are created either through "real" logins
+        where a physical user provided a login and password (these end up
+        in the "authenticated" cache) or via internal lookups that are
+        done without passwords (those are cached in the "anonymous" cache).
+        Keeping separate caches for these different kinds of users avoids
+        intermingling and possible privilege escalation because no 
+        "anonymous" cached user object will ever be used to perform actions
+        that require real authentication and elevated privileges.
+
+    Elements
+
+        'Purge All caches' -- This will purge all caches inside the 
+          LDAPUserFolder.  This includes the cache of currently authenticated 
+          users, the log and any cached username lists. 
+
+        'Cache Timeouts' -- This form allows tweaking the cache timeout
+          values for the authenticated and anonymous caches.
+
+        'Cached users' -- These are the users in the cache of currently
+          cached users. Anonymous users or Emergency User accounts will
+          not show up in this table.
+
+        Every time an authenticated user makes a request to Zope, 
+        the username and password are verified. Depending on site traffic 
+        and number of users that log in through the LDAPUserFolder this
+        process can happen several times a second. Since a lookup on the 
+        LDAP Server can be quite slow, the product will cache the user 
+        information for 10 minutes. This is the duration of a typical session.
+

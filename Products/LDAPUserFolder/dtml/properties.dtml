@@ -1,0 +1,419 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='Configure')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<p class="form-help">
+  Change the basic properties of your LDAPUserFolder 
+  on this form.
+</p>
+
+<form action="manage_edit" method="POST">
+
+  <table cellspacing="0" cellpadding="3">
+  
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Title
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <input type="TEXT" name="title" size="40" value="&dtml-title;" />
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Login Name Attribute
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <select name="login_attr">
+          <dtml-let la="getProperty('_login_attr')">
+            <dtml-in expr="getLDAPSchema()">
+              <dtml-let sk="_['sequence-key']"
+                        si="_['sequence-item']"
+                        la="getProperty( '_login_attr' )"
+                        sel="la == sk and 'selected' or ''">
+                <option value="&dtml-sk;" &dtml-sel;>
+                  &dtml-si; (&dtml-sk;)
+                </option>
+              </dtml-let>
+            </dtml-in>
+            <option value="dn" <dtml-if "la=='dn'">selected</dtml-if>> 
+              Distinguished Name (dn) 
+            </option>
+          </dtml-let>
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        User ID Attribute
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <select name="uid_attr">
+          <dtml-let la="getProperty('_uid_attr')">
+            <dtml-in expr="getLDAPSchema()">
+              <dtml-let sk="_['sequence-key']"
+                        si="_['sequence-item']"
+                        sel="la == sk and 'selected' or ''">
+                <option value="&dtml-sk;" &dtml-sel;>
+                  &dtml-si; (&dtml-sk;)
+                </option>
+              </dtml-let>
+            </dtml-in>
+            <option value="dn" <dtml-if "la=='dn'">selected</dtml-if>> 
+              Distinguished Name (dn) 
+            </option>
+          </dtml-let>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        RDN Attribute
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <select name="rdn_attr">
+          <dtml-in expr="getLDAPSchema()">
+            <dtml-let sk="_['sequence-key']"
+                      si="_['sequence-item']"
+                      la="getProperty( '_rdnattr' )"
+                      sel="la == sk and 'selected' or ''">
+              <option value="&dtml-sk;" &dtml-sel;>
+                &dtml-si; (&dtml-sk;)
+              </option>
+            </dtml-let>
+          </dtml-in>
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Users Base DN
+      </td>
+      <td align="left" valign="top">
+        <input type="TEXT" name="users_base" size="40"
+               value="<dtml-var name="users_base">">
+      </td>
+      <td align="left" valign="top" class="form-label">
+        Scope
+      </td>
+      <td align="left" valign="top">
+        <select name="users_scope:int">
+          <option value="0" <dtml-if "users_scope==0">selected</dtml-if>>
+            BASE
+          </option>
+  	    <option value="1" <dtml-if "users_scope==1">selected</dtml-if>>
+            ONELEVEL
+          </option>
+  	    <option value="2"<dtml-if "users_scope==2">selected</dtml-if>>
+            SUBTREE
+          </options>
+        </select></td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Group storage
+      </td>
+      <td align="left" valign="top">
+        <select name="local_groups:int">
+          <dtml-let lg="getProperty( '_local_groups' )">
+            <option value="0" <dtml-if "not lg">selected</dtml-if>>
+              Groups stored on LDAP server
+            </option>
+            <option value="1" <dtml-if lg>selected</dtml-if>>
+              Groups not stored on LDAP server
+            </option>
+          </select>
+        </dtml-let>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Group mapping (Applies to LDAP group storage only)
+      </td>
+      <td align="left" valign="top">
+        <select name="implicit_mapping:int">
+          <dtml-let im="getProperty( '_implicit_mapping' )">
+            <option value="0" <dtml-if "not im">selected</dtml-if>>
+              Manually map LDAP groups to Zope roles
+            </option>
+            <option value="1" <dtml-if im>selected</dtml-if>>
+              Automatically map LDAP groups to Zope roles
+            </option>
+          </select>
+        </dtml-let>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Groups Base DN
+      </td>
+      <td align="left" valign="top">
+        <input type="TEXT" name="groups_base" size="40" 
+               value="<dtml-var name="groups_base">">
+      </td>
+      <td align="left" valign="top" class="form-label">
+        Scope
+      </td>
+      <td align="left" valign="top">
+        <select name="groups_scope:int">
+          <option value="0" <dtml-if "groups_scope==0">selected</dtml-if>>
+            BASE
+          </option>
+          <option value="1" <dtml-if "groups_scope==1">selected</dtml-if>>
+            ONELEVEL
+          </option>
+          <option value="2" <dtml-if "groups_scope==2">selected</dtml-if>>
+            SUBTREE
+          </option>
+        </select></td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Manager DN
+      </td>
+      <td align="left" valign="top">
+        <input type="TEXT" name="binduid:string" size="40" 
+               value="<dtml-var expr="getProperty('_binduid')">" />
+      </td>
+      <td align="left" valign="top" class="form-optional">
+        Password
+      </td>
+      <td align="left" valign="top">
+        <input type="password" name="bindpwd:string" size="13" 
+               value="<dtml-var expr="getProperty('_bindpwd')">">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Manager DN Usage
+      </td>
+      <td align="left" valign="top">
+        <dtml-let usg="getProperty('_binduid_usage')">
+          <select name="binduid_usage:int">
+            <option value="0" <dtml-if "usg == 0">selected</dtml-if>> 
+              Never 
+            </option>
+            <option value="1" <dtml-if "usg == 1">selected</dtml-if>> 
+              Always 
+            </option>
+            <option value="2" <dtml-if "usg == 2">selected</dtml-if>> 
+              For login data lookup only 
+            </option>
+          </select>
+        </dtml-let>
+      </td>
+      <td align="left" valign="top" class="form-label">
+        Read-only
+      </td>
+      <td align="left" valign="top">
+        <dtml-let sel="getProperty('read_only') and 'checked' or ''">
+         <input type="checkbox" name="read_only" &dtml-sel;>
+        </dtml-let>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        User object classes
+      </td>
+      <td align="left" valign="top">
+        <dtml-let oc="getProperty( '_user_objclasses' )">
+          <input type="text" name="obj_classes" size="40"
+                 value="<dtml-var expr="_.string.join( oc, ',' )">" />
+        </dtml-let>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        User password encryption
+      </td>
+      <td align="left" valign="top">
+        <select name="encryption">
+          <dtml-let enc="getProperty( '_pwd_encryption' )">
+            <dtml-in getEncryptions>
+              <option <dtml-var expr="enc == _['sequence-item'] and 'selected' or ''">>
+                &dtml-sequence-item;
+              </option>
+            </dtml-in>
+          </dtml-let>
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Default User Roles
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <dtml-let rls="getProperty( '_roles' )">
+          <input type="TEXT" name="roles" size="40" 
+                 value="<dtml-var expr="_.string.join( rls, ',' )">" />
+        </dtml-let>
+      </td>
+    </tr>
+   
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="3">
+        <br>
+        <input type="SUBMIT" value=" Apply Changes ">
+      </td>
+    </tr>
+  
+  </table>
+</form>
+
+<p>&nbsp;</p>
+
+<form action="manage_deleteServers" method="post">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+
+    <tr class="list-header">
+      <td colspan="6">
+        <span class="form-label"> LDAP Servers </span>
+        &nbsp;&nbsp;
+        <span class="form-help">
+          (Currently connected to: &dtml-getCurrentServer;)
+        </span>
+      </td>
+    </tr>
+
+    <dtml-in getServers mapping>
+
+      <tr>
+        <td width="16">
+          <input type="checkbox" name="position_list:list"
+                 value="&dtml-sequence-index;">
+        </td>
+        <td class="form-text"> &dtml-host; </td>
+        <td class="form-text"> &dtml-port; </td>
+        <td class="form-text">
+          <dtml-var "(protocol == 'ldaps' and 'LDAP over SSL') or 
+                     (protocol == 'ldapi' and 'LDAP over IPC') or 'LDAP'">
+        </td>
+        <td class="form-text">
+          Connection Timeout: <dtml-var conn_timeout missing="-1"> seconds
+        </td>
+        <td class="form-text">
+          Operation Timeout: <dtml-var op_timeout missing="-1"> seconds
+        </td>
+      </tr>
+
+      <dtml-if sequence-end>
+        <tr>
+          <td width="16">&nbsp;</td>
+          <td colspan="5"> <input type="submit" value=" Delete "> </td>
+        </tr>
+      </dtml-if>
+
+    <dtml-else>
+      <tr>
+        <td colspan="6" class="form-text">
+          No servers defined 
+        </td>
+      </tr>
+    </dtml-in>
+
+  </table>
+
+</form>
+
+<p>&nbsp;</p>
+
+<form action="manage_addServer" method="post">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+
+    <tr class="list-header">
+      <td colspan="2" class="form-label"> Add LDAP Server </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Server host, IP or socket path
+      </td>
+      <td class="form-element">
+        <input type="text" size="40" name="host" value="my.ldap.server">
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Server port
+      </td>
+      <td class="form-element">
+        <input type="text" size="6" name="port" value="389">
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Protocol
+      </td>
+      <td class="form-element">
+        <select name="use_ssl:int">
+          <option value="0" selected> LDAP </option>
+          <option value="1"> LDAP over SSL </option>
+          <option value="2"> LDAP over IPC </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Connection Timeout
+      </td>
+      <td class="form-element">
+        <select name="conn_timeout:int">
+          <option value="2"> 2 seconds </option>
+          <option value="5" selected> 5 seconds </option>
+          <option value="10"> 10 seconds </option>
+          <option value="30"> 30 seconds </option>
+          <option value="60"> 60 seconds </option>
+          <option value="-1"> No timeout </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Operation Timeout
+      </td>
+      <td class="form-element">
+        <select name="op_timeout:int">
+          <option value="5"> 5 seconds </option>
+          <option value="10"> 10 seconds </option>
+          <option value="30"> 30 seconds </option>
+          <option value="60"> 60 seconds </option>
+          <option value="120"> 120 seconds </option>
+          <option value="300"> 300 seconds </option>
+          <option value="-1" selected> No timeout </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <input type="submit" name=" Add " value=" Add Server ">
+      </td>
+    </tr>
+
+  </table>
+
+</form>
+
+<dtml-var manage_page_footer>
+

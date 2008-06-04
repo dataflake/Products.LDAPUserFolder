@@ -1,0 +1,139 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='LDAP Schema')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<p class="form-help">
+  This form is used to input the attributes for user records 
+  as defined by your LDAP schema. 
+  The attributes you define here drive all the select boxes
+  that deal with user attributes in the management interface, like the attribute
+  to search by on the "Search" tab, the attributes you can choose as the 
+  Login Name on the "Properties" tab or the attributes you can map to special
+  user object attributes on the "Advanced" tab.
+</p>
+
+<p class="form-help">
+  Adding or removing attributes on this page does not affect 
+  your LDAP schema in any way, it will only affect what the LDAPUserFolder 
+  knows about your schema. 
+</p>
+
+<form method="post" action="&dtml-URL1;">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+    <dtml-in expr="getSchemaDict()" mapping>
+      <dtml-if name="sequence-start">
+        <tr class="list-header">
+          <td align="left" valign="top" width="16">&nbsp;</td>
+          <td class="form-label"> LDAP Attribute Name </td>
+          <td class="form-label"> Friendly Name </td>
+          <td class="form-label"> Mapped to Name </td>
+          <td class="form-label"> Multi-valued </td>
+          <td class="form-label"> Binary </td>
+        </tr>
+      </dtml-if>
+  
+      <dtml-if sequence-odd>
+        <tr class="row-normal">
+      <dtml-else>
+        <tr class="row-hilite">
+      </dtml-if>
+        <td align="left" valign="top" width="16">
+          <input type="checkbox" name="ldap_names:list" value="&dtml-ldap_name;" />
+        </td>
+        <td class="list-item"> &dtml-ldap_name; </td>
+        <td class="list-item"> &dtml-friendly_name; </td>
+        <td class="list-item"> &dtml-public_name; </td>
+        <td class="list-item">
+          <dtml-let mv="_['sequence-item'].get('multivalued', '')">
+            <dtml-var "mv and 'Yes' or 'No'">
+          </dtml-let>
+        </td>
+        <td class="list-item">
+          <dtml-let bin="_['sequence-item'].get('binary', '')">
+            <dtml-var "bin and 'Yes' or 'No'">
+          </dtml-let>
+        </td>
+      <dtml-if name="sequence-end">
+        <tr>
+          <td align="left" valign="top" colspan="6" class="form-element">
+            <br/>
+            <input class="form-element" type="submit" value=" Delete "
+                   name="manage_deleteLDAPSchemaItems:method" />
+            <br/>
+          </td>
+        </tr>
+      </dtml-if>
+    </dtml-in>
+  </table>
+
+</form>
+
+<p><br></p>
+
+<form action="manage_addLDAPSchemaItem" method="post">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+  
+    <tr class="list-header">
+      <td colspan="2" class="form-label"> Add LDAP schema item </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        LDAP Attribute Name
+      </td>
+      <td align="left" valign="top">
+        <input type="text" name="ldap_name" size="50" />
+      </td>
+    </tr>
+    
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Friendly Name
+      </td>
+      <td align="left" valign="top">
+         <input type="text" name="friendly_name" size="50" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Multi-valued
+      </td>
+      <td align="left" valign="top">
+        <input type="checkbox" name="multivalued" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Binary
+      </td>
+      <td align="left" valign="top">
+        <input type="checkbox" name="binary" />
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Map to Name (optional)
+      </td>
+      <td align="left" valign="top">
+        <input type="text" name="public_name" size="50" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" colspan="2" class="form-element">
+        <br />
+        <input class="form-element" type="submit" value=" Add " />
+      </td>
+    </tr>
+  
+  </table>
+</form>
+
+<dtml-var manage_page_footer>

@@ -1,0 +1,90 @@
+=======
+CHANGES
+=======
+
+This file contains change information for the LDAPUserFolder product.
+To see changes made to revisions prior to the latest version see
+HISTORY.txt.
+
+2.9 (unreleased)
+----------------
+
+- Bug: LDAPUserFolder.getUserByAttr: The negative login cache used for 
+  preventing repeated LDAP requests when a user enters wrong
+  creadentials was keyed on user login alone. This would prevent 
+  subsequent logins with the correct password. Thanks to Tarek 
+  Ziade for test and patch and Gilles Lenfant for filing the issue.
+  (http://www.dataflake.org/tracker/issue_00605)
+
+- Refactoring: test suite: Rearrange imports to prevent error messages when 
+  the CMF is not present.
+
+- Bug: LDAPDelegate.search: Improve searches on binary attributes such as
+  objectGUID by introducing a method argument that prevents 
+  UTF*-conversion of the filter expression passed in.
+  (http://www.dataflake.org/tracker/issue_00576 by Wichert Akkerman)
+
+- Feature: Improve binary attribute handlng by introducing a binary flag 
+  for LDAP schema items that is consulted when inserting/modifying an
+  attribute flagged that way. Introduce a hardcoded list of 
+  binary attributes to no convert from UTF-8 when searching.
+  (http://www.dataflake.org/tracker/issue_00598 Dragos Chirila)
+
+- Bug: LDAPUserFolder.getUserByAttr: made login attribute and uid attribute
+  retrieval safer by explicitly providing a default.
+  (http://www.dataflake.org/tracker/issue_00602 by Martin Gfeller)
+
+- Bug: ZMI Groups tab: Asking for the type of group via a separate
+  LDAP search for every group listed is unfeasible for installations
+  with large numbers of groups, it is now only done if the total
+  number of groups is less than 50.
+
+
+2.9-beta (2008-01-01)
+---------------------
+
+NOTE: In order to use the LDAP-based CMF membership components
+      you need CMF version 2.1.0 or higher.
+
+- Bug: Added a __setstate__ hook for deleting old-style logger
+  instances which were removed for version 2.7 but are now showing
+  up as "broken" objects and may prevent Plone migration scripts
+  from working correctly, pointed out by Martijn Pieters.
+  (http://www.dataflake.org/tracker/issue_00574)
+
+- Bug: Removed failing unit test for old-style Zope 2 interfaces that
+  no longer exist in the CMF
+
+- Bug: CMFLDAP skins: Cleanups and changes to align the custom skin
+  scripts and templates with their CMF 2.1.0 counterparts
+
+- Bug: LDAPMemberDataTool: The "Member Properties" ZMI tab was broken
+  due to a typo in the ZPT code.
+
+- Bug: LDAPMemberDataTool: Adjusted wrapUser to match the changed 
+  behavior in CMF 2.1.0 and up.
+
+- Bug: LDAPMembershipTool/LDAPMemberDataTool: Since the core CMF tools 
+  no longer support the IActionProvider interface the tests to
+  prove the LDAP-based versions support these interfaces have been
+  removed.
+
+- Bug: The functional test rig setup has been changed to avoid 
+  DeprecationWarning-Messages from GenericSetup 1.3 and up.
+
+- Bug: LDAPUserFolder.searchGroups: Make the code more defensive for 
+  situations where a search would return groups without members,
+  suggested by Nick Davis.
+  (http://www.dataflake.org/tracker/issue_00584)
+
+- Feature: Added negative caching for users to avoid querying the LDAP 
+  server again and again for invalid logins. Patch provided by Wichert
+  Akkerman.
+  (http://www.dataflake.org/tracker/issue_00572)
+
+- Feature: added a group/membership mapping for group type "univentionGroup"
+  (http://www.dataflake.org/tracker/issue_00569)
+
+- Documentation: Noted the danger of trying to install the CMFLDAP 
+  extensions into a Plone site: Just don't do it, you will suffer!
+

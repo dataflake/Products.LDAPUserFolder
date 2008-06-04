@@ -1,0 +1,143 @@
+LDAPUserFolder - Configure: Set the basic configuration for the LDAPUserFolder
+
+    Description
+
+       This view is used to change the basic settings of a LDAPUserFolder.
+
+    Controls
+
+     'Title' -- The (optional) title for this adapter
+
+     'Login Name Attribute' -- The LDAP record attribute used as the username.
+       The list of default choices can be changed by adding attributes on the
+       LDAP Schema tab.
+
+     'User ID Attribute' -- The LDAP record attribute used as the user ID.
+       The list of default choices can be changed by adding attributes on the
+       LDAP Schema tab. IMPORTANT: You should only set this attribute to a 
+       LDAP record attribute that contains a single value and that does not
+       get changed, otherwise you will run into problems with the Zope
+       object ownership mechanism.
+
+     'RDN Attribute' -- The RDN attribute (Relative Distinguished Name) is the
+       name of the LDAP attribute used as the first component of the full DN
+       (Distinguished Name). In most cases the default value of *cn* is 
+       correct, you can select *uid* if your schema defines it. Please see 
+       RFC 2377 for more information.
+
+     'Users Base DN' -- The DN for the branch of your LDAP database that 
+       contains user records.
+
+     'Scope' -- Choose the depth for all searches from the user search base dn
+
+     'Group storage' -- Choose where to store the group (a.k.a. Role) 
+       information for users. You can either store roles inside LDAP itself 
+       or you can store it inside the LDAP User Folder, which is simpler and 
+       does not require that LDAP deals with user roles at all.
+
+     'Group mapping' -- If your group information is stored in LDAP and you
+       do not want to set up individual LDAP group to Zope role mappings, then
+       you can simply map all LDAP groups to Zope roles. Each group a user
+       is member of will show up as a role with the same name on the user
+       object.
+
+     'Groups Base DN' -- The DN for the branch of your LDAP database that 
+       contains group records. These group records are of the LDAP class 
+       "groupOfUniqueNames" and the entry CN attribute constitutes the group 
+       name.  Groups embody Zope roles. A user which is part of a "Manager" 
+       group will have the "Manager" role after authenticating through the 
+       LDAPUserFolder.  If you have chosen to store groups inside the user 
+       folder itself this setting will be disregarded.
+
+     'Scope' -- Choose the depth for all searches from the group search base 
+       dn. If you have chosen to store groups inside the user folder itself 
+       this setting will be disregarded.
+
+     'Manager DN and password' -- All LDAP operations require some form of
+       authentication with the LDAP server. Under normal operation if no
+       separate Manager DN is provided, the LDAPUserFolder will use the current
+       user's DN and password to try and authenticate to the LDAP server. If a
+       Manager DN and password are given, those will be used instead.
+
+     'Manager DN usage' -- Specify how the Manager DN (if it has been provided) 
+       will be used. 
+       
+       - *Never* will never apply this DN. If no Manager DN is specified this 
+         is the default value. Bind operations use the current user's DN and 
+         password if the user is known and an anonymous bind if not. Under
+         normal operation only initial logins are performed without a known
+         current user.
+
+       - *Always* means the Manager DN is used to bind for every single
+         operation on the LDAP server.
+
+       - *For login data lookup only* uses the Manager DN upon user login when
+         the user itself has not been instantiated yet and thus the user's DN
+         is not yet known. Once the user has been instantiated its DN and 
+         password are used for binding.
+
+     'Read-only' -- Check this box if you want to prevent the LDAPUserFolder
+       from writing to the LDAP directory. This will disable record insertion
+       or modification.
+
+     'User object classes' -- Comma-separated list of object classes for user
+       records. Any new user record created through the LDAPUserFolder will 
+       carry this list of object classes as its objectClass attribute.
+
+     'User password encryption' -- This dropdown specifies the encryption scheme 
+       used to encrypt a user record userPassword attribute. This scheme is 
+       applied to the plaintext password when a user edits the password or when 
+       a new user is created. Check your LDAP server to see which encryption 
+       schemes it supports, pretty much every server can at least do "crypt" 
+       and "SHA".
+
+     'Default User Roles' -- All users authenticated from your ldap tree
+       will be given the roles you put into this comma-delimited list.
+       Zope expects all users - anonymous as well as authenticated - to
+       have the role Anonymous.
+
+     'Apply Changes' -- Save your configuration changes.
+
+     'LDAP Servers' -- The LDAP servers this LDAPUserFolder is connecting to.
+
+     'Delete' -- Delete a LDAP server definition from the list of LDAP servers
+       used by the LDAPUserFolder.
+
+     'Add LDAP server' -- Add new LDAP servers to connect to.
+
+     'Server host, IP or socket path' -- The hostname, IP address or file
+       socket path for the LDAP server. Please see the README for notes on
+       LDAP over IPC.
+
+     'Server port' -- The port the LDAP server is listening on. By default, 
+       LDAP servers listen on port 389. LDAP over SSL uses port 636 by default.
+       If LDAP over IPC has been selected the port will be ignored.
+
+     'Protocol' -- Select whether to use standard LDAP, LDAP over SSL or
+       LDAP over IPC. Please note that LDAP over SSL is *not* StartTLS, which 
+       uses the same port as unencrypted traffic. Please see the README for 
+       notes on LDAP over IPC.
+
+     'Connection Timeout' -- How long the LDAPUserFolder will wait when 
+       establishing a connection to a LDAP server before giving up. The 
+       Connection Timeout prevents the LDAP connection from hanging indefinitely 
+       if the network connection cannot be established and connection 
+       attempts do not raise an immediate connection error. Important note: 
+       It is possible that during a request several attempts at connecting 
+       to the LDAP server are made. The time it takes for the LDAPUserFolder 
+       to return control to Zope will be the sum of the connection attempts
+       multiplied by the chosen Timeout value.
+
+    'Operation Timeout' -- If a connection has been established before but
+       there is a chance, e.g. due to a misconfigured firewall, that the
+       connection is severed without the LDAPUserFolder noticing, the
+       Operation Timeout value can guard against a hanging site by watching
+       how long it takes for a LDAP request to return. Please use this setting
+       with caution and make sure you know how long your LDAP server might 
+       take to respond under high load. With this setting a long response
+       time due to normal reasons, such as load on the LDAP server, can be
+       misinterpreted as a hanging connection and the LDAPUserFolder can be
+       caught in a vicious circle trying to re-connect again and again.
+
+    'Add Server' -- Add the new server to the list of servers used by the
+       LDAPUserFolder.

@@ -1,0 +1,46 @@
+LDAPUserFolder - LDAP Schema: Improve the LDAPUserFolder's knowledge about your LDAP Schema
+
+    Description
+
+        Use this view to describe the schema in use for your LDAP user records.
+        Adding or removing entries will not change your LDAP server schema or
+        your records, it will only improve the LDAPUserFolder's knowledge 
+        about the schema you use for user records.
+
+        The list of attributes you define is used to populate select boxes in
+        other management views, such as the select box for the LDAP attribute
+        to search on in the "Search" tab or the list of available attributes
+        that can be selected for the user name in the "Configure" tab.
+
+    Controls
+
+     'Delete' -- In order to remove items from the list of LDAP attributes 
+       known to the LDAPUserFolder you can select one or more checkboxes
+       and hit "Delete" to remove them from the list.
+
+     'LDAP Attribute Name' -- Enter the name of an LDAP attribute as defined
+       in your LDAP schema
+
+     'Friendly Name' -- LDAP attributes oftentimes have very cryptic names.
+       Use this field to give the LDAP attribute you entered in "LDAP Attribute
+       Name" a descriptive name.
+
+     'Map to Name' -- This optional attribute lets you name a LDAP attribute
+       to an attribute name of your choosing on the user object. This is
+       useful if you have code that expects certain attributes on the user
+       object, like the Tracker product which expects "email". In this case
+       you would need an LDAP schema item that carries email addresses and 
+       map it to "email".
+
+     'Multi-valued' -- In the underlying libraries, all user record attributes
+       that are returned as part of the LDAP record are sequences of values.
+       By default, in order to stay compatible with "normal" user folders, 
+       Zope user objects do not have sequences as standard user attributes,
+       so when a LDAPUser object is created only the first value in the 
+       sequence of values for a given attribute is used to populate the 
+       equivalent attribute on the user object. By declaring a schema item
+       to be multi-valued the value sequence is stored on the user object
+       as delivered by the LDAP server.
+
+     'Add' -- Add the attribute and its descriptive name to the list of LDAP
+       attributes known by the LDAPUserFolder.

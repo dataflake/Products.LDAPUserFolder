@@ -1,0 +1,527 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='Users')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<script type="text/javascript">
+<!-- 
+
+isSelected = false;
+
+function toggleSelect() {
+  if (isSelected == false) {
+    for (i = 0; i < document.objectItems.length; i++)
+      document.objectItems.elements[i].checked = true ;
+      isSelected = true;
+      document.objectItems.selectButton.value = "Deselect All";
+      return isSelected;
+  }
+  else {
+    for (i = 0; i < document.objectItems.length; i++)
+      document.objectItems.elements[i].checked = false ;
+      isSelected = false;
+      document.objectItems.selectButton.value = "Select All";
+      return isSelected;       
+  }
+}
+
+//-->
+</script>
+
+<dtml-if name="find_button_pressed">
+
+  <br />
+  <dtml-in expr="findUser( search_param=search_param
+                         , search_term=search_term
+                         , exact_match=exact_match
+                         )" 
+           mapping sort="sn">
+    <dtml-if name="sequence-start">
+      <dtml-if expr="_['sequence-length'] > 15">
+        <table border="0" cellpadding="2" cellspacing="0" width="98%">
+          <tr class="section-bar">
+            <td class="form-label">
+              Search Again
+            </td>
+          </tr>
+        </table>
+        <form action="<dtml-var name="URL1">/manage_userrecords" method="post" >
+        <table cellpadding="2" cellspacing="0">
+          <tr>
+            <td>
+              <select name="search_param">
+                <dtml-in expr="getLDAPSchema()">
+                  <dtml-let sk="_['sequence-key']"
+                            si="_['sequence-item']">
+                    <option value="&dtml-sk;">
+                      &dtml-si; (&dtml-sk;)
+                    </option>
+                  </dtml-let>
+                </dtml-in>
+              </select>
+            </td>
+            <td>
+              <input type="text" name="search_term" size="30">
+            </td>
+            <td>
+              <select name="exact_match">
+                <option value=""> Wildcard match </option>
+                <option value="1"> Exact match </option>
+              </select>
+            </td>
+            <td>
+              <input type="submit" name="find_button_pressed" 
+                     value=" Search! ">
+            </td>
+          </tr>
+        </table>
+        </form>
+      </dtml-if>
+
+      <form action="&dtml-URL1;" method="post" name="objectItems">
+      <table cellpadding="2" cellspacing="0" border="0" width="98%">
+        <tr class="list-header">
+          <td align="left" valign="top" width="16">&nbsp;</td>
+          <td class="form-label"> SN </td>
+          <td class="form-label"> CN </td>
+          <td class="form-label"> Distinguished Name </td>
+        </tr>
+    </dtml-if>
+
+    <dtml-if sequence-odd>
+      <tr class="row-normal">
+    <dtml-else>
+      <tr class="row-hilite">
+    </dtml-if>
+      <td align="left" valign="top" width="16">
+        <input type="checkbox" name="dns:list" value="&dtml-dn;" />
+      </td>
+      <td class="list-item"> &dtml-sn; </td>
+      <td class="list-item"> &dtml-cn; </td>
+      <td class="list-item">
+        <a href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-dn;">
+          &dtml-dn;
+        </a>
+      </td>
+    </tr>
+
+    <dtml-if name="sequence-end">
+        <tr>
+          <td align="left" valign="top" width="16">&nbsp;</td>
+          <td align="left" valign="top" colspan="3" class="form-element">
+            <input class="form-element" type="submit" 
+                   name="manage_deleteUsers:method"
+                   value="Delete" />
+            <script type="text/javascript">
+            <!-- 
+              if (document.forms[0]) {
+              document.write('<input class="form-element" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
+              }
+            //-->
+            </script>
+          </td>
+        </tr>
+      </table>
+      </form>
+    </dtml-if>
+
+  <dtml-else>
+    <p><b>No record match!</b></p>
+
+    <p class="form-help">
+      Have you set the user object classes correctly on the Configure tab?
+    </p>
+  </dtml-in>
+
+  <p><br></p>
+
+  <table border="0" cellpadding="2" cellspacing="0" width="98%">
+    <tr class="section-bar">
+      <td class="form-label">
+        Search Again
+      </td>
+    </tr>
+  </table>
+  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+  <table cellpadding="2" cellspacing="0">
+    <tr>
+      <td>
+        <select name="search_param">
+          <dtml-in expr="getLDAPSchema()">
+            <dtml-let sk="_['sequence-key']"
+                      si="_['sequence-item']">
+              <option value="&dtml-sk;">
+                &dtml-si; (&dtml-sk;)
+              </option>
+            </dtml-let>
+          </dtml-in>
+        </select>
+      </td>
+      <td>
+        <input type="text" name="search_term" size="30">
+      </td>
+      <td>
+        <select name="exact_match">
+          <option value=""> Wildcard match </option>
+          <option value="1"> Exact match </option>
+        </select>
+      </td>
+      <td>
+        <input type="submit" name="find_button_pressed" 
+               value=" Search! ">
+      </td>
+    </tr>
+  </table>
+  </form>
+
+<dtml-elif name="user_dn">
+
+  <p class="form-help">
+    Edit the details for user &dtml-user_dn;:<br />
+    <i>
+      To enter multiple values for attributes designated as multivalue in the 
+      LDAP Schema configuration separate the values with a semicolon (;).
+    </i>
+  </p>
+
+  <dtml-let cur_vals="getUserDetails(encoded_dn=user_dn, format='dictionary')">
+  <dtml-in expr="getLDAPSchema()">
+    <dtml-if name="sequence-start">
+      <form action="manage_editUser" method="post">
+      <input type="hidden" name="user_dn" value="&dtml-user_dn;">
+      <table border="0" cellpadding="3" width="98%">
+        <tr class="list-header">
+          <td class="form-label"> Attribute </td>
+          <td class="form-label"> Value </td>
+        </tr>
+        <tr>
+          <td class="form-text"> Distinguished Name (DN) </td>
+          <td class="form-text"> 
+            <dtml-var "cur_vals.get('dn', '(n/a)')"> 
+          </td>
+        </tr>
+        <tr>
+          <td class="form-text"> Object Class (objectClass) </td>
+          <td class="form-text">
+            <dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))">
+          </td>
+        </tr>
+    </dtml-if>
+
+    <dtml-let sk="_['sequence-key']"
+              si="_['sequence-item']"
+              cur_val="cur_vals.get( sk, '' )"
+              binaries="getBinaryUserAttrs()">
+      <dtml-if expr="sk not in ('userPassword', 'dn')">
+        <tr>
+          <td class="form-text"> &dtml-si; (&dtml-sk;) </td>
+          <td>
+            <dtml-if expr="sk in binaries">
+              <span class="form-text"> n/a (binary value) </span>
+            <dtml-else>
+              <input type="text" size="50" name="&dtml-sk;" 
+                 value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
+            </dtml-if>
+          </td>
+        </tr>
+      </dtml-if>
+      <dtml-if expr="sk == 'dn'">
+        <tr>
+          <td class="form-text"> &dtml-si; (&dtml-sk;) </td>
+          <td class="form-text"> &dtml-cur_val; </td>
+        </tr>
+      </dtml-if>
+    </dtml-let>
+
+    <dtml-if name="sequence-end">
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr>
+          <td colspan="2" class="form-element">
+            <input type="submit" value=" Apply Changes ">
+          </td>
+        </tr>
+      </table>
+      </form>
+    </dtml-if>
+  </dtml-in>
+  </dtml-let>
+
+  <p>&nbsp;</p>
+
+  <table cellpadding"3" cellspacing="0" width="98%">
+    <tr class="section-bar">
+      <td align="left" valign="top" class="form-label">
+        LDAP Groups for &dtml-user_dn;
+      </td>
+    </tr>
+  </table>
+
+  <form action="manage_editUserRoles" method="post">
+  <input type="hidden" name="user_dn" value="&dtml-user_dn;">
+  <dtml-let cur_roles="getGroups(dn=user_dn, attr='dn')">
+  <dtml-in expr="getGroups()"><div class="form-text">
+    <input type="checkbox" name="role_dns:list" value="&dtml-sequence-item;" 
+      <dtml-if expr="_['sequence-item'] in cur_roles">checked</dtml-if>>
+    &dtml-sequence-key; (&dtml-sequence-item;)</div>
+  </dtml-in>
+  </dtml-let>
+  <br />
+  &nbsp;<input type="submit" value=" Change Groups ">
+  </form>
+
+  <p><br></p>
+
+  <table cellpadding"3" cellspacing="0" width="98%">
+    <tr class="section-bar">
+      <td align="left" valign="top" class="form-label">
+        Change Password
+      </td>
+    </tr>
+  </table>
+
+  <form action="manage_editUserPassword" method="post">
+
+    <input type="hidden" name="dn" value="&dtml-user_dn;">
+    <div class="form-text">
+      New password
+      <input type="password" name="new_pw" />
+    </div>
+
+  <br />
+  &nbsp;<input type="submit" value=" Change Password ">
+  </form>
+
+  <p><br></p>
+
+  <table border="0" cellpadding="2" cellspacing="0" width="98%">
+    <tr class="section-bar">
+      <td class="form-label"> 
+        Search Again 
+      </td>
+    </tr>
+  </table>
+  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+  <table cellpadding="2" cellspacing="0">
+    <tr>
+      <td>
+        <select name="search_param">
+          <dtml-in expr="getLDAPSchema()">
+            <dtml-let sk="_['sequence-key']"
+                      si="_['sequence-item']">
+              <option value="&dtml-sk;">
+                &dtml-si; (&dtml-sk;)
+              </option>
+            </dtml-let>
+          </dtml-in>
+        </select>
+      </td>
+      <td>
+        <input type="text" name="search_term" size="30">
+      </td>
+      <td>
+        <select name="exact_match">
+          <option value=""> Wildcard match </option>
+          <option value="1"> Exact match </option>
+        </select>
+      </td>
+      <td>
+        <input type="submit" name="find_button_pressed" value=" Search! ">
+      </td>
+    </tr>
+  </table>
+  </form>
+
+<dtml-else>
+
+  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+  <table cellpadding="2" cellspacing="0" width="98%">
+    <tr class="list-header">
+      <td colspan="4" align="left" valign="top" class="form-label">
+        Find existing user
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" class="form-help">
+        Use this form to find user records on the LDAP server and
+        view or edit their details.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select name="search_param">
+          <dtml-in expr="getLDAPSchema()">
+            <dtml-let sk="_['sequence-key']"
+                      si="_['sequence-item']">
+              <option value="&dtml-sk;">
+                &dtml-si; (&dtml-sk;)
+              </option>
+            </dtml-let>
+          </dtml-in>
+        </select>
+      </td>
+      <td> <input type="text" name="search_term" size="30"> </td>
+      <td>
+        <select name="exact_match">
+          <option value=""> Wildcard match </option>
+          <option value="1"> Exact match </option>
+        </select>
+      </td>
+      <td>
+        <input type="submit" name="find_button_pressed" value=" Search! ">
+      </td>
+    </tr>
+  </table>
+  </form>
+
+  <dtml-let local_users=getLocalUsers>
+
+    <dtml-if "local_users and getProperty('_local_groups')">
+
+      <p>&nbsp;</p>
+  
+      <form action="&dtml-URL1;" method="post" name="objectItems">
+
+        <table cellspacing="0" cellpadding="3" width="98%">
+
+          <tr class="list-header">
+            <td colspan="3" align="left" valign="top" class="form-label">
+              Users with locally stored roles
+            </td>
+          </tr>
+
+          <dtml-in local_users>
+
+            <dtml-let sk=sequence-key
+                      si=sequence-item>
+
+              <dtml-if sequence-odd>
+                <tr class="row-normal">
+              <dtml-else>
+                <tr class="row-hilite">
+              </dtml-if>
+                <td align="left" valign="top" width="16">
+                  <input type="checkbox" name="dns:list" value="&dtml-sk;" />
+                </td>
+                <td class="list-item">
+                  <a href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-sk;">
+                    &dtml-sk;
+                  </a>
+                </td>
+                <td class="list-item">
+                  <dtml-var expr="_.string.join(si, ', ')">
+                </td>
+              </tr>
+
+            </dtml-let>
+
+          </dtml-in>
+
+          <tr>
+            <td align="left" valign="top" width="16">&nbsp;</td>
+            <td align="left" valign="top" colspan="2" class="form-element">
+              <input class="form-element" type="submit"
+                     name="manage_deleteUsers:method"
+                     value="Delete User" />
+              <script type="text/javascript">
+              <!--
+                if (document.forms[0]) {
+                document.write('<input class="form-element" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
+                }
+              //-->
+              </script>
+            </td>
+          </tr>
+
+        </table>
+  
+      </form>
+  
+    </dtml-if>
+
+  </dtml-let>
+
+  <p><br></p>
+
+<dtml-in expr="getLDAPSchema()">
+  <dtml-if name="sequence-start">
+    <form action="manage_addUser" method="post">
+    <table cellspacing="0" cellpadding="3" width="98%">
+      <tr class="list-header">
+        <td colspan="2" align="left" valign="top" class="form-label">
+          Add new user
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="form-help">
+          The user record will be created on the branch you designated 
+          as the users search base on the configuration screen. 
+          The user attributes on this form depend on the list of 
+          attributes you specified under "LDAP user attributes" on the same 
+          configuration screen.<br /> 
+          <i>
+            To enter multiple values for attributes designated as multivalue in 
+            the LDAP Schema configuration separate the values with a 
+            semicolon (;).
+          </i>
+        </td>
+      </tr>
+  </dtml-if>
+
+  <tr>
+    <td align="left" valign="top" class="form-label">
+      &dtml-sequence-item; (&dtml-sequence-key;)
+    </td>
+    <td align="left" valign="top">
+      <input type="text" name="&dtml-sequence-key;" size="50">
+    </td>
+  </tr>
+
+  <dtml-if name="sequence-end">
+      <tr>
+        <td align="left" valign="top" class="form-label">
+          Password
+        </td>
+        <td align="left" valign="top">
+          <input type="password" name="user_pw" size="50">
+        </td>
+      </tr>
+      
+      <tr>
+        <td align="left" valign="top" class="form-label">
+          Confirm Password
+        </td>
+        <td align="left" valign="top">
+          <input type="password" name="confirm_pw" size="50">
+        </td>
+      </tr>
+      
+      <tr>
+        <td align="left" valign="top" class="form-label">
+          Roles
+        </td>
+        <td align="left" valign="top">
+          <dtml-in expr="getGroups()"><div class="form-text">
+            <input type="checkbox" name="user_roles:list" 
+                value="&dtml-sequence-item;" />
+              &dtml-sequence-key;</div>
+          </dtml-in>
+        </td>
+      </tr>
+      
+      <tr> <td colspan="2">&nbsp;</td> </tr>
+      
+      <tr>
+        <td colspan="2">
+          <input type="SUBMIT" value=" Add User ">
+        </td>
+      </tr>
+      
+    </table>
+    </form>
+  </dtml-if>
+</dtml-in>
+
+</dtml-if>
+
+<dtml-var manage_page_footer>

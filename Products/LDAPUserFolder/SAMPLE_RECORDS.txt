@@ -1,0 +1,44 @@
+#
+# Sample Records: Examples for records that can be used with the 
+#                 LDAPUserFolder product.
+#
+# Assume you have a LDAP server with a root "dc=dataflake,dc=org".
+# Furthermore assume that you decide to store user records on the
+# branch "ou=people,dc=dataflake,dc=org".
+# You decide that group records go into "ou=groups,dc=dataflake,dc=org"
+#
+# The entries below would describe some valid entries for user 
+# Jens Vagelpohl who is part of the "Manager" group, meaning in Zope
+# he has role "Manager".
+#
+
+
+# This is the user record for Jens:
+
+dn: cn=Jens Vagelpohl,ou=people,dc=dataflake,dc=org
+objectClass: top
+objectClass: organizationalPerson
+telephoneNumber: (800) 555-1212
+st: VA
+givenName: Jens  
+title: Software Engineer
+mail: jens@digicool.com
+postalCode: 22401
+l: Fredericksburg
+url: http://www.dataflake.org
+c: United States of America   
+mail: jens@dataflake.org
+street: 607 William Street
+company: Digital Creations, Inc
+cn: Jens Vagelpohl 
+sn: Vagelpohl
+userPassword: {SHA}Ryx8UNCnNJgY7RkAOaBKt3K6JEo=
+
+
+# This is the group record for the "Manager" group:
+
+dn: cn=Manager,ou=groups,dc=dataflake,dc=org
+cn: Manager
+objectClass: top
+objectClass: groupOfUniqueNames
+uniqueMember: cn=Jens Vagelpohl,ou=people,dc=dataflake,dc=org

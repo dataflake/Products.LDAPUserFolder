@@ -1,0 +1,185 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='Caches')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<p class="form-help">
+  This view shows all available groups exposed by the LDAP server 
+  as well as all non-anonymous logged-in users in the cache 
+  at this moment.
+</p>
+
+<form action="manage_reinit" method="post">
+
+  <table cellpadding="2" cellspacing="0" width="98%">
+    <tr class="section-bar">
+      <td colspan="2" align="left" valign="top" class="form-label">
+        Purge all caches
+      </td>
+    </tr><tr>
+      <td align="left" valign="top" class="form-text">
+        Empty all caches and force reloading of user records 
+        from LDAP.
+      </td>
+      <td align="left" valign="top" class="form-element">
+        <input type="submit" value=" Purge all caches " />
+      </td>
+    </tr>
+  </table>
+
+</form>
+
+<p>&nbsp;</p>
+
+<table cellpadding="2" cellspacing="0" width="98%">
+  <tr class="section-bar">
+    <td colspan="2" align="left" valign="top" class="form-label">
+      Cache Timeouts
+    </td>
+  </tr><tr>
+    <td align="left" valign="top" class="form-text">
+      Authenticated Cache
+    </td>
+    <td align="left" valign="top" class="form-element">
+      <form action="setCacheTimeout">
+        <input type="hidden" name="cache_type" value="authenticated" />
+        <input type="text" size="6" name="timeout" 
+               value="<dtml-var "getCacheTimeout('authenticated')">" />
+        <input type="submit" value=" Change " />
+      </form>
+    </td>
+  </tr><tr>
+    <td align="left" valign="top" class="form-text">
+      Anonymous Cache
+    </td>
+    <td align="left" valign="top" class="form-element">
+       <form action="setCacheTimeout">
+        <input type="hidden" name="cache_type" value="anonymous" />
+        <input type="text" size="6" name="timeout" 
+               value="<dtml-var "getCacheTimeout('anonymous')">" />
+        <input type="submit" value=" Change " />
+      </form>
+   </td>
+  </tr>
+  </tr><tr>
+    <td align="left" valign="top" class="form-text">
+      Negative Cache
+    </td>
+    <td align="left" valign="top" class="form-element">
+       <form action="setCacheTimeout">
+        <input type="hidden" name="cache_type" value="negative" />
+        <input type="text" size="6" name="timeout" 
+               value="<dtml-var "getCacheTimeout('negative')">" />
+        <input type="submit" value=" Change " />
+      </form>
+   </td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<table cellpadding"3" cellspacing="0" width="98%">
+  <tr class="section-bar">
+    <td align="left" valign="top" class="form-label"> Cached users </td>
+  </tr>
+</table>
+
+<dtml-let auth_cache="getUsers(authenticated=1)"
+          anon_cache="getUsers(authenticated=0)">
+
+<dtml-if "auth_cache or anon_cache">
+
+  <br />
+  <table border="1" cellpadding="2">
+    <tr>
+      <td class="form-label"> Login Name </td>
+      <td class="form-label"> User ID </td>
+      <td class="form-label"> Roles </td>
+      <td class="form-label"> Last Access time </td>
+      <td class="form-label"> Cache Type </td>
+    </tr>
+
+  <dtml-in expr="auth_cache">
+
+    <tr>
+
+      <td valign="top" class="form-text">
+        <dtml-let u_dn="getUserDN()">
+          <a href="manage_userrecords?user_dn=<dtml-var u_dn url_quote>">
+            <dtml-var expr="getUserName()">
+          </a>
+        </dtml-let>
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-var expr="getId()">
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-in expr="getRoles()">
+          <dtml-var name="sequence-item"><br/>
+        </dtml-in>
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-var expr="getLastActiveTime()" fmt=Time>
+      </td>
+
+      <td valign="top" class="form-text">
+        authenticated
+      </td>
+
+    </tr>
+
+  </dtml-in>
+
+  <dtml-in expr="anon_cache">
+
+    <tr>
+      <td valign="top" class="form-text">
+        <dtml-let u_dn="getUserDN()">
+          <a href="manage_userrecords?user_dn=<dtml-var u_dn url_quote>">
+            <dtml-var expr="getUserName()">
+          </a>
+        </dtml-let>
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-var expr="getId()">
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-in expr="getRoles()">
+          <dtml-var name="sequence-item"><br>
+        </dtml-in>
+      </td>
+
+      <td valign="top" class="form-text">
+        <dtml-var expr="getLastActiveTime()" fmt=Time>
+      </td>
+
+      <td valign="top" class="form-text">
+        anonymous
+      </td>
+
+    </tr>
+
+  </dtml-in>
+
+  </table>
+
+
+<dtml-else>
+    <br />
+    <div class="form-text">
+      No users in cache
+      (superuser is never cached)
+    </div>
+
+</dtml-if>
+
+</dtml-let>
+
+
+<dtml-var manage_page_footer>

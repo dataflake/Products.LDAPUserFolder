@@ -1,0 +1,7 @@
+Zope >= 2.8 (see http://www.zope.org/Products/Zope)
+python-ldap >= 2.0.6 (see http://python-ldap.sourceforge.net)
+
+If you want to use the LDAPMembership and the LDAPMemberData tools:
+(NOTE: DO NOT INSTALL DIRECTLY INTO A PLONE SITE!)
+CMF >= 2.1.0 (see http://www.zope.org/Products/CMF)
+

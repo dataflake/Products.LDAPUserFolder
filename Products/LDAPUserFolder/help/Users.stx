@@ -1,0 +1,106 @@
+LDAPUserFolder - Users: Manage user records
+
+    Description
+
+        This form is used to add new user records to the LDAP database or
+        to find and edit existing records.
+
+        In order to edit an existing record you must find it first. Select
+        the search parameter and enter the search term into the form. You
+        will be presented with a view listing matching records. In order
+        to select a specific record click on the DN. This will lead to a 
+        detail view in which all aspects of the user record can be 
+        edited.
+
+        For more details on the search results listing see the "List View"
+        help below. Help on the detailed user view is under "Detail View"
+        below.
+        
+        When adding new records please keep the following in mind:
+
+        o The fields you can fill in depend on the LDAP user attributes
+          you define on the "LDAP Schema" tab.
+
+        o Before you add any user make sure that the "LDAP user objectclass"
+          setting on the main configuration screen is correct. User records
+          you create on this form will receive the object classes whose names
+          you designate as LDAP user objectclasses during configuration.
+
+        o The list of roles that you see depend on the groups available
+          from the LDAP server. Visit the "Groups" view and make any
+          necessary changes.
+
+        o Always keep in mind that your schema might enforce certain
+          rules, like attributes that *must* be filled in. The LDAPUserFolder
+          cannot discover these rules by itself and you will get an error 
+          if the data you enter on this form does not conform to your LDAP
+          schema rules.
+
+        o Some attributes might carry more than one value. If the LDAP
+          schema allows multiple values you can enter them as a 
+          semicolon (;) - separated list in the input field. They will
+          show up semicolon-separated when you view the record again.
+
+   Controls
+
+        'Add User' -- After filling in all values you need to select this 
+                    button. 
+
+    Description - List View
+
+        After having searched the LDAP database you will see a list 
+        of possible matches, or a message indicating no matches.
+
+    Controls - List View
+
+        'Delete' -- After checking one or more checkboxes next to records
+         in the list hitting Delete will delete those records from the 
+         LDAP database. You will see a confirmation screen indicating any
+         errors encountered and will end up on the search page of the 
+         Edit User screen again.
+
+        'Select All and Deselect All' -- This button checks or unchecks 
+         all checkboxes on the record list.
+
+        'Search!' -- Search for another record 
+
+    Description - Detail View
+
+        This page shows all user record details. Please keep the following 
+        in mind:
+
+        o The fields you can fill in depend on the LDAP user attributes
+          you define on the "LDAP Schema" tab.
+
+        o The list of roles that you see depend on the groups available
+          from the LDAP server. Visit the "Groups" view and make any
+          necessary changes.
+
+        o Always keep in mind that your schema might enforce certain
+          rules, like attributes that *must* be filled in. The LDAPUserFolder
+          cannot discover these rules by itself and you will get an error 
+          if the data you enter on this form does not conform to your LDAP
+          schema rules.
+
+        o Some attributes might carry more than one value. If the LDAP
+          schema allows multiple values you can enter them as a comma-separated
+          list in the input field.
+
+
+   Controls - Detail View
+
+        'Apply Changes' -- Hitting this button after changing the record's 
+         attributes will modify the user record in LDAP. After selecting
+         "OK" on the confirmation screen you will end up on the detail
+         view again.
+
+        'Change Groups' -- You can change a user's LDAP groups by selecting 
+         the desired groups from the list of available groups. Hitting the 
+         "Change Groups" button will show a confirmation screen and will
+         drop you into the detail view again.
+
+        'Change Password' -- Type in the new password and hit the 
+         "Change Password" button. You will get back to the detail view
+         after clicking "OK" on the confirmation screen.
+
+        'Search!' -- Search for another record

@@ -1,0 +1,64 @@
+LDAPUserSatellite - Configure: Set the basic configuration for the LDAPUserSatellite
+
+    Description
+
+       This view is used to change the basic settings of a LDAPUserSatellite.
+
+    Controls
+
+     'Title' -- The (optional) title for this object
+
+     'LDAP user Folder' -- The LDAP User Folder this Satellite is
+       cooperating with.
+
+     'Groups Base DN' -- The DN for the branch of your LDAP database that 
+       contains group records. Groups embody Zope roles. A user which is 
+       part of a "Manager" group will have the "Manager" role if the 
+       LDAPUserSatellite is invoked for role manipulation during a 
+       request. This is an optional setting and presents one of two ways 
+       to add roles to a user. See *Group Mappings* below for the other
+       method.
+
+     'Groups search scope' -- Choose the depth for all searches from the 
+       group search base dn. This setting is optional as well.
+
+     'Log Level' -- Specify what kinds of events get logged. The different 
+       log levels are:
+
+        o 0: No logging entries will be made
+
+        o 1: Catastrophes, like failures to connect to the LDAP server
+
+        o 2: Major Events, like LDAPUserSatellite property changes
+
+        o 3: Minor Events, like initialization after Zope is restarted
+
+        o 4: Authentication failures
+
+        o 5: Successful authentications
+
+        o 7: Authentication from cache
+
+        o 9: Debugging, includes extra debugging info
+
+     'Operation' -- Select how the LDAPUserSatellite operates. It can either
+       operate in a simple fashion where roles are manipulated based on the
+       rules defined in this LDAPUserSatellite, or in recursive mode where all
+       LDAPUserSatellite objects between this location and the root are called 
+       and each one applies its own role changes so that a cumulative effect
+       is reached. Recursive operation is potentially expensive and should
+       only be used if you know what you are doing.
+
+     'Apply Changes' -- Save your configuration changes.
+
+     'Group Mappings' -- Group mappings are the second way to add roles
+       to a user in the context governed by the LDAPUsersatellite object.
+       This part of the configuration screen will show all existing mappings
+       as well as a form to enter a new mapping.
+
+       Adding a mapping means that if a user has the role specified by
+       *LDAP Group* the role *Zope Role* will be added if the user object
+       enters the context governed by this LDAPUserSatellite object.
+
+       Mappings only *add* roles. They never subtract roles.
+
