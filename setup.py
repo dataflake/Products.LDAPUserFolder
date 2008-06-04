@@ -13,10 +13,7 @@ def _package_doc(name):
 VERSION = _package_doc('VERSION.txt').strip()
 
 _boundary = '\n' + ('-' * 60) + '\n'
-README = (open(os.path.join(here, 'README.txt')).read()
-        + _boundary + _package_doc('README.txt')
-        + _boundary + _package_doc('CHANGES.txt')
-         )
+README = _package_doc('README.txt') + _boundary + _package_doc('CHANGES.txt')
 
 setup(name='Products.LDAPUserFolder',
       version=VERSION,
