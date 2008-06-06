@@ -352,7 +352,16 @@ def apply_filter(tree_pos, base, fltr):
                 q_val = q_val[1:]
             if q_val.endswith('*'):
                 q_val = q_val[:-1]
-    for key, val in tree_pos.items():
+
+    # Need to find out if tree_pos is a leaf record, it needs different handling
+    # Leaf records will appear when doing BASE-scoped searches.
+    if tree_pos.has_key('dn'):
+        key = explode_dn(tree_pos['dn'])[0]
+        to_search = [(key, tree_pos)]
+    else:
+        to_search = tree_pos.items()
+
+    for key, val in to_search:
         found = True
         if val.has_key(q_key):
             if q_val == '*':

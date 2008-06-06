@@ -9,6 +9,11 @@ HISTORY.txt.
 2.10 (unreleased)
 -----------------
 
+- Bug: FakeLDAP could not handle BASE-scoped searches
+
+- Bug: LDAPUserFolder.searchUsers mishandled searches on DN by not passing
+  the correct BASE search scope through. Found by Nico Grubert.
+
 
 2.9 (2008-06-04)
 ----------------

@@ -551,6 +551,15 @@ class TestLDAPUserFolder(LDAPTest):
                                 )
         self.assertEquals(len(result), 0)
 
+        # Weird edge case: Someone put "dn" into the LDAP Schema tab and
+        # searched for that
+        acl.manage_addLDAPSchemaItem('dn', 'DN')
+        user2_dn = 'cn=%s,%s' % (user_cn, acl.users_base)
+        result = acl.searchUsers(dn=user2_dn, exact_match=True)
+        self.assertEquals(len(result), 1)
+        self.assertEquals(result[0].get(key), user_cn)
+
+
     def testGetUserNames(self):
         acl = self.folder.acl_users
         for role in ug('user_roles'):

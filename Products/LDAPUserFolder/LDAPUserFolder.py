@@ -952,6 +952,7 @@ class LDAPUserFolder(BasicUserFolder):
         lscope = self._delegate.getScopes()[self.users_scope]
         users  = []
         users_base = self.users_base
+        search_scope = self.users_scope
         filt_list = []
 
         schema_translator = {}
@@ -970,6 +971,7 @@ class LDAPUserFolder(BasicUserFolder):
         for (search_param, search_term) in kw.items():
             if search_param == 'dn':
                 users_base = search_term
+                search_scope = self._delegate.BASE
 
             elif search_param == 'objectGUID':
                 # we can't escape the objectGUID query piece using filter_format
@@ -1001,7 +1003,7 @@ class LDAPUserFolder(BasicUserFolder):
                 else:
                     filt_list.append('(%s=*)' % ldap_param)
 
-        if len(filt_list) == 0:
+        if len(filt_list) == 0 and search_param != 'dn':
             # We have no useful filter criteria, bail now before bringing the
             # site down with a search that is overly broad.
             res = { 'exception' : 'No useful filter criteria given' }
@@ -1013,7 +1015,7 @@ class LDAPUserFolder(BasicUserFolder):
                                         for o in self._user_objclasses ] )
             search_str = '(&%s)' % ''.join(filt_list)
             res = self._delegate.search( base=users_base
-                                       , scope=self.users_scope
+                                       , scope=search_scope
                                        , filter=search_str
                                        , attrs=attrs
                                        )
