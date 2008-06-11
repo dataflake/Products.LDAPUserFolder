@@ -1,6 +1,6 @@
-======
-README
-======
+=======================
+Products.LDAPUserFolder
+=======================
 
 NOTE: Do not install the CMFLDAP GenericSetup extension profile into a Plone 
 site. They are meant for pure CMF sites only and will break Plone.
@@ -9,9 +9,9 @@ This product is a replacement for a Zope user folder. It does not store its
 own user objects but builds them on the fly after authenticating a user against 
 the LDAP database.
 
-
+==============
 How to upgrade
---------------
+==============
 
 Upgrading entails not only unpacking the new code, you should also delete and 
 recreate all LDAPUserFolder instances in your Zope installation to prevent 
@@ -29,9 +29,9 @@ the 'doc' folder at the root of your Zope software installation. The
 mentioned 'zpasswd.py' script resides in the 'bin' folder at the root of your 
 Zope installation.
 
-
+==================
 Debugging problems
-------------------
+==================
 
 All log messages are sent to the standard Zope event log 'event.log'. In 
 order to see more verbose logging output you need to increase the log level 
@@ -39,9 +39,9 @@ in your Zope instance's zope.conf. See the 'eventlog' directive. Setting
 the 'level' key to 'debug' will maximize log output and may help pinpoint 
 problems during setup and testing.
 
-
+========================================================
 Why does the LDAPUserFolder not show all my LDAP groups?
---------------------------------------------------------
+========================================================
 
 According to feedback received from people who use Netscape directory 
 products the way a new group is instantiated allows empty groups to exist 
@@ -54,9 +54,9 @@ To work around this (Netscape) phenomenon add one or more members to the
 group in question using the tools that came with the directory server. It 
 should appear in the LDAPUserFolder after that.
 
-
+===================================
 Why use LDAP to store user records?
------------------------------------
+===================================
 
 LDAP as a source of Zope user records is an excellent choice in many cases, 
 like...
@@ -79,9 +79,9 @@ like...
 
 ... the list continues.
 
-
+===============
 The LDAP Schema
----------------
+===============
 
 Your LDAP server should contain records that can be used as user 
 records. Any object types like person, organizationalPerson, 
@@ -124,9 +124,9 @@ It is outside of the scope of this documentation to describe the
 different object classes and attributes in detail, please see 
 LDAP documentation for a better treatment.
 
-
+=======================
 Things to watch out for
------------------------
+=======================
 
 Since a user folder is one of these items that can lock users out 
 of your site if they break I suggest testing the settings in some 
@@ -139,9 +139,9 @@ who, as an added bonus, can delete and create user folders. This is
 a breach of the standard "the superuser cannot create / own anything" 
 policy, but can save your skin in so many ways.
 
-
+=================================================
 LDAP Schema considerations when used with the CMF
--------------------------------------------------
+=================================================
 
 The CMF (and by extension, Plone) expect that every user has an email
 address. In order to make everything work correctly your LDAP user
