@@ -1,6 +1,8 @@
-=======================
-Products.LDAPUserFolder
-=======================
+=========================
+ Products.LDAPUserFolder
+=========================
+
+.. contents::
 
 NOTE: Do not install the CMFLDAP GenericSetup extension profile into a Plone 
 site. They are meant for pure CMF sites only and will break Plone.
@@ -9,7 +11,6 @@ This product is a replacement for a Zope user folder. It does not store its
 own user objects but builds them on the fly after authenticating a user against 
 the LDAP database.
 
-==============
 How to upgrade
 ==============
 
@@ -29,7 +30,6 @@ the 'doc' folder at the root of your Zope software installation. The
 mentioned 'zpasswd.py' script resides in the 'bin' folder at the root of your 
 Zope installation.
 
-==================
 Debugging problems
 ==================
 
@@ -39,7 +39,6 @@ in your Zope instance's zope.conf. See the 'eventlog' directive. Setting
 the 'level' key to 'debug' will maximize log output and may help pinpoint 
 problems during setup and testing.
 
-========================================================
 Why does the LDAPUserFolder not show all my LDAP groups?
 ========================================================
 
@@ -54,7 +53,6 @@ To work around this (Netscape) phenomenon add one or more members to the
 group in question using the tools that came with the directory server. It 
 should appear in the LDAPUserFolder after that.
 
-===================================
 Why use LDAP to store user records?
 ===================================
 
@@ -79,7 +77,6 @@ like...
 
 ... the list continues.
 
-===============
 The LDAP Schema
 ===============
 
@@ -124,7 +121,6 @@ It is outside of the scope of this documentation to describe the
 different object classes and attributes in detail, please see 
 LDAP documentation for a better treatment.
 
-=======================
 Things to watch out for
 =======================
 
@@ -139,7 +135,6 @@ who, as an added bonus, can delete and create user folders. This is
 a breach of the standard "the superuser cannot create / own anything" 
 policy, but can save your skin in so many ways.
 
-=================================================
 LDAP Schema considerations when used with the CMF
 =================================================
 

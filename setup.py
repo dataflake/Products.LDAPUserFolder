@@ -6,19 +6,14 @@ NAME = 'LDAPUserFolder'
 here = os.path.abspath(os.path.dirname(__file__))
 package = os.path.join(here, 'Products', NAME)
 
-def _package_doc(name):
+def _read(name):
     f = open(os.path.join(package, name))
     return f.read()
 
-VERSION = _package_doc('VERSION.txt').strip()
-
-_boundary = '\n' + ('-' * 60) + '\n'
-README = _package_doc('README.txt') + _boundary + _package_doc('CHANGES.txt')
-
 setup(name='Products.%s' % NAME,
-      version=VERSION,
+      version=_read('VERSION.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=README,
+      long_description=_read('README.txt')+'\n\n'+_read('CHANGES.txt'),
       classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Zope2",
