@@ -10,10 +10,17 @@ def _read(name):
     f = open(os.path.join(package, name))
     return f.read()
 
+_boundary = '\n' + ('-' * 60) + '\n'
+
 setup(name='Products.%s' % NAME,
       version=_read('VERSION.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=_read('README.txt')+'\n\n'+_read('CHANGES.txt'),
+      long_description=( _read('README.txt') 
+                       + _boundary
+                       + _read('CHANGES.txt')
+                       + _boundary
+                       + "\nDownload\n========"
+                       ),
       classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Zope2",
