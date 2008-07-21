@@ -8,6 +8,15 @@ HISTORY.txt.
 2.10 (unreleased)
 -----------------
 
+- Bug: Recreating the internal cache hash key inside 
+  LDAPUserFolder.__setstate__ can lead to values differring from one thread 
+  to the next, leading to unnecessary extra LDAP lookups for values already 
+  cached under the original key.
+  (http://www.dataflake.org/tracker/issue_00608 by Stefan Loidl)
+
+- Factoring: LDAPUserFolder.__setstate__: Removed old backwards-compatibility 
+  gyrations.
+
 - Bug: FakeLDAP could not handle BASE-scoped searches
 
 - Bug: LDAPUserFolder.searchUsers mishandled searches on DN by not passing

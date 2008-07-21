@@ -130,11 +130,6 @@ class LDAPUserFolder(BasicUserFolder):
         # Call inherited __setstate__ methods if they exist
         LDAPUserFolder.inheritedAttribute('__setstate__')(self, v)
 
-        # Create a hash value which is used as a unique identifier
-        # for the global resource retrieval. Every instance needs a
-        # unique hash because *all instances share the cache!*
-        self._hash = '%s%s' % (self.meta_type, str(random.random()))
-
         # Reset user caches
         anon_timeout = self.getCacheTimeout('anonymous')
         self._cache('anonymous').setTimeout(anon_timeout)
@@ -144,15 +139,6 @@ class LDAPUserFolder(BasicUserFolder):
 
         negative_timeout = self.getCacheTimeout('negative')
         self._cache('negative').setTimeout(negative_timeout)
-
-        # For older LDAPUserFolders which don't distinguish between uid
-        # and login id attrs, provide a _uid_attr
-        if not hasattr(self, '_uid_attr'):
-            self._uid_attr = self._login_attr
-
-        # Delete old-style logger instances
-        if getattr(self, '_logger', None) is not None:
-            del self._logger
 
 
     def __init__(self, delegate_type='LDAP delegate'):
