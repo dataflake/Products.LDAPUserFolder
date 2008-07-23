@@ -18,6 +18,9 @@ $Id$
 # General Python imports
 import unittest
 
+# Zope imports
+from DateTime.DateTime import DateTime
+
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.tests.config import user
@@ -61,6 +64,7 @@ class TestLDAPUser(unittest.TestCase):
         ae(u.getProperty('dn'), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
         ae(u.getUserDN(), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
         ae(u._getLDAPGroups(), tuple(ug('ldap_groups')))
+        self.assert_(DateTime() >= u.getCreationTime())
 
     def testUnicodeAttributes(self):
         # Internally, most attributes are stored as unicode.

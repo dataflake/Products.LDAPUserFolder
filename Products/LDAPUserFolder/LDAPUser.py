@@ -74,7 +74,6 @@ class LDAPUser(BasicUser):
         self.groups = ''
         now = time.time()
         self._created = now
-        self._lastactivetime = now
 
         for key in user_attrs.keys():
             if key in multivalued_attrs:
@@ -236,16 +235,6 @@ class LDAPUser(BasicUser):
             return self._dn.encode(encoding)
 
         return self._dn
-
-
-    def _updateActiveTime(self):
-        """ Update the active time """
-        self._lastactivetime = time.time()
-
-
-    def getLastActiveTime(self):
-        """ When was this user last active? """
-        return DateTime(self._lastactivetime)
 
 
     def getCreationTime(self):

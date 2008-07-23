@@ -8,6 +8,14 @@ HISTORY.txt.
 2.11 (unreleased)
 -----------------
 
+- Bug: The ZMI Caches tab erroneously suggested that a cached user's 
+  last access time would be recorded and/or updated. This was not the case, 
+  it is recorded at user object creation and then never updated. The Caches
+  tab will now reflect the creation time. Since the API to set or query the
+  last access time was not used anywhere it has been removed.
+  (in response to http://www.dataflake.org/tracker/issue_00614 by Stefan
+  Loidl)
+
 
 2.10 (2008-07-21)
 -----------------

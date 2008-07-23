@@ -35,7 +35,7 @@
 <table cellpadding="2" cellspacing="0" width="98%">
   <tr class="section-bar">
     <td colspan="2" align="left" valign="top" class="form-label">
-      Cache Timeouts
+      Cache Timeouts (in seconds)
     </td>
   </tr><tr>
     <td align="left" valign="top" class="form-text">
@@ -96,7 +96,7 @@
       <td class="form-label"> Login Name </td>
       <td class="form-label"> User ID </td>
       <td class="form-label"> Roles </td>
-      <td class="form-label"> Last Access time </td>
+      <td class="form-label"> Creation time </td>
       <td class="form-label"> Cache Type </td>
     </tr>
 
@@ -123,7 +123,7 @@
       </td>
 
       <td valign="top" class="form-text">
-        <dtml-var expr="getLastActiveTime()" fmt=Time>
+        <dtml-var expr="getCreationTime()" fmt=Time>
       </td>
 
       <td valign="top" class="form-text">
@@ -156,7 +156,7 @@
       </td>
 
       <td valign="top" class="form-text">
-        <dtml-var expr="getLastActiveTime()" fmt=Time>
+        <dtml-var expr="getCreationTime()" fmt=Time>
       </td>
 
       <td valign="top" class="form-text">

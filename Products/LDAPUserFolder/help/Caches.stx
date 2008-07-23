@@ -32,5 +32,6 @@ LDAPUserFolder - Caches: View Available Groups and Cached Users
         and number of users that log in through the LDAPUserFolder this
         process can happen several times a second. Since a lookup on the 
         LDAP Server can be quite slow, the product will cache the user 
-        information for 10 minutes. This is the duration of a typical session.
+        information for 600 seconds by default. This is the duration of a 
+        typical session.
 
