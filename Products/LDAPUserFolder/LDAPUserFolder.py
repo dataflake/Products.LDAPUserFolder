@@ -183,6 +183,7 @@ class LDAPUserFolder(BasicUserFolder):
         self.groups_scope = 2
         self._local_groups = False
         self._roles = ['Anonymous']
+        self._extra_user_filter = ''
 
     security.declarePrivate('_clearCaches')
     def _clearCaches(self):
@@ -368,7 +369,7 @@ class LDAPUserFolder(BasicUserFolder):
                    , binduid, bindpwd, binduid_usage=1, rdn_attr='cn'
                    , obj_classes='top,person', local_groups=0
                    , implicit_mapping=0, encryption='SHA', read_only=0
-                   , REQUEST=None
+                   , extra_user_filter='', REQUEST=None
                    ):
         """ Edit the LDAPUserFolder Object """
         if not binduid:
@@ -431,6 +432,8 @@ class LDAPUserFolder(BasicUserFolder):
                                          , friendly_name=uid_attr
                                          )
         self._uid_attr = uid_attr
+
+        self._extra_user_filter = extra_user_filter.strip()
 
         self._clearCaches()
         msg = 'Properties changed'
@@ -640,12 +643,32 @@ class LDAPUserFolder(BasicUserFolder):
 
 
     security.declarePrivate('_getUserFilterString')
-    def _getUserFilterString(self):
-        """ Return filter string suitable for querying on user objects """
-        user_filter = [filter_format('(%s=%s)', ('objectClass', o))
-                       for o in filter(None, self._user_objclasses)]
-        user_filter.append("(%s=*)" % self._uid_attr)
-        user_filter = '(&%s)' % ''.join(user_filter)
+    def _getUserFilterString(self, filters=[]):
+        """ Return filter string suitable for querying on user objects 
+
+        A filter is constructed from the following elements:
+
+        o the user object classes from the ZMI configuration
+
+        o if a sequence of filters is passed in, it is added
+
+        o if no sequence of filters is passed in then a wildcard filter 
+          for all records with the attribute from the ZMI UID attribute 
+          configuration is added
+
+        o if the Additional user search filter has been configured in the
+          ZMI it will also be ANDed into the final search filter.
+        """
+        user_filter_list = [filter_format('(%s=%s)', ('objectClass', o))
+                               for o in filter(None, self._user_objclasses)]
+        if filters:
+            user_filter_list.extend(filters)
+        else:
+            user_filter_list.append("(%s=*)" % self._uid_attr)
+        extra_filter = self.getProperty('_extra_user_filter')
+        if extra_filter:
+            user_filter_list.append(extra_filter)
+        user_filter = '(&%s)' % ''.join(user_filter_list)
 
         return user_filter
 
@@ -1002,9 +1025,7 @@ class LDAPUserFolder(BasicUserFolder):
             search_str = ''
 
         else:
-            filt_list.extend( [ filter_format('(%s=%s)', ('objectClass', o))
-                                        for o in self._user_objclasses ] )
-            search_str = '(&%s)' % ''.join(filt_list)
+            search_str = self._getUserFilterString(filters=filt_list)
             res = self._delegate.search( base=users_base
                                        , scope=search_scope
                                        , filter=search_str

@@ -66,6 +66,7 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_local_groups'), not not dg('local_groups'))
         ae(acl.getProperty('_implicit_mapping'), not not dg('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), dg('encryption'))
+        ae(acl.getProperty('_extra_user_filter'), dg('extra_user_filter'))
         ae(acl.getProperty('read_only'), not not dg('read_only'))
         ae(len(acl._cache('anonymous').getCache()), 0)
         ae(len(acl._cache('authenticated').getCache()), 0)
@@ -100,6 +101,7 @@ class TestLDAPUserFolder(LDAPTest):
                        , implicit_mapping = ag('implicit_mapping')
                        , encryption = ag('encryption')
                        , read_only = ag('read_only')
+                       , extra_user_filter = ag('extra_user_filter')
                        )
         acl = self.folder.acl_users
         ae(acl.getProperty('title'), ag('title'))
@@ -117,6 +119,7 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_local_groups'), not not ag('local_groups'))
         ae(acl.getProperty('_implicit_mapping'), not not ag('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), ag('encryption'))
+        ae(acl.getProperty('_extra_user_filter'), ag('extra_user_filter'))
         ae(acl.getProperty('read_only'), not not ag('read_only'))
 
 
@@ -405,6 +408,12 @@ class TestLDAPUserFolder(LDAPTest):
         # Search on valid attribute with invalid term, must return empty result
         result = acl.findUser(key, 'invalid_cn')
         self.assertEquals(len(result), 0)
+
+        # We can also try this through the extra user filter
+        acl._extra_user_filter = "(%s=%s)" % (key, "invalid_cn")
+        result = acl.findUser(key, user_cn)
+        self.assertEquals(len(result), 0)
+        acl._extra_user_filter = ''
 
         # Search with wildcard - both user_cn and crippled_cn must return
         # the data for user2.
@@ -976,6 +985,60 @@ class TestLDAPUserFolder(LDAPTest):
         group_dn = group_dn.replace('\\', '')
         acl.manage_deleteGroups(dns=[group_dn])
         self.failUnless(len(acl.getGroups()) == 0)
+
+    def testGetUserFilterString(self):
+        acl = self.folder.acl_users
+        filt_string = acl._getUserFilterString()
+        for ob_class in acl.getProperty('_user_objclasses'):
+            self.failUnless('(objectclass=%s)' % ob_class.lower() 
+                                 in filt_string.lower())
+        self.failUnless('(%s=*)' % dg('uid_attr') in filt_string.lower())
+
+        filters = ['(uid=test)', '(cn=test)']
+        filt_string = acl._getUserFilterString(filters=filters)
+        for ob_class in acl.getProperty('_user_objclasses'):
+            self.failUnless('(objectclass=%s)' % ob_class.lower() 
+                                 in filt_string.lower())
+        for filt in filters:
+            self.failUnless(filt in filt_string)
+        self.failIf('(%s=*)' % dg('uid_attr') in filt_string.lower())
+
+        # Set up some different values
+        acl.manage_edit( title = ag('title')
+                       , login_attr = ag('login_attr')
+                       , uid_attr = ag('uid_attr')
+                       , users_base = ag('users_base')
+                       , users_scope = ag('users_scope')
+                       , roles= ag('roles')
+                       , groups_base = ag('groups_base')
+                       , groups_scope = ag('groups_scope')
+                       , binduid = ag('binduid')
+                       , bindpwd = ag('bindpwd')
+                       , binduid_usage = ag('binduid_usage')
+                       , rdn_attr = ag('rdn_attr')
+                       , local_groups = ag('local_groups')
+                       , implicit_mapping = ag('implicit_mapping')
+                       , encryption = ag('encryption')
+                       , read_only = ag('read_only')
+                       , obj_classes = ag('obj_classes')
+                       , extra_user_filter = ag('extra_user_filter')
+                       )
+
+        filt_string = acl._getUserFilterString()
+        for ob_class in acl.getProperty('_user_objclasses'):
+            self.failUnless('(objectclass=%s)' % ob_class.lower() 
+                                 in filt_string.lower())
+        self.failUnless(ag('extra_user_filter') in filt_string)
+        self.failUnless('(%s=*)' % ag('uid_attr') in filt_string)
+
+        filters = ['(uid=test)', '(cn=test)']
+        filt_string = acl._getUserFilterString(filters=filters)
+        for ob_class in acl.getProperty('_user_objclasses'):
+            self.failUnless('(objectclass=%s)' % ob_class.lower() 
+                                 in filt_string.lower())
+        for filt in filters:
+            self.failUnless(filt in filt_string)
+        self.failIf('(%s=*)' % ag('uid_attr') in filt_string)
         
 
 def test_suite():

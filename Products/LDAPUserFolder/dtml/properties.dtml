@@ -234,6 +234,19 @@
         </dtml-let>
       </td>
     </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        Additional user search filter
+      </td>
+      <td align="left" valign="top">
+        <input type="text" name="extra_user_filter" size="40"
+               value="<dtml-var expr="getProperty('_extra_user_filter')">" />
+      </td>
+      <td colspan="2" class="form-help">
+        Danger! See the online help for details.
+      </td>
+    </tr>
   
     <tr>
       <td align="left" valign="top" class="form-label">

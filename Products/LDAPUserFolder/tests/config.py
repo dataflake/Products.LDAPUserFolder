@@ -33,6 +33,7 @@ defaults = { 'title'  : 'LDAP User Folder'
            , 'use_ssl' : 0
            , 'encryption' : 'SHA'
            , 'read_only' : 0
+           , 'extra_user_filter' : ''
            }
 
 alternates = { 'title'  : 'LDAPUserFolder'
@@ -54,6 +55,7 @@ alternates = { 'title'  : 'LDAPUserFolder'
              , 'encryption' : 'SSHA'
              , 'read_only' : 1
              , 'obj_classes' : 'top, person, inetOrgPerson'
+             , 'extra_user_filter' : '(special=true)'
              }
 
 satellite_defaults= { 'title' : 'Satellite'

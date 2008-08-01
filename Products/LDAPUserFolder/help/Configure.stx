@@ -84,6 +84,17 @@ LDAPUserFolder - Configure: Set the basic configuration for the LDAPUserFolder
        records. Any new user record created through the LDAPUserFolder will 
        carry this list of object classes as its objectClass attribute.
 
+     'Additional user search filter' -- *Only set this value if you really
+       know what you are doing! You can lock out your users with a 
+       faulty value here!*
+       The additional user search filter allows the administrator to 
+       specify a free-form LDAP filter expression which will be added to the
+       default user search filter. The default user search filter and this
+       additional search filter are combined as an AND expression. Records must
+       satisfy both filters to be found using the various user searches. Any
+       value specified in this field must follow correct LDAP search filter
+       syntax.
+
      'User password encryption' -- This dropdown specifies the encryption scheme 
        used to encrypt a user record userPassword attribute. This scheme is 
        applied to the plaintext password when a user edits the password or when 
