@@ -8,6 +8,9 @@ HISTORY.txt.
 2.11 (unreleased)
 -----------------
 
+- Bug: The unit tests for the LDAPMemberDataTool and the 
+  LDAPMembershipTool did not run due to a faulty import.
+
 - Bug: The ZMI Caches tab erroneously suggested that a cached user's 
   last access time would be recorded and/or updated. This was not the case, 
   it is recorded at user object creation and then never updated. The Caches

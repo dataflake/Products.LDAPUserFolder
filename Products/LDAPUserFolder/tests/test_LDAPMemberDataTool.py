@@ -26,6 +26,14 @@ Zope2.startup()
 import Acquisition
 from OFS.Folder import Folder
 
+try:
+    from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUserFolder
+    from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
+except ImportError:
+    # These have CMF dependencies, but there should not be blowups
+    # if the CMF is not present.
+    pass
+
 
 class DummyMemberDataTool(Acquisition.Implicit):
     pass
@@ -196,8 +204,6 @@ class LDAPMemberDataTests(TestCase):
 def test_suite():
     try:
         from Products import CMFCore
-        from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUserFolder
-        from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 
         return TestSuite((
             makeSuite( LDAPMemberDataToolTests ),

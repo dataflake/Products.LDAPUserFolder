@@ -31,6 +31,9 @@ try:
     from Products.CMFCore.PortalFolder import PortalFolder
     from Products.CMFCore.tests.base.dummy import DummySite
     from Products.CMFCore.tests.base.dummy import DummyTool
+    from Products.LDAPUserFolder.LDAPMemberDataTool import LDAPMemberDataTool
+    from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUserFolder
+    from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 except ImportError:
     SecurityTest = TestCase
 
@@ -179,8 +182,6 @@ class LDAPMembershipToolSecurityTests(SecurityTest):
 def test_suite():
     try:
         from Products import CMFCore
-        from Products.LDAPUserFolder.LDAPMemberDataTool import LDAPMemberDataTool
-        from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUserFolder
 
         return TestSuite((
             makeSuite( LDAPMembershipToolTests ),
