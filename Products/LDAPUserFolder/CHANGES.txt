@@ -14,8 +14,7 @@ HISTORY.txt.
   the default filter and this arbitrary filter expression will be
   returned. CAUTION: The filter expression must conform to standard LDAP
   filter syntax. Setting a wrong value will lock out your users!
-  (http://www.dataflake.org/tracker/issue_00615 and 
-   http://www.dataflake.org/tracker/issue_00489)
+  (http://www.dataflake.org/tracker/issue_00615)
 
 - Factoring: Move the LDAP server configuration off the Configure
   tab in the ZMI to its own LDAP Servers tab to avoid overcrowding the
