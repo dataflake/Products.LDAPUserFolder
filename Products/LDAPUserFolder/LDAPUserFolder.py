@@ -85,6 +85,8 @@ class LDAPUserFolder(BasicUserFolder):
         (
         {'label' : 'Configure',	'action' : 'manage_main',
          'help'  : ('LDAPUserFolder','Configure.stx')},
+        {'label' : 'LDAP Servers',	'action' : 'manage_servers',
+         'help'  : ('LDAPUserFolder','Servers.stx')},
         {'label' : 'LDAP Schema', 'action' : 'manage_ldapschema',
          'help'  : ('LDAPUserFolder', 'Schema.stx')},
         {'label' : 'Caches', 'action' : 'manage_cache',
@@ -101,6 +103,9 @@ class LDAPUserFolder(BasicUserFolder):
     security.declareProtected(view_management_screens, 'manage_main')
     manage = manage_main = DTMLFile('dtml/properties', globals())
     manage_main._setName('manage_main')
+
+    security.declareProtected(view_management_screens, 'manage_servers')
+    manage_servers = DTMLFile('dtml/servers', globals())
 
     security.declareProtected(view_management_screens, 'manage_ldapschema')
     manage_ldapschema = DTMLFile('dtml/ldapschema', globals())
@@ -453,7 +458,7 @@ class LDAPUserFolder(BasicUserFolder):
         msg = 'Server at %s:%s added' % (host, port)
 
         if REQUEST:
-            return self.manage_main(manage_tabs_message=msg)
+            return self.manage_servers(manage_tabs_message=msg)
 
 
     security.declareProtected(manage_users, 'getServers')
@@ -472,7 +477,7 @@ class LDAPUserFolder(BasicUserFolder):
             msg = 'Servers deleted'
 
         if REQUEST:
-            return self.manage_main(manage_tabs_message=msg)
+            return self.manage_servers(manage_tabs_message=msg)
 
 
     security.declareProtected(manage_users, 'getMappedUserAttrs')

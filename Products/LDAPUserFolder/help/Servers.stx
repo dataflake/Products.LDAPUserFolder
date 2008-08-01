@@ -1,0 +1,51 @@
+LDAPUserFolder - Servers: Specify the LDAP servers to use
+
+    Description
+
+       This view is used to specify the LDAP servers to use
+
+    Controls
+
+     'LDAP Servers' -- The LDAP servers this LDAPUserFolder is connecting to.
+
+     'Delete' -- Delete a LDAP server definition from the list of LDAP servers
+       used by the LDAPUserFolder.
+
+     'Add LDAP server' -- Add new LDAP servers to connect to.
+
+     'Server host, IP or socket path' -- The hostname, IP address or file
+       socket path for the LDAP server. Please see the README for notes on
+       LDAP over IPC.
+
+     'Server port' -- The port the LDAP server is listening on. By default, 
+       LDAP servers listen on port 389. LDAP over SSL uses port 636 by default.
+       If LDAP over IPC has been selected the port will be ignored.
+
+     'Protocol' -- Select whether to use standard LDAP, LDAP over SSL or
+       LDAP over IPC. Please note that LDAP over SSL is *not* StartTLS, which 
+       uses the same port as unencrypted traffic. Please see the README for 
+       notes on LDAP over IPC.
+
+     'Connection Timeout' -- How long the LDAPUserFolder will wait when 
+       establishing a connection to a LDAP server before giving up. The 
+       Connection Timeout prevents the LDAP connection from hanging indefinitely 
+       if the network connection cannot be established and connection 
+       attempts do not raise an immediate connection error. Important note: 
+       It is possible that during a request several attempts at connecting 
+       to the LDAP server are made. The time it takes for the LDAPUserFolder 
+       to return control to Zope will be the sum of the connection attempts
+       multiplied by the chosen Timeout value.
+
+    'Operation Timeout' -- If a connection has been established before but
+       there is a chance, e.g. due to a misconfigured firewall, that the
+       connection is severed without the LDAPUserFolder noticing, the
+       Operation Timeout value can guard against a hanging site by watching
+       how long it takes for a LDAP request to return. Please use this setting
+       with caution and make sure you know how long your LDAP server might 
+       take to respond under high load. With this setting a long response
+       time due to normal reasons, such as load on the LDAP server, can be
+       misinterpreted as a hanging connection and the LDAPUserFolder can be
+       caught in a vicious circle trying to re-connect again and again.
+
+    'Add Server' -- Add the new server to the list of servers used by the
+       LDAPUserFolder.

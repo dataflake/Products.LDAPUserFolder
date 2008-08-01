@@ -1,0 +1,150 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='LDAP Servers')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<p class="form-help">
+  Define which servers to connect to on this form.
+</p>
+
+<form action="manage_deleteServers" method="post">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+
+    <tr class="list-header">
+      <td colspan="6">
+        <span class="form-label"> LDAP Servers </span>
+        &nbsp;&nbsp;
+        <span class="form-help">
+          (Currently connected to: &dtml-getCurrentServer;)
+        </span>
+      </td>
+    </tr>
+
+    <dtml-in getServers mapping>
+
+      <tr>
+        <td width="16">
+          <input type="checkbox" name="position_list:list"
+                 value="&dtml-sequence-index;">
+        </td>
+        <td class="form-text"> &dtml-host; </td>
+        <td class="form-text"> &dtml-port; </td>
+        <td class="form-text">
+          <dtml-var "(protocol == 'ldaps' and 'LDAP over SSL') or 
+                     (protocol == 'ldapi' and 'LDAP over IPC') or 'LDAP'">
+        </td>
+        <td class="form-text">
+          Connection Timeout: <dtml-var conn_timeout missing="-1"> seconds
+        </td>
+        <td class="form-text">
+          Operation Timeout: <dtml-var op_timeout missing="-1"> seconds
+        </td>
+      </tr>
+
+      <dtml-if sequence-end>
+        <tr>
+          <td width="16">&nbsp;</td>
+          <td colspan="5"> <input type="submit" value=" Delete "> </td>
+        </tr>
+      </dtml-if>
+
+    <dtml-else>
+      <tr>
+        <td colspan="6" class="form-text">
+          No servers defined 
+        </td>
+      </tr>
+    </dtml-in>
+
+  </table>
+
+</form>
+
+<p>&nbsp;</p>
+
+<form action="manage_addServer" method="post">
+
+  <table cellspacing="0" cellpadding="2" width="98%">
+
+    <tr class="list-header">
+      <td colspan="2" class="form-label"> Add LDAP Server </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Server host, IP or socket path
+      </td>
+      <td class="form-element">
+        <input type="text" size="40" name="host" value="my.ldap.server">
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Server port
+      </td>
+      <td class="form-element">
+        <input type="text" size="6" name="port" value="389">
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Protocol
+      </td>
+      <td class="form-element">
+        <select name="use_ssl:int">
+          <option value="0" selected> LDAP </option>
+          <option value="1"> LDAP over SSL </option>
+          <option value="2"> LDAP over IPC </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Connection Timeout
+      </td>
+      <td class="form-element">
+        <select name="conn_timeout:int">
+          <option value="2"> 2 seconds </option>
+          <option value="5" selected> 5 seconds </option>
+          <option value="10"> 10 seconds </option>
+          <option value="30"> 30 seconds </option>
+          <option value="60"> 60 seconds </option>
+          <option value="-1"> No timeout </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="form-label">
+        Operation Timeout
+      </td>
+      <td class="form-element">
+        <select name="op_timeout:int">
+          <option value="5"> 5 seconds </option>
+          <option value="10"> 10 seconds </option>
+          <option value="30"> 30 seconds </option>
+          <option value="60"> 60 seconds </option>
+          <option value="120"> 120 seconds </option>
+          <option value="300"> 300 seconds </option>
+          <option value="-1" selected> No timeout </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <input type="submit" name=" Add " value=" Add Server ">
+      </td>
+    </tr>
+
+  </table>
+
+</form>
+
+<dtml-var manage_page_footer>
+

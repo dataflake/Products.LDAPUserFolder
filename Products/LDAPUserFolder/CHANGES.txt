@@ -8,6 +8,10 @@ HISTORY.txt.
 2.11 (unreleased)
 -----------------
 
+- Factoring: Move the LDAP server configuration off the Configure
+  tab in the ZMI to its own LDAP Servers tab to avoid overcrowding the
+  configuration view even more.
+
 - Bug: The unit tests for the LDAPMemberDataTool and the 
   LDAPMembershipTool did not run due to a faulty import.
 
