@@ -9,7 +9,7 @@
   on this form.
 </p>
 
-<form action="manage_edit" method="POST">
+<form action="manage_edit" method="post">
 
   <table cellspacing="0" cellpadding="3">
   
@@ -18,7 +18,7 @@
         Title
       </td>
       <td align="left" valign="top" colspan="3">
-        <input type="TEXT" name="title" size="40" value="&dtml-title;" />
+        <input type="text" name="title" size="40" value="&dtml-title;" />
       </td>
     </tr>
   
@@ -96,7 +96,7 @@
         Users Base DN
       </td>
       <td align="left" valign="top">
-        <input type="TEXT" name="users_base" size="40"
+        <input type="text" name="users_base" size="40"
                value="<dtml-var name="users_base">">
       </td>
       <td align="left" valign="top" class="form-label">
@@ -157,7 +157,7 @@
         Groups Base DN
       </td>
       <td align="left" valign="top">
-        <input type="TEXT" name="groups_base" size="40" 
+        <input type="text" name="groups_base" size="40" 
                value="<dtml-var name="groups_base">">
       </td>
       <td align="left" valign="top" class="form-label">
@@ -182,7 +182,7 @@
         Manager DN
       </td>
       <td align="left" valign="top">
-        <input type="TEXT" name="binduid:string" size="40" 
+        <input type="text" name="binduid:string" size="40" 
                value="<dtml-var expr="getProperty('_binduid')">" />
       </td>
       <td align="left" valign="top" class="form-optional">
@@ -258,7 +258,7 @@
       </td>
       <td align="left" valign="top" colspan="3">
         <dtml-let rls="getProperty( '_roles' )">
-          <input type="TEXT" name="roles" size="40" 
+          <input type="text" name="roles" size="40" 
                  value="<dtml-var expr="_.string.join( rls, ',' )">" />
         </dtml-let>
       </td>
@@ -268,7 +268,7 @@
       <td>&nbsp;</td>
       <td colspan="3">
         <br>
-        <input type="SUBMIT" value=" Apply Changes ">
+        <input type="submit" value=" Apply Changes ">
       </td>
     </tr>
   

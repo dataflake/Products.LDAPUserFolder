@@ -6,7 +6,7 @@
   on this form.
 </p>
 
-<form action="manage_edit" method="POST">
+<form action="manage_edit" method="post">
 
   <table cellspacing="0" cellpadding="3">
   
@@ -15,7 +15,7 @@
         Title
       </td>
       <td align="left" valign="top" colspan="3">
-        <input type="TEXT" name="title" size="40" value="&dtml-title;" />
+        <input type="text" name="title" size="40" value="&dtml-title;" />
       </td>
     </tr>
   
@@ -91,7 +91,7 @@
       <td>&nbsp;</td>
       <td colspan="3">
         <br>
-        <input type="SUBMIT" value=" Apply Changes ">
+        <input type="submit" value=" Apply Changes ">
       </td>
     </tr>
   
@@ -205,7 +205,7 @@
 
   <tr>
     <td align="left" valign="top" colspan="4">
-      <input class="form-element" type="SUBMIT"
+      <input class="form-element" type="submit"
              name="manage_addGroupMapping:method"
              value=" Add " />
     </td>

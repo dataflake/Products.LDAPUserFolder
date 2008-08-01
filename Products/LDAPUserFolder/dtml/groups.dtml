@@ -77,7 +77,7 @@
         Name
       </td>
       <td align="left" valign="top">
-        <input type="TEXT" name="newgroup_name" size="25" 
+        <input type="text" name="newgroup_name" size="25" 
                value="MyGroup" />&nbsp;
       </td>
       <td align="left" valign="absmiddle" class="form-label">

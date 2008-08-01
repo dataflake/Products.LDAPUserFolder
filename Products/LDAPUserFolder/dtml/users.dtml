@@ -513,7 +513,7 @@ function toggleSelect() {
       
       <tr>
         <td colspan="2">
-          <input type="SUBMIT" value=" Add User ">
+          <input type="submit" value=" Add User ">
         </td>
       </tr>
       

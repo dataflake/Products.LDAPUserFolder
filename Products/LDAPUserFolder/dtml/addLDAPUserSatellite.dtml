@@ -13,7 +13,7 @@
 <dtml-let lufs="superValues(['LDAPUserFolder'])">
   <dtml-if lufs>
 
-    <form action="manage_addLDAPUserSatellite" method="POST">
+    <form action="manage_addLDAPUserSatellite" method="post">
     <table cellspacing="0" cellpadding="3">
 
       <tr>
@@ -42,7 +42,7 @@
         <td>&nbsp;</td>
         <td>
           <br />
-          <input type="SUBMIT" value=" Add ">
+          <input type="submit" value=" Add ">
         </td>
       </tr>
     
