@@ -1035,6 +1035,24 @@ class TestLDAPUserFolder(LDAPTest):
         for filt in filters:
             self.failUnless(filt in filt_string)
         self.failIf('(%s=*)' % ag('uid_attr') in filt_string)
+
+
+    def test_expireUser(self):
+        # http://www.dataflake.org/tracker/issue_00617 etc.
+        import sha
+        acl = self.folder.acl_users
+    
+        # Retrieving an invalid user should return None
+        nonexisting = acl.getUserById('invalid')
+        self.failUnless(nonexisting is None)
+    
+        # The retrieval above will add the invalid user to the negative cache
+        negative_cache_key = '%s:%s' % ('invalid', sha.new('').digest())
+        self.failIf(acl._cache('negative').get(negative_cache_key) is None)
+    
+        # Expiring the user must remove it from the negative cache
+        acl._expireUser('invalid')
+        self.failUnless(acl._cache('negative').get(negative_cache_key) is None)
         
 
 def test_suite():

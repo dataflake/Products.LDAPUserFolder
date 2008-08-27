@@ -1865,6 +1865,12 @@ class LDAPUserFolder(BasicUserFolder):
         self._cache('anonymous').remove(user)
         self._cache('authenticated').remove(user)
 
+        # This only removes records from the negative cache which
+        # were retrieved without a password, since down here we do not
+        # know that password.
+        negative_cache_key = '%s:%s' % (user, sha.new('').digest())
+        self._cache('negative').remove(negative_cache_key)
+
 
     security.declareProtected(manage_users, 'isUnique')
     def isUnique(self, attr, value):

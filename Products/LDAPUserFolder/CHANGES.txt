@@ -14,6 +14,10 @@ HISTORY.txt.
 - Bug: Added explicit CMFDefault dependency for the CMF-related functions
   by adding an extras_require in setup.py.
 
+- Bug: Make sure a user is purged from the negative cache when the user
+  is explicitly expired.
+  (http://www.dataflake.org/tracker/issue_00617)
+
 
 2.11 (2008-08-01)
 -----------------
