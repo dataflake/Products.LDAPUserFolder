@@ -49,7 +49,7 @@ setup(name='Products.%s' % NAME,
           'cmfldap': ['Products.CMFDefault'],
           },
       tests_require=[
-        'dataflake.ldapconnection',
+        'dataflake.ldapconnection>=0.2',
         ],
       entry_points="""
       [zope2.initialize]
