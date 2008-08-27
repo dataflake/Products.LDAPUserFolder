@@ -20,9 +20,7 @@ from unittest import makeSuite
 from unittest import TestCase
 from unittest import TestSuite
 
-import Testing
-import Zope2
-Zope2.startup()
+from Testing.ZopeTestCase import ZopeLite
 
 try:
     from Products.CMFCore.tests.base.testcase import RequestTest
@@ -37,6 +35,7 @@ class LDAPMembershipTests(MembershipTests):
 
     def setUp(self):
         MembershipTests.setUp(self)
+        ZopeLite.installProduct('LDAPUserFolder')
 
         if getattr(self, 'app', None) is not None:
             # Running under CMF >= 2.1, need to set up a site

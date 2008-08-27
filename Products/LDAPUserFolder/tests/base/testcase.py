@@ -20,10 +20,8 @@ import unittest, sys
 
 # Zope imports
 from OFS.Folder import Folder
-import Testing
-import Zope2
+from Testing import ZopeTestCase
 import transaction
-Zope2.startup()
 
 # Do some namespace manipulation to make use of FakeLDAP
 from Products.LDAPUserFolder.tests import FakeLDAP
@@ -51,8 +49,7 @@ class LDAPTest(unittest.TestCase):
     def setUp(self):
         FakeLDAP.clearTree()
         transaction.begin()
-        self.connection = Zope2.DB.open()
-        self.root =  self.connection.root()[ 'Application' ]
+        self.app = self.root = ZopeTestCase.app()
         self.root._setObject('luftest', Folder('luftest'))
         self.folder = self.root.luftest
         manage_addLDAPUserFolder(self.folder)
@@ -81,5 +78,5 @@ class LDAPTest(unittest.TestCase):
 
     def tearDown( self ):
         transaction.abort()
-        self.connection.close()
+        ZopeTestCase.close(self.app)
 

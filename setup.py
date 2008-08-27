@@ -45,6 +45,9 @@ setup(name='Products.%s' % NAME,
         "setuptools",
         "python-ldap >= 2.0.6",
         ],
+      extras_require={
+          'cmfldap': ['Products.CMFDefault'],
+          },
       entry_points="""
       [zope2.initialize]
       Products.LDAPUserFolder = Products.LDAPUserFolder:initialize

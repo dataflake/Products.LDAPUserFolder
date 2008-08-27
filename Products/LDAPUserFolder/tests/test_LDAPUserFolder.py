@@ -25,10 +25,6 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from Globals import package_home
 
-import Testing
-import Zope2
-Zope2.startup()
-
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 

@@ -8,6 +8,12 @@ HISTORY.txt.
 2.12 (unreleased)
 -----------------
 
+- Factoring: Refactored unit tests to use ZopeTestCase and ZopeLite instead 
+  of hand-rolling ZODB connections etc.
+
+- Bug: Added explicit CMFDefault dependency for the CMF-related functions
+  by adding an extras_require in setup.py.
+
 
 2.11 (2008-08-01)
 -----------------

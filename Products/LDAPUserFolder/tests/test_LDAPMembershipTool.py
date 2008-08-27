@@ -19,9 +19,6 @@ from unittest import main
 from unittest import makeSuite
 from unittest import TestCase
 from unittest import TestSuite
-import Testing
-import Zope2
-Zope2.startup()
 
 from AccessControl.SecurityManagement import newSecurityManager
 from OFS.Folder import Folder
