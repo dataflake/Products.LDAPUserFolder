@@ -48,6 +48,9 @@ setup(name='Products.%s' % NAME,
       extras_require={
           'cmfldap': ['Products.CMFDefault'],
           },
+      tests_require=[
+        'dataflake.ldapconnection',
+        ],
       entry_points="""
       [zope2.initialize]
       Products.LDAPUserFolder = Products.LDAPUserFolder:initialize

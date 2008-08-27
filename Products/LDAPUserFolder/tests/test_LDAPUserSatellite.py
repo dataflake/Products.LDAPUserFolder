@@ -21,8 +21,8 @@ import unittest
 # Zope imports
 from OFS.Folder import manage_addFolder
 
-# Do some namespace manipulation to make use of FakeLDAP
-from Products.LDAPUserFolder.tests import FakeLDAP
+# Do some namespace manipulation to make use of fakeldap
+from dataflake.ldapconnection.tests import fakeldap
 
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserSatellite
@@ -39,7 +39,7 @@ class TestLDAPUserSatellite(LDAPTest):
         luf = self.folder.acl_users
         luf._implicit_mapping = True
 
-        FakeLDAP.addTreeItems(sg('groups_base'))
+        fakeldap.addTreeItems(sg('groups_base'))
         manage_addFolder(self.folder, 'lustest')
         self.lustest = self.folder.lustest
         manage_addLDAPUserSatellite( self.lustest

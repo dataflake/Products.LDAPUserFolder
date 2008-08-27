@@ -8,6 +8,9 @@ HISTORY.txt.
 2.12 (unreleased)
 -----------------
 
+- Factoring: For testing, use the fakeldap module from the 
+  dataflake.ldapconnection package instead of maintaining a copy here.
+
 - Factoring: Refactored unit tests to use ZopeTestCase and ZopeLite instead 
   of hand-rolling ZODB connections etc.
 

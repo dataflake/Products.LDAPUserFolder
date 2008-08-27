@@ -29,7 +29,7 @@ from Globals import package_home
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
 # Tests imports
-from Products.LDAPUserFolder.tests import FakeLDAP
+from dataflake.ldapconnection.tests import fakeldap
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
@@ -459,7 +459,7 @@ class TestLDAPUserFolder(LDAPTest):
         # let's create some users
         msg = acl.manage_addUser(REQUEST=None, kwargs=user2)
         self.assert_(not msg)
-        # and put them in groups that match the uniqueMember shortcut in FakeLDAP
+        # and put them in groups that match the uniqueMember shortcut in fakeldap
         ldapconn = acl._delegate.connect()
         group_cn = 'group1'
         crippled_cn = group_cn[:-1]
@@ -729,38 +729,38 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEqual(user_ob.getProperty('sn'), ug('sn'))
 
     def testEditUserPassword(self):
-        conn = FakeLDAP.initialize('')
+        conn = fakeldap.initialize('')
         acl = self.folder.acl_users
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assert_(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        res = conn.search_s(user_ob.getUserDN(), scope=FakeLDAP.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
         old_pw = res[0][1]['userPassword'][0]
         acl.manage_editUserPassword(user_dn, 'newpass')
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        res = conn.search_s(user_ob.getUserDN(), scope=FakeLDAP.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
         new_pw = res[0][1]['userPassword'][0]
         self.assertNotEqual(old_pw, new_pw)
 
     def testEditUserPasswordReadOnly(self):
-        conn = FakeLDAP.initialize('')
+        conn = fakeldap.initialize('')
         acl = self.folder.acl_users
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assert_(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        res = conn.search_s(user_ob.getUserDN(), scope=FakeLDAP.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
         old_pw = res[0][1]['userPassword'][0]
         acl.read_only = 1
         acl._delegate.read_only = 1
         acl.manage_editUserPassword(user_dn, 'newpass')
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        res = conn.search_s(user_ob.getUserDN(), scope=FakeLDAP.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
         new_pw = res[0][1]['userPassword'][0]
         self.assertEqual(old_pw, new_pw)
 
@@ -975,7 +975,7 @@ class TestLDAPUserFolder(LDAPTest):
 
         # Now delete the group.
         group_dn = all_groups[0][1]
-        # XXX Shortcoming in FakeLDAP: DNs are not "unescaped", meaning escaping
+        # XXX Shortcoming in fakeldap: DNs are not "unescaped", meaning escaping
         # done during insertion will be retained in the real record, unlike
         # a real LDAP server which will store and return unescaped DNs.
         group_dn = group_dn.replace('\\', '')
@@ -1057,7 +1057,7 @@ class TestLDAPUserFolder(LDAPTest):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(FakeLDAP))
+    suite.addTest(doctest.DocTestSuite(fakeldap))
     suite.addTest(unittest.makeSuite(TestLDAPUserFolder))
     return suite
 

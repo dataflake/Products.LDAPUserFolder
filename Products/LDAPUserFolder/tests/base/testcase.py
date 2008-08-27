@@ -23,13 +23,13 @@ from OFS.Folder import Folder
 from Testing import ZopeTestCase
 import transaction
 
-# Do some namespace manipulation to make use of FakeLDAP
-from Products.LDAPUserFolder.tests import FakeLDAP
+# Do some namespace manipulation to make use of fakeldap
+from dataflake.ldapconnection.tests import fakeldap
 if sys.modules.has_key('_ldap'):
     del sys.modules['_ldap']
-sys.modules['ldap'] = FakeLDAP
+sys.modules['ldap'] = fakeldap
 from Products.LDAPUserFolder import LDAPDelegate
-LDAPDelegate.c_factory = FakeLDAP.ldapobject.ReconnectLDAPObject
+LDAPDelegate.c_factory = fakeldap.ldapobject.ReconnectLDAPObject
 
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
@@ -47,7 +47,7 @@ u2g = user2.get
 class LDAPTest(unittest.TestCase):
 
     def setUp(self):
-        FakeLDAP.clearTree()
+        fakeldap.clearTree()
         transaction.begin()
         self.app = self.root = ZopeTestCase.app()
         self.root._setObject('luftest', Folder('luftest'))
@@ -73,8 +73,8 @@ class LDAPTest(unittest.TestCase):
                        , encryption = dg('encryption')
                        , read_only = dg('read_only')
                        )
-        FakeLDAP.addTreeItems(dg('users_base'))
-        FakeLDAP.addTreeItems(dg('groups_base'))
+        fakeldap.addTreeItems(dg('users_base'))
+        fakeldap.addTreeItems(dg('groups_base'))
 
     def tearDown( self ):
         transaction.abort()
