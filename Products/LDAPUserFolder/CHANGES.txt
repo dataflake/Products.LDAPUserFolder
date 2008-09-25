@@ -8,6 +8,12 @@ HISTORY.txt.
 2.12 (unreleased)
 -----------------
 
+- Bug/LDAPDelegate: Use the canonical explode_dn method when splitting
+  up a DN for escaping its values instead of hand-splitting on ",", which
+  breaks if the DN contains commas in any value. Patch by Russell Sim.
+  This also required cleaning up one test that used an invalid DN format.
+  (http://www.dataflake.org/tracker/issue_00623)
+
 - Factoring: For testing, use the fakeldap module from the 
   dataflake.ldapconnection package instead of maintaining a copy here.
 

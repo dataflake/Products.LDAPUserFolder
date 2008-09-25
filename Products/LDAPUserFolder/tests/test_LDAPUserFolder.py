@@ -962,7 +962,7 @@ class TestLDAPUserFolder(LDAPTest):
         # http://www.dataflake.org/tracker/issue_00507
         # Make sure groups with hash characters can be
         # added, deleted and used
-        groupid = '#APPLIKATIONEN LAUFWERK(a)#'
+        groupid = '"#APPLIKATIONEN LAUFWERK(a)#"'
         acl = self.folder.acl_users
 
         # Add the group with the odd character in it
@@ -978,7 +978,8 @@ class TestLDAPUserFolder(LDAPTest):
         # XXX Shortcoming in fakeldap: DNs are not "unescaped", meaning escaping
         # done during insertion will be retained in the real record, unlike
         # a real LDAP server which will store and return unescaped DNs.
-        group_dn = group_dn.replace('\\', '')
+        # That means we cannot use the returned DN, we must construct it anew.
+        group_dn = 'cn=%s,%s' % (groupid, acl.groups_base)
         acl.manage_deleteGroups(dns=[group_dn])
         self.failUnless(len(acl.getGroups()) == 0)
 

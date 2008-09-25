@@ -621,7 +621,7 @@ class LDAPDelegate(Persistent):
 
     def _clean_dn(self, dn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        elems = [self._clean_rdn(x) for x in dn.split(',')]
+        elems = [self._clean_rdn(x) for x in self.explode_dn(dn)]
 
         return ','.join(elems)
 
