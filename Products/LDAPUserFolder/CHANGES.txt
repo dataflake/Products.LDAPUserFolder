@@ -5,6 +5,11 @@ This file contains change information for the LDAPUserFolder product.
 To see changes made to revisions prior to the latest version see
 HISTORY.txt.
 
+2.13 (unreleased)
+-----------------
+
+
+
 2.12 (2008-10-21)
 -----------------
 
