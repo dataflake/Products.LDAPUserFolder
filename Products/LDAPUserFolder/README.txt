@@ -11,6 +11,21 @@ This product is a replacement for a Zope user folder. It does not store its
 own user objects but builds them on the fly after authenticating a user against 
 the LDAP database.
 
+Bug tracker
+===========
+
+Please post questions, bug reports or feature requests to the bug tracker
+at http://www.dataflake.org/tracker/
+
+SVN version
+===========
+
+You can retrieve the latest code from Subversion using setuptools or
+zc.buildout via this URL:
+
+http://svn.dataflake.org/svn/Products.LDAPUserFolder/trunk#egg=Products.LDAPUserFolder
+
+
 How to upgrade
 ==============
 
