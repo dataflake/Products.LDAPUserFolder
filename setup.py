@@ -34,7 +34,7 @@ setup(name='Products.%s' % NAME,
       keywords='web application server zope zope2 ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url="http://www.dataflake.org/software/ldapuserfolder",
+      url="http://pypi.python.org/pypi/Products.LDAPUserFolder",
       license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
       packages=find_packages(),
       include_package_data=True,
@@ -53,7 +53,7 @@ setup(name='Products.%s' % NAME,
         ],
       entry_points="""
       [zope2.initialize]
-      Products.LDAPUserFolder = Products.LDAPUserFolder:initialize
-      """,
+      Products.%s = Products.%s:initialize
+      """ % (NAME, NAME),
       )
 
