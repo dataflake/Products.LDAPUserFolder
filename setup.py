@@ -46,10 +46,13 @@ setup(name='Products.%s' % NAME,
         "python-ldap >= 2.0.6",
         ],
       extras_require={
-          'cmfldap': ['Products.CMFDefault'],
+          'cmfldap': [
+                #'Zope >= 2.10.4',
+                'Products.CMFDefault >= 2.1.0'
+                ],
           },
       tests_require=[
-        'dataflake.ldapconnection>=0.2',
+        'dataflake.ldapconnection >= 0.2',
         ],
       entry_points="""
       [zope2.initialize]

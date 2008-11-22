@@ -23,19 +23,6 @@ from Products.LDAPUserFolder.LDAPUserSatellite import addLDAPUserSatelliteForm
 from Products.LDAPUserFolder.LDAPUserSatellite import manage_addLDAPUserSatellite
 from Products.LDAPUserFolder.LDAPUserSatellite import LDAPUserSatellite 
 
-try:
-    from Products.CMFCore.DirectoryView import registerDirectory
-    from Products.CMFCore.interfaces import ISiteRoot
-    registerDirectory('skins', globals())
-
-    from Products.GenericSetup import EXTENSION
-    from Products.GenericSetup import profile_registry
-
-    have_cmf = True
-except ImportError:
-    have_cmf = False
-
-
 def initialize(context):
     context.registerClass( LDAPUserFolder
                          , permission=add_user_folders
@@ -53,12 +40,3 @@ def initialize(context):
 
     context.registerHelp()
 
-    if have_cmf:
-        profile_registry.registerProfile( 'default'
-                                        , 'LDAPUserFolder CMF Tools'
-                                        , 'Adds LDAP support to the CMF.'
-                                        , 'profiles/default'
-                                        , 'LDAPUserFolder'
-                                        , EXTENSION
-                                        , for_=ISiteRoot
-                                        )
