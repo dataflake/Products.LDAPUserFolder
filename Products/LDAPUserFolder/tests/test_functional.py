@@ -22,6 +22,8 @@ from unittest import TestSuite
 
 from Testing.ZopeTestCase import ZopeLite
 
+from Products.Five import zcml
+
 try:
     from Products.CMFCore.tests.base.testcase import RequestTest
     from Products.CMFDefault.tests.test_join import MembershipTests
@@ -34,12 +36,23 @@ except ImportError:
 class LDAPMembershipTests(MembershipTests):
 
     def setUp(self):
+        import Products.LDAPUserFolder
+        zcml.load_config('configure.zcml', Products.LDAPUserFolder)
+
         MembershipTests.setUp(self)
         ZopeLite.installProduct('LDAPUserFolder')
+        site = self.app.site
 
-        if getattr(self, 'app', None) is not None:
-            # Running under CMF >= 2.1, need to set up a site
-            self._mungeSite(self.app.site)
+        profile_id = 'profile-Products.LDAPUserFolder:cmfldap'
+        site.portal_setup.runAllImportStepsFromProfile(profile_id)
+    
+        # Remove the "standard" user folder and replace it with a
+        # LDAPDummyUserFolder
+        site.manage_delObjects(['acl_users'])
+        site._setObject('acl_users', LDAPDummyUserFolder())
+
+        # Register one new attribute for testing
+        site.portal_memberdata.addMemberProperty('sn')
 
 
     def _makePortal(self):
@@ -52,27 +65,6 @@ class LDAPMembershipTests(MembershipTests):
 
         return self._mungeSite(site)
             
-
-    def _mungeSite(self, site):
-        # Load the LDAPUserFolder:default extension profile and run it
-        profile_id = 'profile-LDAPUserFolder:default'
-        try:
-            site.portal_setup.runAllImportStepsFromProfile(profile_id)
-        except AttributeError:
-            # BBB GenericSetup < 1.3
-            site.portal_setup.setImportContext(profile_id)
-            site.portal_setup.runAllImportSteps()
-    
-        # Remove the "standard" user folder and replace it with a
-        # LDAPDummyUserFolder
-        site.manage_delObjects(['acl_users'])
-        site._setObject('acl_users', LDAPDummyUserFolder())
-
-        # Register one new attribute for testing
-        site.portal_memberdata.addMemberProperty('sn')
-
-        return site
-
 
     def test_join_rdn_not_login( self ):
         # Test joing for situations where the login attribute is not the
