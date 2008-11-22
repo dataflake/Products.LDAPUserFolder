@@ -11,7 +11,8 @@ HISTORY.txt.
 - Factoring: GenericSetup profile registration and CMF skin folder 
   registration now moved from code to ZCML. Renamed profile
   "default" to "cmfldap", that's a more descriptive name. The minimum CMF
-  version required for installing the CMF integration is now 2.10.4.
+  version required for installing the CMF integration is now 2.1.0, which
+  implies Zope 2.10.4 or later.
 
 
 2.12 (2008-10-21)
