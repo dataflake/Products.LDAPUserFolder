@@ -37,8 +37,10 @@ from Globals import DTMLFile
 from Globals import InitializeClass
 from Globals import package_home
 from OFS.SimpleItem import SimpleItem
+from zope.interface import implements
 
 # LDAPUserFolder package imports
+from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
@@ -68,6 +70,9 @@ class LDAPUserFolder(BasicUserFolder):
         database.  Its important public method is validate() which
         returns a Zope user object of type LDAPUser
     """
+
+    implements(ILDAPUserFolder)
+
     security = ClassSecurityInfo()
 
     meta_type = 'LDAPUserFolder'
@@ -152,13 +157,15 @@ class LDAPUserFolder(BasicUserFolder):
         self._delegate = _createDelegate(delegate_type)
         self._ldapschema = { 'cn' : { 'ldap_name' : 'cn'
                                     , 'friendly_name' : 'Canonical Name'
-                                    , 'multivalued' : ''
+                                    , 'multivalued' : False
                                     , 'public_name' : ''
+                                    , 'binary' : False
                                     }
                            , 'sn' : { 'ldap_name' : 'sn'
                                     , 'friendly_name' : 'Last Name'
-                                    , 'multivalued' : ''
+                                    , 'multivalued' : False
                                     , 'public_name' : ''
+                                    , 'binary' : False
                                     }
                            }
 
@@ -175,14 +182,21 @@ class LDAPUserFolder(BasicUserFolder):
 
         # Set up some safe defaults
         self._login_attr = 'cn'
+        self._uid_attr = ''
+        self._bindpwd = ''
+        self._rdnattr = ''
         self.users_base = 'ou=people,dc=mycompany,dc=com'
         self._user_objclasses = ['top', 'person']
+        self._binduid = ''
         self._binduid_usage = 0
         self.users_scope = 2
         self.groups_base = 'ou=groups,dc=mycompany,dc=com'
         self.groups_scope = 2
         self._local_groups = False
         self._roles = ['Anonymous']
+        self._implicit_mapping = False
+        self._pwd_encryption = 'SHA'
+        self.read_only = False
         self._extra_user_filter = ''
 
     security.declarePrivate('_clearCaches')
@@ -1376,9 +1390,9 @@ class LDAPUserFolder(BasicUserFolder):
     def manage_addLDAPSchemaItem( self
                                 , ldap_name
                                 , friendly_name=''
-                                , multivalued=''
+                                , multivalued=False
                                 , public_name=''
-                                , binary=''
+                                , binary=False
                                 , REQUEST=None
                                 ):
         """ Add a schema item to my list of known schema items """

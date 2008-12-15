@@ -50,6 +50,10 @@ setup(name='Products.%s' % NAME,
                 #'Zope >= 2.10.4',
                 'Products.CMFDefault >= 2.1.0'
                 ],
+          'exportimport': [
+                #'Zope >= 2.8.5'
+                'Products.GenericSetup >= 1.2'
+                ],
           },
       tests_require=[
         'dataflake.ldapconnection >= 0.2',

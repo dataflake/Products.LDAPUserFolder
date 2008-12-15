@@ -8,6 +8,11 @@ HISTORY.txt.
 2.13 (unreleased)
 -----------------
 
+- Feature: Added GenericSetup support with import/export steps for the
+  LDAPUserFolder. When installing the LDAPUserFolder via Buildout, make
+  sure to specify the extra name "exportimport" to automatically pull
+  the GenericSetup dependency: Products.LDAPUserFolder[exportimport]
+
 - Factoring: GenericSetup profile registration and CMF skin folder 
   registration now moved from code to ZCML. Renamed profile
   "default" to "cmfldap", that's a more descriptive name. The minimum CMF

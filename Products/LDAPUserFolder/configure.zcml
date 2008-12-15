@@ -5,6 +5,28 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ldapuserfolder">
 
+  <!-- Only install GenericSetup handlers if GenericSetup is installed -->
+  <configure
+    zcml:condition="installed Products.GenericSetup">
+
+    <adapter factory=".exportimport.LDAPUserFolderXMLAdapter"/>
+
+    <genericsetup:importStep
+        name="ldapuserfolder"
+        title="LDAPUserFolder"
+        description="Import LDAPUserFolder settings"
+        handler="Products.LDAPUserFolder.exportimport.importLDAPUserFolder">
+    </genericsetup:importStep>
+
+    <genericsetup:exportStep
+        name="ldapuserfolder"
+        title="LDAPUserFolder"
+        description="Export LDAPUserFolder settings"
+        handler="Products.LDAPUserFolder.exportimport.exportLDAPUserFolder">
+    </genericsetup:exportStep>
+
+  </configure>
+
   <!-- Only install CMFLDAP bits if CMFCore is installed -->
   <configure
     zcml:condition="installed Products.CMFCore">
