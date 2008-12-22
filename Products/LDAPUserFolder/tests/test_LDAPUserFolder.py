@@ -499,7 +499,10 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEquals(result[0].get('cn'), group_cn)
 
         # Now we ask for exact matches. Only group_cn returns results.
-        result = acl.searchGroups(cn=group_cn, description=group_description, exact_match=True)
+        result = acl.searchGroups( cn=group_cn
+                                 , description=group_description
+                                 , exact_match=True
+                                 )
         self.assertEquals(len(result), 1)
         self.assertEquals(result[0].get('cn'), group_cn)
 

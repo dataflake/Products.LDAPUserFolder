@@ -852,6 +852,9 @@ class LDAPUserFolder(BasicUserFolder):
         """ Return all attributes for a given DN """
         dn = to_utf8(urllib.unquote(encoded_dn))
 
+        if not attrs:
+            attrs = self.getSchemaConfig().keys()
+
         res = self._delegate.search( base=dn
                                    , scope=self._delegate.BASE
                                    , attrs=attrs
@@ -982,6 +985,9 @@ class LDAPUserFolder(BasicUserFolder):
         users_base = self.users_base
         search_scope = self.users_scope
         filt_list = []
+
+        if not attrs:
+            attrs = self.getSchemaConfig().keys()
 
         schema_translator = {}
         for ldap_key, info in self.getSchemaConfig().items():
@@ -1164,6 +1170,8 @@ class LDAPUserFolder(BasicUserFolder):
     def findUser(self, search_param, search_term, attrs=(), exact_match=False):
         """ Look up matching user records based on a single attribute """
         kw = { search_param : search_term }
+        if not attrs:
+            attrs = self.getSchemaConfig().keys()
 
         return self.searchUsers(attrs=attrs, exact_match=exact_match, **kw)
 

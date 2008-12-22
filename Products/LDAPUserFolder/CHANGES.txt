@@ -8,6 +8,10 @@ HISTORY.txt.
 2.13 (unreleased)
 -----------------
 
+- Miscellaneous: Weed out all LDAP search calls that would indiscriminately
+  pull all attributes from a user record. This will reduce server load if
+  the user record contains large attributes such as jpegPhoto.
+
 - Feature: Added GenericSetup support with import/export steps for the
   LDAPUserFolder. When installing the LDAPUserFolder via Buildout, make
   sure to specify the extra name "exportimport" to automatically pull
