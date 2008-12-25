@@ -16,6 +16,7 @@ $Id$
 """
 
 # General Python imports
+import copy
 import doctest
 import os.path
 import unittest
@@ -906,6 +907,38 @@ class TestLDAPUserFolder(LDAPTest):
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertEqual(mgr_ob.getProperty('jpegPhoto'), image_contents)
 
+    def testManageEditUserBinaryHandling(self):
+        # Make sure binary attributes are never converted
+        test_home = package_home(globals())
+        image_path = os.path.join(test_home, 'test.jpg')
+        image_file = open(image_path, 'rb')
+        image_contents = image_file.read()
+        image_file.close()
+        acl = self.folder.acl_users
+        acl.manage_addLDAPSchemaItem('jpegPhoto', binary=True)
+        acl.manage_addUser(REQUEST=None, kwargs=manager_user)
+        mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
+        self.assertEqual(mgr_ob.getProperty('jpegPhoto'), '')
+        acl.manage_editUser( mgr_ob.getUserDN()
+                           , kwargs={'jpegPhoto':image_contents}
+                           )
+        mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
+        self.assertEqual(mgr_ob.getProperty('jpegPhoto'), image_contents)
+
+    def testManageAddUserBinaryHandling(self):
+        # Make sure binary attributes are never converted
+        test_home = package_home(globals())
+        image_path = os.path.join(test_home, 'test.jpg')
+        image_file = open(image_path, 'rb')
+        image_contents = image_file.read()
+        image_file.close()
+        acl = self.folder.acl_users
+        acl.manage_addLDAPSchemaItem('jpegPhoto', binary=True)
+        kw_args = copy.deepcopy(manager_user)
+        kw_args['jpegPhoto'] = image_contents
+        acl.manage_addUser(REQUEST=None, kwargs=kw_args)
+        mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
+        self.assertEqual(mgr_ob.getProperty('jpegPhoto'), image_contents)
 
     def testGetAttributesOfAllObjects(self):
         # Test the resilience of the getAttributesOfAllUsers method

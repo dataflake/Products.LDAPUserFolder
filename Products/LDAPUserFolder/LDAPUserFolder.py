@@ -1525,7 +1525,7 @@ class LDAPUserFolder(BasicUserFolder):
                 attr_val = source.get(attribute, None)
 
                 if names.get('binary', None) and attr_val:
-                    attr_dict['%s;binary' % attribute] = attr_val
+                    attr_dict['%s;binary' % attribute] = [attr_val]
                 elif attr_val:
                     attr_dict[attribute] = attr_val
                 elif names.get('public_name', None):

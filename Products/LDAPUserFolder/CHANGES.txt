@@ -8,6 +8,9 @@ HISTORY.txt.
 2.13 (unreleased)
 -----------------
 
+- Bug: Binary attribute handling in manage_addUser was broken. Only the
+  first character in the binary attribute's value would be stored.
+
 - Miscellaneous: Weed out all LDAP search calls that would indiscriminately
   pull all attributes from a user record. This will reduce server load if
   the user record contains large attributes such as jpegPhoto.
