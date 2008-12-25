@@ -1094,7 +1094,6 @@ class TestLDAPUserFolder(LDAPTest):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(doctest.DocTestSuite(fakeldap))
     suite.addTest(unittest.makeSuite(TestLDAPUserFolder))
     return suite
 
