@@ -51,8 +51,8 @@ setup(name='Products.%s' % NAME,
                 'Products.CMFDefault >= 2.1.0'
                 ],
           'exportimport': [
-                #'Zope >= 2.8.5'
-                'Products.GenericSetup >= 1.2'
+                #'Zope >= 2.10.0
+                'Products.GenericSetup >= 1.4.0'
                 ],
           },
       tests_require=[
