@@ -12,11 +12,6 @@
 ##############################################################################
 """ SharedResource: Unique resource store
 
-$Id$
-"""
-
-"""Shared Resource.
-
 'Shared Resource' is a module that manages resources shared by all threads. 
 Such resources can be controlled much more easily. A shared resource provides
 locking capabilities (via Python's RLock) and performs automatic locking for 
@@ -24,6 +19,8 @@ function calls. Access to non-functions is not protected.
 
 A shared resource is identified by an id. The application
 is responsible that id s are unique.
+
+$Id$
 """
 
 from threading import _RLock, Lock
