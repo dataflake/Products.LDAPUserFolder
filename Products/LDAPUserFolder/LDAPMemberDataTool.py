@@ -20,10 +20,10 @@ import os
 from copy import deepcopy
 
 # General Zope imports
-from Globals import InitializeClass
-from Globals import package_home
-from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
+from Acquisition import aq_base
+from App.class_init import default__class_init__ as InitializeClass
+from App.Common import package_home
 from ZPublisher.HTTPRequest import HTTPRequest
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 

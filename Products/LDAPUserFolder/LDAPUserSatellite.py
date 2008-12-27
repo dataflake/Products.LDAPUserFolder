@@ -28,11 +28,11 @@ from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
 from AccessControl.SpecialUsers import emergency_user
 from Acquisition import aq_base
+from App.class_init import default__class_init__ as InitializeClass
+from App.Common import package_home
+from App.Dialogs import MessageDialog
+from App.special_dtml import DTMLFile
 from DateTime.DateTime import DateTime
-from Globals import DTMLFile
-from Globals import InitializeClass
-from Globals import MessageDialog
-from Globals import package_home
 from OFS.SimpleItem import SimpleItem
 
 # LDAPUserFolder package imports

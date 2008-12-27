@@ -17,7 +17,7 @@ $Id$
 
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
-from Globals import InitializeClass
+from App.class_init import default__class_init__ as InitializeClass
 
 from Products.CMFCore.permissions import ManageUsers
 from Products.CMFCore.utils import _checkPermission

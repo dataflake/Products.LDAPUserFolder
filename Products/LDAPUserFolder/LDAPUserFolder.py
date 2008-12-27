@@ -32,10 +32,10 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.User import BasicUserFolder
 from AccessControl.User import domainSpecMatch
 from Acquisition import aq_base
+from App.class_init import default__class_init__ as InitializeClass
+from App.Common import package_home
+from App.special_dtml import DTMLFile
 from BTrees.OOBTree import OOBTree
-from Globals import DTMLFile
-from Globals import InitializeClass
-from Globals import package_home
 from OFS.SimpleItem import SimpleItem
 from zope.interface import implements
 

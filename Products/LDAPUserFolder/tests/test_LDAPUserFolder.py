@@ -23,7 +23,7 @@ import unittest
 # Zope imports
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
-from Globals import package_home
+from App.Common import package_home
 
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
