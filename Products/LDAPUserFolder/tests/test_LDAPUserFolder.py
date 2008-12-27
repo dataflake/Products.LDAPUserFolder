@@ -17,7 +17,6 @@ $Id$
 
 # General Python imports
 import copy
-import doctest
 import os.path
 import unittest
 

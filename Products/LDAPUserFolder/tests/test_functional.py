@@ -28,7 +28,6 @@ try:
     from Products.CMFCore.tests.base.testcase import RequestTest
     from Products.CMFDefault.tests.test_join import MembershipTests
     from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUserFolder
-    from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 except ImportError:
     RequestTest = MembershipTests = TestCase
 
