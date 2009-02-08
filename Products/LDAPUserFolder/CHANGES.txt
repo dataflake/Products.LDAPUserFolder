@@ -8,6 +8,10 @@ HISTORY.txt.
 2.13 (unreleased)
 -----------------
 
+- Factoring: Removed the SSHA module in favor of using Zope's 
+  AccessControl.AuthEncoding module to handle password creation for 
+  most types of encryption.
+
 - Bug: Binary attribute handling in manage_addUser was broken. Only the
   first character in the binary attribute's value would be stored.
 

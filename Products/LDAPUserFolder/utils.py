@@ -18,11 +18,10 @@ $Id$
 import base64
 import codecs
 import md5
-import random
 from sets import Set
-import sha
-import SSHA
 import string
+
+from AccessControl import AuthEncoding
 
 #################################################
 # "Safe" imports for use in the other modules
@@ -76,26 +75,21 @@ def _verifyUnicode(st):
         except UnicodeError:
             return unicode(st, encoding)
 
+
 def _createLDAPPassword(password, encoding='SHA'):
-    """ Create a password string suitable for userPassword """
-    if encoding == 'SSHA':
-        pwd_str = '{SSHA}' + SSHA.encrypt(password)
-    elif encoding == 'crypt':
-        saltseeds = list('%s%s' % ( string.lowercase[:26]
-                                  , string.uppercase[:26]
-                                  ) )
-        salt = ''
-        for n in range(2):
-            salt += random.choice(saltseeds)
-        pwd_str = '{crypt}%s' % crypt.crypt(password, salt)
-    elif encoding == 'md5':
+    """ Create a password string suitable for the userPassword attribute
+    """
+    encoding = encoding.upper()
+
+    if encoding in ('SSHA', 'SHA', 'CRYPT'):
+        pwd_str = AuthEncoding.pw_encrypt(password, encoding)
+    elif encoding == 'MD5':
         m = md5.new(password)
-        pwd_str = '{md5}' + base64.encodestring(m.digest())
-    elif encoding == 'clear':
+        pwd_str = '{MD5}' + base64.encodestring(m.digest())
+    elif encoding == 'CLEAR':
         pwd_str = password
     else:
-        sha_obj = sha.new(password)
-        pwd_str = '{SHA}' + base64.encodestring(sha_obj.digest())
+        pwd_str = AuthEncoding.pw_encrypt(password, 'SSHA')
 
     return pwd_str.strip()
 
