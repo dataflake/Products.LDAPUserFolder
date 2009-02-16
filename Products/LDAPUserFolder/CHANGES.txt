@@ -5,8 +5,12 @@ This file contains change information for the LDAPUserFolder product.
 To see changes made to revisions prior to the latest version see
 HISTORY.txt.
 
-2.13 (unreleased)
+3.0 (unreleased)
 -----------------
+
+- Removed the LDAPUserSatellite code due to severe bit-rot. Please use 
+  the PluggableAuthService package in conjunction with LDAPMultiPlugins
+  to gain the same functionality.
 
 - Factoring: Moved the CMF LDAP tools out into their own package
   named Products.CMFLDAP.

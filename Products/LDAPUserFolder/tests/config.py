@@ -58,13 +58,6 @@ alternates = { 'title'  : 'LDAPUserFolder'
              , 'extra_user_filter' : '(special=true)'
              }
 
-satellite_defaults= { 'title' : 'Satellite'
-                    , 'luf' : '/luftest/acl_users'
-                    , 'recurse' : 0
-                    , 'groups_base' : 'ou=special,dc=dataflake,dc=org'
-                    , 'groups_scope' : 2
-                    }
-
 user = { 'cn' : 'test'
        , 'sn' : 'User'
        , 'mail' : 'joe@blow.com'

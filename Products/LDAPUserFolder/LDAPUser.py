@@ -135,65 +135,6 @@ class LDAPUser(BasicUser):
         """ The user's domains """
         return self.domains
 
-
-    #######################################################
-    # Overriding these to enable context-based role
-    # computation with the LDAPUserSatellite
-    #######################################################
-
-    def getRolesInContext(self, object):
-        """Return the list of roles assigned to the user,
-           including local roles assigned in context of
-           the passed in object."""
-        roles = BasicUser.getRolesInContext(self, object)
-
-        acl_satellite = self._getSatellite(object)
-        if acl_satellite and hasattr(acl_satellite, 'getAdditionalRoles'):
-            satellite_roles = acl_satellite.getAdditionalRoles(self)
-            roles = list(roles) + satellite_roles
-
-        return roles
-
-
-    def allowed(self, object, object_roles=None):
-        """ Must override, getRolesInContext is not always called """
-        if BasicUser.allowed(self, object, object_roles):
-            return 1
-
-        acl_satellite = self._getSatellite(object)
-        if acl_satellite and hasattr(acl_satellite, 'getAdditionalRoles'):
-            satellite_roles = acl_satellite.getAdditionalRoles(self)
-
-            for role in object_roles:
-                if role in satellite_roles:
-                    if self._check_context(object):
-                        return 1
-
-        return 0
-
-
-    security.declarePrivate('_getSatellite')
-    def _getSatellite(self, object):
-        """ Get the acl_satellite (sometimes tricky!) """
-        while 1:
-            acl_satellite = getattr(object, 'acl_satellite', None)
-            if acl_satellite is not None:
-                return acl_satellite
-
-            parent = aq_parent(aq_inner(object))
-            if parent:
-                object = parent
-                continue
-
-            if hasattr(object, 'im_self'):
-                object = aq_inner(object.im_self)
-                continue
-
-            break
-
-        return None
-
-
     #######################################################
     # Interface unique to the LDAPUser class of user objects
     #######################################################
