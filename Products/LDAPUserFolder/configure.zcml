@@ -1,6 +1,5 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ldapuserfolder">
@@ -24,22 +23,6 @@
         description="Export LDAPUserFolder settings"
         handler="Products.LDAPUserFolder.exportimport.exportLDAPUserFolder">
     </genericsetup:exportStep>
-
-  </configure>
-
-  <!-- Only install CMFLDAP bits if CMFCore is installed -->
-  <configure
-    zcml:condition="installed Products.CMFCore">
-
-    <cmf:registerDirectory name="cmfldap"/>
-
-    <genericsetup:registerProfile
-        name="cmfldap"
-        title="LDAPUserFolder CMF Tools"
-        description="Adds LDAP support to the CMF."
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        for="Products.CMFCore.interfaces.ISiteRoot"
-        />
 
   </configure>
 

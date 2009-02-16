@@ -8,6 +8,9 @@ HISTORY.txt.
 2.13 (unreleased)
 -----------------
 
+- Factoring: Moved the CMF LDAP tools out into their own package
+  named Products.CMFLDAP.
+
 - Factoring: Removed the SSHA module in favor of using Zope's 
   AccessControl.AuthEncoding module to handle password creation for 
   most types of encryption.

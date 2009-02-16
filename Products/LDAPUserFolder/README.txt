@@ -4,31 +4,25 @@
 
 .. contents::
 
-NOTE: Do not install the CMFLDAP GenericSetup extension profile into a Plone 
-site. They are meant for pure CMF sites only and will break Plone.
-
 This product is a replacement for a Zope user folder. It does not store its 
 own user objects but builds them on the fly after authenticating a user against 
 the LDAP database.
 
 Bug tracker
 ===========
-
 Please post questions, bug reports or feature requests to the bug tracker
 at http://www.dataflake.org/tracker/
 
 SVN version
 ===========
-
 You can retrieve the latest code from Subversion using setuptools or
 zc.buildout via this URL:
 
 http://svn.dataflake.org/svn/Products.LDAPUserFolder/trunk#egg=Products.LDAPUserFolder
 
 
-How to upgrade
-==============
-
+Upgrading
+=========
 Upgrading entails not only unpacking the new code, you should also delete and 
 recreate all LDAPUserFolder instances in your Zope installation to prevent 
 errors. A safe upgrade strategy looks like this:
@@ -47,7 +41,6 @@ Zope installation.
 
 Debugging problems
 ==================
-
 All log messages are sent to the standard Zope event log 'event.log'. In 
 order to see more verbose logging output you need to increase the log level 
 in your Zope instance's zope.conf. See the 'eventlog' directive. Setting 
@@ -56,7 +49,6 @@ problems during setup and testing.
 
 Why does the LDAPUserFolder not show all my LDAP groups?
 ========================================================
-
 According to feedback received from people who use Netscape directory 
 products the way a new group is instantiated allows empty groups to exist 
 in the system. However, according to the canonical definition for group 
@@ -70,7 +62,6 @@ should appear in the LDAPUserFolder after that.
 
 Why use LDAP to store user records?
 ===================================
-
 LDAP as a source of Zope user records is an excellent choice in many cases, 
 like...
 
@@ -94,7 +85,6 @@ like...
 
 The LDAP Schema
 ===============
-
 Your LDAP server should contain records that can be used as user 
 records. Any object types like person, organizationalPerson, 
 or inetOrgPerson and any derivatives thereof should work. Records
@@ -138,7 +128,6 @@ LDAP documentation for a better treatment.
 
 Things to watch out for
 =======================
-
 Since a user folder is one of these items that can lock users out 
 of your site if they break I suggest testing the settings in some 
 inconspicuous location before replacing a site's main acl_users folder 
@@ -149,23 +138,4 @@ as the superuser (or in newer Zope releases called "emergency user")
 who, as an added bonus, can delete and create user folders. This is 
 a breach of the standard "the superuser cannot create / own anything" 
 policy, but can save your skin in so many ways.
-
-LDAP Schema considerations when used with the CMF
-=================================================
-
-The CMF (and by extension, Plone) expect that every user has an email
-address. In order to make everything work correctly your LDAP user
-records must have a "mail" attribute, and this attribute must be set
-up in the "LDAP Schema" tab of your LDAPUserFolder. When you add the
-"mail" schema item make sure you set the "Map to Name" field to
-"email". 
-
-The attributes that show up on the join form and the personalize view
-are governed by the properties you 'register' using the 
-'Member Properties' tab in the portal_memberdata tool ZMI view, which
-in turn is sourced from the 'LDAP Schema' tab in the LDAPUserFolder
-ZMI view. Attributes you would like to enable for portal members
-must be set up on the LDAPUserFolder 'LDAP Schema' tab first, and
-then registered using the 'Membeer properties' screen in the 
-Member data tool ZMI view.
 

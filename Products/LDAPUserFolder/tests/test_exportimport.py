@@ -45,11 +45,6 @@ else:
             return LDAPUserFolderXMLAdapter
 
         def setUp(self):
-            try:
-                import Products.CMFCore
-                zcml.load_config('meta.zcml', Products.CMFCore)
-            except ImportError:
-                pass
             import Products.LDAPUserFolder
             BodyAdapterTestCase.setUp(self)
             zcml.load_config('configure.zcml', Products.LDAPUserFolder)

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_skins" meta_type="CMF Skins Tool">
- <object name="cmfldap" meta_type="Filesystem Directory View"
-    directory="Products.LDAPUserFolder:skins/cmfldap"/>
- <skin-path name="*">
-  <layer name="cmfldap" insert-after="custom"/>
- </skin-path>
-</object>
