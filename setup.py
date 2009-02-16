@@ -46,10 +46,6 @@ setup(name='Products.%s' % NAME,
         "python-ldap >= 2.0.6",
         ],
       extras_require={
-          'cmfldap': [
-                #'Zope >= 2.10.4',
-                'Products.CMFDefault >= 2.1.0'
-                ],
           'exportimport': [
                 #'Zope >= 2.10.0
                 'Products.GenericSetup >= 1.4.0'
