@@ -2,10 +2,9 @@ Changelog for Products.LDAPUserFolder
 =====================================
 
 This file contains change information for the LDAPUserFolder product.
-To see changes made to revisions prior to the latest version see
-HISTORY.txt.
+To see changes for older releases please see HISTORY.txt.
 
-2.13 (unreleased)
+2.13 (2008-05-02)
 -----------------
 
 - Factoring: Removed the SSHA module in favor of using Zope's 
