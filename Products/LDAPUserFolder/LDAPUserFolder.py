@@ -213,6 +213,8 @@ class LDAPUserFolder(BasicUserFolder):
             returns a record's DN and the groups a uid belongs to
             as well as a dictionary containing user attributes
         """
+        users_base = self.users_base
+
         if name == 'dn':
             if value.find(',') == -1:
                 # micro-optimization: this is not a valid dn because it
@@ -225,7 +227,6 @@ class LDAPUserFolder(BasicUserFolder):
             users_base = to_utf8(value)
             search_str = '(objectClass=*)'
         elif name == 'objectGUID':
-            users_base = self.users_base
             # we need to convert the GUID to a specially formatted string
             # for the query to work
             value = guid2string(value)
@@ -233,16 +234,10 @@ class LDAPUserFolder(BasicUserFolder):
             # because it replaces backslashes, which we need as a result
             # of guid2string
             ob_flt = ['(%s=%s)' % (name, value)]
-            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
-                            for o in self._user_objclasses] )
-            search_str = '(&%s)' % ''.join(ob_flt)
-
+            search_str = self._getUserFilterString(filters=ob_flt)
         else:
-            users_base = self.users_base
             ob_flt = [filter_format('(%s=%s)', (name, value))]
-            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
-                            for o in self._user_objclasses] )
-            search_str = '(&%s)' % ''.join(ob_flt)
+            search_str = self._getUserFilterString(filters=ob_flt)
 
         # Step 1: Bind either as the Manager or anonymously to look
         #         up the user from the login given

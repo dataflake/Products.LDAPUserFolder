@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 2.14 (unreleased)
 -----------------
 
+- Bug: _lookupuserbyattr created its own user search filter and 
+  did not take the _extra_user_filter attribute into account
+  (http://www.dataflake.org/tracker/issue_00640)
+
 
 2.13 (2009-05-02)
 -----------------
