@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 3.0 (unreleased)
 -----------------
 
+- Bug: _lookupuserbyattr created its own user search filter and 
+  did not take the _extra_user_filter attribute into account
+  (http://www.dataflake.org/tracker/issue_00640)
+
 - Removed the LDAPUserSatellite code due to severe bit-rot. Please use 
   the PluggableAuthService package in conjunction with LDAPMultiPlugins
   to gain the same functionality.
