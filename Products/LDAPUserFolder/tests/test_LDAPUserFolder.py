@@ -30,6 +30,7 @@ from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
 # Tests imports
 from dataflake.ldapconnection.tests import fakeldap
+from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
@@ -1089,7 +1090,30 @@ class TestLDAPUserFolder(LDAPTest):
         # Expiring the user must remove it from the negative cache
         acl._expireUser('invalid')
         self.failUnless(acl._cache('negative').get(negative_cache_key) is None)
-        
+
+    def test_manage_reinit(self):
+        # part of http://www.dataflake.org/tracker/issue_00629
+        acl = self.folder.acl_users
+        old_hash = acl._hash
+
+        # Fill some caches
+        acl._misc_cache().set('foo', 'bar')
+        self.assertEquals(acl._misc_cache().get('foo'), 'bar')
+        dummy = LDAPDummyUser('user1', 'pass')
+        acl._cache('authenticated').set('user1', dummy)
+        self.assertEquals(acl._cache('authenticated').get('user1'), dummy)
+        acl._cache('anonymous').set('user1', dummy)
+        self.assertEquals(acl._cache('anonymous').get('user1'), dummy)
+        acl._cache('negative').set('user1', dummy)
+        self.assertEquals(acl._cache('negative').get('user1'), dummy)
+
+        acl.manage_reinit()
+        self.failIf(acl._misc_cache().get('foo'))
+        self.failIf(acl._cache('authenticated').get('user1'))
+        self.failIf(acl._cache('anonymous').get('user1'))
+        self.failIf(acl._cache('negative').get('user1'))
+        self.failIf(acl._hash == old_hash)
+
 
 def test_suite():
     suite = unittest.TestSuite()

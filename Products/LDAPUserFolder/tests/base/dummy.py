@@ -15,15 +15,15 @@
 $Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
-from Acquisition import Implicit
+import time
 
-from Products.CMFCore.tests.base.dummy import DummyUser
-from Products.CMFCore.tests.base.dummy import DummyUserFolder
+from Acquisition import Implicit
+from DateTime.DateTime import DateTime
 
 DN_BASE = 'dc=example,dc=com'
 
 
-class LDAPDummyUser(Implicit, DummyUser):
+class LDAPDummyUser(Implicit):
     """ LDAP-enabled dummy user """
 
     def __init__(self, name, password='', roles=(), domains=()):
@@ -31,6 +31,7 @@ class LDAPDummyUser(Implicit, DummyUser):
         self.__ = password
         self.roles = tuple(roles)
         self.domains = tuple(domains)
+        self._created = time.time()
 
     def getId(self):
         return self.name
@@ -53,10 +54,11 @@ class LDAPDummyUser(Implicit, DummyUser):
     def _getPassword(self):
         return self.__
 
+    def getCreationTime(self):
+        return DateTime(self._created)
 
 
-
-class LDAPDummyUserFolder(DummyUserFolder):
+class LDAPDummyUserFolder(Implicit):
     """ LDAP-enabled dummy user folder """
 
     _rdnattr = 'cn'

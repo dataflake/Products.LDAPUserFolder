@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 2.14 (unreleased)
 -----------------
 
+- Potential Bug: Avoid cache hash clashes by recomputing the hash 
+  when the admin clears the caches in the ZMI
+  (http://www.dataflake.org/tracker/issue_00629)
+
 - Bug: _lookupuserbyattr created its own user search filter and 
   did not take the _extra_user_filter attribute into account
   (http://www.dataflake.org/tracker/issue_00640)
