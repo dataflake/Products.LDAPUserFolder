@@ -42,8 +42,8 @@ setup(name='Products.%s' % NAME,
       zip_safe=False,
       install_requires=[
         #"Zope >= 2.8",
-        "setuptools",
-        "python-ldap >= 2.0.6",
+        'setuptools',
+        'dataflake.ldapconnection >= 0.2',
         ],
       extras_require={
           'exportimport': [
@@ -51,9 +51,6 @@ setup(name='Products.%s' % NAME,
                 'Products.GenericSetup >= 1.4.0'
                 ],
           },
-      tests_require=[
-        'dataflake.ldapconnection >= 0.2',
-        ],
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize
