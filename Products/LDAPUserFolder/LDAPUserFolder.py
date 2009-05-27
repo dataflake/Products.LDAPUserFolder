@@ -335,6 +335,9 @@ class LDAPUserFolder(BasicUserFolder):
     def manage_reinit(self, REQUEST=None):
         """ re-initialize and clear out users and log """
         self._clearCaches()
+        self._hash = '%s-%s' % ( str(self.getPhysicalPath())
+                               , str(random.random())
+                               )
         logger.info('manage_reinit: Cleared caches')
 
         if REQUEST:

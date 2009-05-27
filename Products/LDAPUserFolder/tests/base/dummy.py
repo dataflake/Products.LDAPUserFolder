@@ -15,7 +15,10 @@
 $Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
+import time
+
 from Acquisition import Implicit
+from DateTime.DateTime import DateTime
 
 DN_BASE = 'dc=example,dc=com'
 
@@ -28,6 +31,7 @@ class LDAPDummyUser(Implicit):
         self.__ = password
         self.roles = tuple(roles)
         self.domains = tuple(domains)
+        self._created = time.time()
 
     def getId(self):
         return self.name
@@ -57,6 +61,9 @@ class LDAPDummyUser(Implicit):
 
     def _getPassword(self):
         return self.__
+
+    def getCreationTime(self):
+        return DateTime(self._created)
 
 
 class LDAPDummyUserFolder(Implicit):
