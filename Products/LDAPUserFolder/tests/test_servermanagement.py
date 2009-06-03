@@ -10,28 +10,33 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-""" Tests for the LDAPDelegate class
+""" LDAPUserFolder server management tests
 
 $Id$
 """
 
 import unittest
 
+from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 
-class TestSimple(unittest.TestCase):
 
-    def _getTargetClass(self):
-        from Products.LDAPUserFolder.LDAPDelegate import LDAPDelegate
+class TestServerManagement(LDAPTest):
 
-        return LDAPDelegate
+    def testServerManagement(self):
+        acl = self.folder.acl_users
+        self.assertEquals(len(acl.getServers()), 1)
+        acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
+        self.assertEquals(len(acl.getServers()), 2)
+        acl.manage_addServer('localhost')
+        self.assertEquals(len(acl.getServers()), 2)
+        acl.manage_deleteServers([1])
+        self.assertEquals(len(acl.getServers()), 1)
+        acl.manage_deleteServers()
+        self.assertEquals(len(acl.getServers()), 1)
 
-    def _makeOne(self, *args, **kw):
-        klass = self._getTargetClass()
 
-        return klass(*args, **kw)
-
-        
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(TestSimple),
+        unittest.makeSuite(TestServerManagement),
         ))
+

@@ -29,7 +29,7 @@ if sys.modules.has_key('_ldap'):
     del sys.modules['_ldap']
 sys.modules['ldap'] = fakeldap
 from Products.LDAPUserFolder import LDAPDelegate
-LDAPDelegate.c_factory = fakeldap.ldapobject.ReconnectLDAPObject
+LDAPDelegate.c_factory = fakeldap.ldapobject.SmartLDAPObject
 
 # LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder

@@ -260,7 +260,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         res = self._delegate.search( base=users_base
                                    , scope=self.users_scope
-                                   , filter=search_str
+                                   , fltr=search_str
                                    , attrs=known_attrs
                                    , bind_dn=bind_dn
                                    , bind_pwd=bind_pwd
@@ -304,7 +304,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             auth_res = self._delegate.search( base=utf8_dn
                                             , scope=self._delegate.BASE
-                                            , filter='(objectClass=*)'
+                                            , fltr='(objectClass=*)'
                                             , attrs=known_attrs
                                             , bind_dn=user_dn
                                             , bind_pwd=user_pwd
@@ -545,7 +545,7 @@ class LDAPUserFolder(BasicUserFolder):
         res = self._delegate.search( base=base_dn
                                    , scope=scope
                                    , attrs=attrnames
-                                   , filter=filter_str
+                                   , fltr=filter_str
                                    )
 
         if res['size'] == 0 or res['exception']:
@@ -890,7 +890,7 @@ class LDAPUserFolder(BasicUserFolder):
             member_attrs = list(Set(GROUP_MEMBER_MAP.values()))
             res = self._delegate.search( base=self.groups_base
                                        , scope=self.groups_scope
-                                       , filter=filter_format('(cn=%s)', (cn,))
+                                       , fltr=filter_format('(cn=%s)', (cn,))
                                        , attrs=member_attrs
                                        )
 
@@ -1046,7 +1046,7 @@ class LDAPUserFolder(BasicUserFolder):
             search_str = self._getUserFilterString(filters=filt_list)
             res = self._delegate.search( base=users_base
                                        , scope=search_scope
-                                       , filter=search_str
+                                       , fltr=search_str
                                        , attrs=attrs
                                        )
 
@@ -1135,7 +1135,7 @@ class LDAPUserFolder(BasicUserFolder):
             search_str = '(&%s)' % ''.join(filt_list)
             res = self._delegate.search( base=groups_base
                                        , scope=self.groups_scope
-                                       , filter=search_str
+                                       , fltr=search_str
                                        , attrs=attrs
                                        )
 
@@ -1230,7 +1230,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             res = self._delegate.search( base=self.groups_base
                                        , scope=gscope
-                                       , filter=group_filter
+                                       , fltr=group_filter
                                        , attrs=['cn']
                                        , bind_dn=''
                                        , bind_pwd=''
@@ -1903,7 +1903,7 @@ class LDAPUserFolder(BasicUserFolder):
         search_str = filter_format('(%s=%s)', (attr, str(value)))
         res = self._delegate.search( base=self.users_base
                                    , scope=self.users_scope
-                                   , filter=search_str
+                                   , fltr=search_str
                                    )
 
         if res['exception']:

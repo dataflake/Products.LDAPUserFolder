@@ -61,6 +61,12 @@ else:
             acl = self.root.site.acl_users = LDAPUserFolder()
 
             if use_changed:
+                acl.manage_addServer( 'localhost'
+                                    , port='636'
+                                    , use_ssl=True
+                                    , conn_timeout=10
+                                    , op_timeout=10
+                                    )
                 acl.manage_edit( 'changed title'
                                , 'uid'
                                , 'cn'
@@ -86,12 +92,6 @@ else:
                                             , public_name='publicmail'
                                             , binary=True
                                             )
-                acl.manage_addServer( 'localhost'
-                                    , port='636'
-                                    , use_ssl=True
-                                    , conn_timeout=10
-                                    , op_timeout=10
-                                    )
                 acl.manage_addGroup('posixAdmin')
                 acl.manage_addGroupMapping('posixAdmin', 'Manager')
                 acl._anonymous_timeout = 60
