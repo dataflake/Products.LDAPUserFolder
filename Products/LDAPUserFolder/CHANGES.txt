@@ -7,6 +7,20 @@ To see changes for older releases please see HISTORY.txt.
 3.0 (unreleased)
 -----------------
 
+- Feature: The kind of LDAP connection object to be used can be 
+  changed by the administrator through ZCML instead of monkey
+  patching a module-level constant in the LDAPDelegate module
+
+- Refactoring: Remove the delegate registration mechanism
+
+- Refactoring: The fakeldap module is only used to provide the 
+  LDAP connection factory, and not as a full python-ldap module
+  facade. For testing it is no longer necessary to mess with
+  the sys.modules registry.
+
+- Refactoring: Now using dataflake.ldapconnection, the LDAPDelegate
+  is just a wrapper. Remove obsolete LDAPDelegate methods.
+
 - Potential Bug: Avoid cache hash clashes by recomputing the hash 
   when the admin clears the caches in the ZMI
   (http://www.dataflake.org/tracker/issue_00629)

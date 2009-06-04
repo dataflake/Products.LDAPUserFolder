@@ -15,7 +15,6 @@
 $Id$
 """
 
-# General python imports
 import logging
 import os
 import random
@@ -24,7 +23,6 @@ import sha
 import time
 import urllib
 
-# Zope imports
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
@@ -39,15 +37,16 @@ from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem
 from zope.interface import implements
 
-# LDAPUserFolder package imports
+from dataflake.ldapconnection.connection import explode_dn
+from dataflake.ldapconnection.connection import filter_format
+
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
-from Products.LDAPUserFolder.LDAPDelegate import filter_format
+from Products.LDAPUserFolder.LDAPDelegate import LDAPDelegate
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
 from Products.LDAPUserFolder.SimpleCache import SharedObject
 from Products.LDAPUserFolder.SimpleCache import SimpleCache
-from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
 from Products.LDAPUserFolder.utils import crypt
 from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
@@ -154,7 +153,7 @@ class LDAPUserFolder(BasicUserFolder):
     def __init__(self, delegate_type='LDAP delegate'):
         """ Create a new LDAPUserFolder instance """
         self._hash = '%s%s' % (self.meta_type, str(random.random()))
-        self._delegate = _createDelegate(delegate_type)
+        self._delegate = LDAPDelegate()
         self._ldapschema = { 'cn' : { 'ldap_name' : 'cn'
                                     , 'friendly_name' : 'Canonical Name'
                                     , 'multivalued' : False
@@ -839,12 +838,6 @@ class LDAPUserFolder(BasicUserFolder):
         return user
 
 
-    #################################################################
-    #
-    # Stuff formerly in LDAPShared.py
-    #
-    #################################################################
-
     security.declareProtected(manage_users, 'getUserDetails')
     def getUserDetails(self, encoded_dn, format=None, attrs=()):
         """ Return all attributes for a given DN """
@@ -1249,7 +1242,7 @@ class LDAPUserFolder(BasicUserFolder):
                     try:
                         cn = res_dicts[i]['cn'][0]
                     except KeyError:    # NDS oddity
-                        cn = self._delegate.explode_dn(dn, 1)[0]
+                        cn = explode_dn(dn, 1)[0]
 
                     if attr is None:
                         group_list.append((cn, dn))
@@ -1557,7 +1550,7 @@ class LDAPUserFolder(BasicUserFolder):
 
                         for role in user_roles:
                             try:
-                                exploded = self._delegate.explode_dn(role)
+                                exploded = explode_dn(role)
                                 elements = len(exploded)
                             except:
                                 elements = 1
@@ -1841,7 +1834,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if new_cn and new_utf8_rdn != old_utf8_rdn:
             old_dn = utf8_dn
-            old_dn_exploded = self._delegate.explode_dn(old_dn)
+            old_dn_exploded = explode_dn(old_dn)
             old_dn_exploded[0] = new_rdn
             new_dn = ','.join(old_dn_exploded)
             old_groups = self.getGroups(dn=user_dn, attr='dn')

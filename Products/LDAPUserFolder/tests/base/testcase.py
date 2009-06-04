@@ -15,26 +15,18 @@
 $Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
-# General Python imports
 import unittest, sys
 
-# Zope imports
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
 import transaction
+from zope.component import getSiteManager
+from zope.component.interfaces import IFactory
 
-# Do some namespace manipulation to make use of fakeldap
 from dataflake.ldapconnection.tests import fakeldap
-if sys.modules.has_key('_ldap'):
-    del sys.modules['_ldap']
-sys.modules['ldap'] = fakeldap
-from Products.LDAPUserFolder import LDAPDelegate
-LDAPDelegate.c_factory = fakeldap.ldapobject.SmartLDAPObject
 
-# LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
-# Tests imports
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
 from Products.LDAPUserFolder.tests.config import user
@@ -47,6 +39,11 @@ u2g = user2.get
 class LDAPTest(unittest.TestCase):
 
     def setUp(self):
+        gsm = getSiteManager()
+        gsm.registerUtility( fakeldap.ldapobject.SmartLDAPObject
+                           , IFactory
+                           , 'LDAP connection factory'
+                           )
         fakeldap.clearTree()
         transaction.begin()
         self.app = self.root = ZopeTestCase.app()
@@ -77,6 +74,11 @@ class LDAPTest(unittest.TestCase):
         fakeldap.addTreeItems(dg('groups_base'))
 
     def tearDown( self ):
+        gsm = getSiteManager()
+        gsm.unregisterUtility( fakeldap.ldapobject.SmartLDAPObject
+                             , IFactory
+                             , 'LDAP connection factory'
+                             )
         transaction.abort()
         ZopeTestCase.close(self.app)
 

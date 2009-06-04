@@ -19,6 +19,10 @@ import unittest
 
 from OFS.Folder import Folder
 from Products.Five import zcml
+from zope.component import getSiteManager
+from zope.component.interfaces import IFactory
+
+from dataflake.ldapconnection.tests import fakeldap
 
 from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
 
@@ -46,7 +50,7 @@ else:
 
         def setUp(self):
             import Products.LDAPUserFolder
-            BodyAdapterTestCase.setUp(self)
+            super(LDAPUserFolderXMLAdapterTests, self).setUp()
             zcml.load_config('configure.zcml', Products.LDAPUserFolder)
             self._obj = LDAPUserFolder()
             self._BODY = _LDAPUSERFOLDER_BODY
@@ -54,6 +58,23 @@ else:
     class _LDAPUserFolderSetup(BaseRegistryTests):
 
         layer = ExportImportZCMLLayer
+
+        def setUp(self):
+            gsm = getSiteManager()
+            gsm.registerUtility( fakeldap.ldapobject.SmartLDAPObject
+                               , IFactory
+                               , 'LDAP connection factory'
+                               )
+            super(_LDAPUserFolderSetup, self).setUp()
+
+        def tearDown(self):
+            gsm = getSiteManager()
+            gsm.unregisterUtility( fakeldap.ldapobject.SmartLDAPObject
+                                 , IFactory
+                                 , 'LDAP connection factory'
+                                 )
+            super(_LDAPUserFolderSetup, self).tearDown()
+
 
         def _initSite(self, use_changed=False):
             self.root.site = Folder(id='site')

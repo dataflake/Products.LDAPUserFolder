@@ -123,33 +123,3 @@ def guid2string(val):
     return ''.join(s)
 
 
-############################################################
-# LDAP delegate registry
-############################################################
-
-delegate_registry = {}
-
-def registerDelegate(name, klass, description=''):
-    """ Register delegates that handle the LDAP-related work
-
-    name is a short ID-like moniker for the delegate
-    klass is a reference to the delegate class itself
-    description is a more verbose delegate description
-    """
-    delegate_registry[name] = { 'name'        : name
-                              , 'klass'       : klass
-                              , 'description' : description
-                              }
-
-def registeredDelegates():
-    """ Return the currently-registered delegates """
-    return delegate_registry
-
-def _createDelegate(name='LDAP delegate'):
-    """ Create a delegate based on the name passed in """
-    default = delegate_registry.get('LDAP delegate')
-    info = delegate_registry.get(name, None) or default
-    klass = info['klass']
-    delegate = klass()
-
-    return delegate

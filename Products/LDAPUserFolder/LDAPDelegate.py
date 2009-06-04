@@ -16,22 +16,21 @@ $Id$
 """
 
 import ldap
-from ldap.dn import escape_dn_chars
-from ldap.filter import filter_format
 import logging
 import random
 
 from AccessControl.SecurityManagement import getSecurityManager
 from Persistence import Persistent
+from zope.component import getUtility
+from zope.component.factory import Factory
+from zope.component.interfaces import ComponentLookupError
+from zope.component.interfaces import IFactory
 
 from dataflake.ldapconnection.connection import LDAPConnection
 
-from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
 from Products.LDAPUserFolder.SharedResource import setResource
-from Products.LDAPUserFolder.utils import registerDelegate
 
-c_factory = ldap.ldapobject.SmartLDAPObject
 logger = logging.getLogger('event.LDAPDelegate')
 
 
@@ -164,10 +163,10 @@ class LDAPDelegate(Persistent):
             user_pwd = self.bind_pwd
         else:
             user = getSecurityManager().getUser()
-            if isinstance(user, LDAPUser):
+            try:
                 user_dn = user.getUserDN()
                 user_pwd = user._getPassword()
-            else:
+            except AttributeError:
                 user_dn = user_pwd = ''
 
         connection_manager = getResource('%s-connection' % self._hash, str, ())
@@ -179,6 +178,13 @@ class LDAPDelegate(Persistent):
             for i in range(len(self._servers)):
                 svr = self._servers[i]
                 if not i:
+                    try:
+                        c_factory = getUtility( IFactory
+                                              , 'LDAP connection factory'
+                                              )
+                    except ComponentLookupError:
+                        c_factory = ldap.ldapobject.SmartLDAPObject
+
                     connection_manager = LDAPConnection( svr['host']
                                              , svr['port']
                                              , svr['protocol']
@@ -261,33 +267,5 @@ class LDAPDelegate(Persistent):
     def getScopes(self):
         return (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
-    def _clean_rdn(self, rdn):
-        """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        if rdn.find('\\') != -1:
-            # already escaped, disregard
-            return rdn
-
-        try:
-            key, val = rdn.split('=')
-            val = val.lstrip()
-            return '%s=%s' % (key, escape_dn_chars(val))
-        except ValueError:
-            return rdn
-
-    def _clean_dn(self, dn):
-        """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        elems = [self._clean_rdn(x) for x in self.explode_dn(dn)]
-
-        return ','.join(elems)
-
-    def explode_dn(self, dn, notypes=0):
-        """ Indirection to avoid need for importing ldap elsewhere """
-        return ldap.explode_dn(dn, notypes)
-
-
-# Register this delegate class with the delegate registry
-registerDelegate( 'LDAP delegate'
-                , LDAPDelegate
-                , 'The default LDAP delegate from the LDAPUserFolder package'
-                )
+connectionFactory = Factory(ldap.ldapobject.SmartLDAPObject)
 

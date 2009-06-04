@@ -4,6 +4,12 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ldapuserfolder">
 
+  <!-- The kind of LDAP connection to be used -->
+  <utility
+    component=".LDAPDelegate.connectionFactory"
+    name="LDAP connection factory"
+    />
+
   <!-- Only install GenericSetup handlers if GenericSetup is installed -->
   <configure
     zcml:condition="installed Products.GenericSetup">
