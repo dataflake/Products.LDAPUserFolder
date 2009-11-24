@@ -38,7 +38,7 @@ except ImportError:
 
 else:
 
-    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase):
+    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase, unittest.TestCase):
 
         layer = ExportImportZCMLLayer
     
