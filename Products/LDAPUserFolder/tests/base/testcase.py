@@ -23,11 +23,7 @@ from OFS.Folder import Folder
 from Testing import ZopeTestCase
 import transaction
 
-# Do some namespace manipulation to make use of fakeldap
 from dataflake.ldapconnection.tests import fakeldap
-if sys.modules.has_key('_ldap'):
-    del sys.modules['_ldap']
-sys.modules['ldap'] = fakeldap
 from Products.LDAPUserFolder import LDAPDelegate
 LDAPDelegate.c_factory = fakeldap.ldapobject.ReconnectLDAPObject
 

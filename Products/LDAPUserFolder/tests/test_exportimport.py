@@ -34,7 +34,7 @@ except ImportError:
 
 else:
 
-    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase):
+    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase, unittest.TestCase):
 
         layer = ExportImportZCMLLayer
     
@@ -51,7 +51,7 @@ else:
             except ImportError:
                 pass
             import Products.LDAPUserFolder
-            BodyAdapterTestCase.setUp(self)
+            super(LDAPUserFolderXMLAdapterTests, self).setUp()
             zcml.load_config('configure.zcml', Products.LDAPUserFolder)
             self._obj = LDAPUserFolder()
             self._BODY = _LDAPUSERFOLDER_BODY

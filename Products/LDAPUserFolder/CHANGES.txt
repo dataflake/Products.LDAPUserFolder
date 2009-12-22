@@ -7,6 +7,12 @@ To see changes for older releases please see HISTORY.txt.
 2.15 (unreleased)
 -----------------
 
+- Changed import/export test code to be compatible with 
+  GenericSetup 1.5
+
+- No longer force-inject the "fakeldap" module into the module
+  namespace sys.modules as "ldap" for testing
+
 
 2.14 (2009-12-22)
 -----------------
