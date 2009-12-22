@@ -17,6 +17,7 @@ $Id$
 
 # General Python imports
 import copy
+import ldap
 import os.path
 import unittest
 
@@ -740,12 +741,12 @@ class TestLDAPUserFolder(LDAPTest):
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=ldap.SCOPE_BASE)
         old_pw = res[0][1]['userPassword'][0]
         acl.manage_editUserPassword(user_dn, 'newpass')
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=ldap.SCOPE_BASE)
         new_pw = res[0][1]['userPassword'][0]
         self.assertNotEqual(old_pw, new_pw)
 
@@ -757,14 +758,14 @@ class TestLDAPUserFolder(LDAPTest):
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=ldap.SCOPE_BASE)
         old_pw = res[0][1]['userPassword'][0]
         acl.read_only = 1
         acl._delegate.read_only = 1
         acl.manage_editUserPassword(user_dn, 'newpass')
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        res = conn.search_s(user_ob.getUserDN(), scope=fakeldap.SCOPE_BASE)
+        res = conn.search_s(user_ob.getUserDN(), scope=ldap.SCOPE_BASE)
         new_pw = res[0][1]['userPassword'][0]
         self.assertEqual(old_pw, new_pw)
 

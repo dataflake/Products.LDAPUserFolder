@@ -7,6 +7,9 @@ To see changes for older releases please see HISTORY.txt.
 2.14 (unreleased)
 -----------------
 
+- Updated compatibility with CMF 2.1 and the upcoming 
+  dataflake.ldapconnection 1.0
+
 - Potential Bug: Avoid cache hash clashes by recomputing the hash 
   when the admin clears the caches in the ZMI
   (http://www.dataflake.org/tracker/issue_00629)

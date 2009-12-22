@@ -57,6 +57,11 @@ class LDAPDummyUser(Implicit):
     def getCreationTime(self):
         return DateTime(self._created)
 
+    def allowed(self, context, roles):
+        if set(roles).intersection(set(self.roles)):
+            return True
+        return False
+
 
 class LDAPDummyUserFolder(Implicit):
     """ LDAP-enabled dummy user folder """
@@ -166,3 +171,8 @@ class LDAPDummyUserFolder(Implicit):
 
         return getattr(self, user_id, None)
 
+    def getUserById(self, id, default=None):
+        return getattr(self, id, default)
+
+    def getUser(self, name):
+        return getattr(self, name, None)
