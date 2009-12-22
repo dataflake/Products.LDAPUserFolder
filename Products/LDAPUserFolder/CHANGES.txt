@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.14 (unreleased)
+2.14 (2009-12-22)
 -----------------
 
 - Updated compatibility with CMF 2.1 and the upcoming 
