@@ -15,7 +15,7 @@ Bug tracker
 ===========
 
 Please post questions, bug reports or feature requests to the bug tracker
-at http://www.dataflake.org/tracker/
+at https://bugs.launchpad.net/ldapuserfolder
 
 SVN version
 ===========
