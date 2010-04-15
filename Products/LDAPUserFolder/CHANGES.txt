@@ -7,6 +7,9 @@ To see changes for older releases please see HISTORY.txt.
 2.16 (unreleased)
 -----------------
 
+- depend on dataflake.ldapconnection so tests run without 
+  any hassle.
+
 - Use sha hexdigests instead of digests to build cache keys,
   digest values can contain non-ASCII characters.
 

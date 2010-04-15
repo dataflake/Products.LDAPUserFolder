@@ -34,7 +34,7 @@ setup(name='Products.%s' % NAME,
       keywords='web application server zope zope2 ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url="http://pypi.python.org/pypi/Products.LDAPUserFolder",
+      url="http://pypi.python.org/pypi/Products.%s" % NAME,
       license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
       packages=find_packages(),
       include_package_data=True,
@@ -43,7 +43,7 @@ setup(name='Products.%s' % NAME,
       install_requires=[
         #"Zope >= 2.8",
         "setuptools",
-        "python-ldap >= 2.0.6",
+        "dataflake.ldapconnection",
         ],
       extras_require={
           'cmfldap': [
@@ -55,9 +55,6 @@ setup(name='Products.%s' % NAME,
                 'Products.GenericSetup >= 1.4.0'
                 ],
           },
-      tests_require=[
-        'dataflake.ldapconnection >= 0.2',
-        ],
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize
