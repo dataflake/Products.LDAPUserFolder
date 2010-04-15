@@ -20,7 +20,10 @@ import logging
 import os
 import random
 from sets import Set
-import sha
+try:
+    from hashlib import sha1 as sha_new
+except ImportError:
+    from sha import new as sha_new
 import time
 import urllib
 
@@ -696,7 +699,7 @@ class LDAPUserFolder(BasicUserFolder):
             return None
         
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s' % (value, sha.new(pwd or '').digest())
+        negative_cache_key = '%s:%s' % (value, sha_new(pwd or '').hexdigest())
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -1888,7 +1891,7 @@ class LDAPUserFolder(BasicUserFolder):
         # This only removes records from the negative cache which
         # were retrieved without a password, since down here we do not
         # know that password.
-        negative_cache_key = '%s:%s' % (user, sha.new('').digest())
+        negative_cache_key = '%s:%s' % (user, sha_new('').hexdigest())
         self._cache('negative').remove(negative_cache_key)
 
 
