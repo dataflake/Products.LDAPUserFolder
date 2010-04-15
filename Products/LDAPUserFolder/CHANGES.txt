@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.16 (unreleased)
+2.16 (2010-04-15)
 -----------------
 
 - depend on dataflake.ldapconnection so tests run without 
