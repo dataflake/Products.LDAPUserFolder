@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 2.17 (unreleased)
 -----------------
 
+- Added GenericSetup magic to fully provide the INode interface
+  for the exporter and importer classes, making it easier to nest
+  within other importers.
+  (https://bugs.launchpad.net/bugs/586531)
+
 
 2.16 (2010-04-15)
 -----------------
