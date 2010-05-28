@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 3.0 (unreleased)
 -----------------
 
+- Added GenericSetup magic to fully provide the INode interface
+  for the exporter and importer classes, making it easier to nest
+  within other importers.
+  (https://bugs.launchpad.net/bugs/586531)
+
 - Feature: The kind of LDAP connection object to be used can be 
   changed by the administrator through ZCML instead of monkey
   patching a module-level constant in the LDAPDelegate module
