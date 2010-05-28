@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.17 (unreleased)
+2.17 (2010-05-28)
 -----------------
 
 - Added GenericSetup magic to fully provide the INode interface
