@@ -305,10 +305,18 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 if grandchild.nodeName != 'ldap-server':
                     continue
 
-                use_ssl = grandchild.getAttribute('protocol').lower() == u'ldaps'
+                if grandchild.getAttribute('protocol').lower() == u'ldaps':
+                    use_ssl = 1
+                elif grandchild.getAttribute('protocol').lower() == u'ldapi':
+                    use_ssl = 2
+                else:
+                    use_ssl = 0
+                port = grandchild.getAttribute('port')
+                if port:
+                    port = int(port)
                 self.context.manage_addServer(
                     grandchild.getAttribute('host').encode(self._encoding)
-                  , port=int(grandchild.getAttribute('port'))
+                  , port=port
                   , use_ssl=use_ssl
                   , conn_timeout=int(grandchild.getAttribute('conn_timeout'))
                   , op_timeout=int(grandchild.getAttribute('op_timeout'))

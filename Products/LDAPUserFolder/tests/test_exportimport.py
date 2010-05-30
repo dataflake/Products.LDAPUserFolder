@@ -97,6 +97,12 @@ else:
                                     , conn_timeout=10
                                     , op_timeout=10
                                     )
+                acl.manage_addServer( '/var/spool/ldapi'
+                                    , port=''
+                                    , use_ssl=2
+                                    , conn_timeout=2
+                                    , op_timeout=2
+                                    )
                 acl.manage_addGroup('posixAdmin')
                 acl.manage_addGroupMapping('posixAdmin', 'Manager')
                 acl._anonymous_timeout = 60
@@ -186,15 +192,21 @@ else:
                              )
 
             servers = acl.getServers()
-            self.assertEquals(len(servers), 1)
-            self.assertEquals( servers[0]
-                             , { 'host' : 'localhost'
-                               , 'port' : 636
-                               , 'protocol' : 'ldaps'
-                               , 'conn_timeout' : 10
-                               , 'op_timeout' : 10
-                               }
-                             )
+            self.assertEquals(len(servers), 2)
+            svr1 = { 'host' : 'localhost'
+                   , 'port' : 636
+                   , 'protocol' : 'ldaps'
+                   , 'conn_timeout' : 10
+                   , 'op_timeout' : 10
+                   }
+            svr2 = { 'host': '/var/spool/ldapi'
+                   , 'port': 0
+                   , 'protocol': 'ldapi'
+                   , 'conn_timeout': 2
+                   , 'op_timeout': 2
+                    }
+            self.failUnless(svr1 in servers)
+            self.failUnless(svr2 in servers)
 
             local_groups = list(acl._groups_store.items())
             self.assertEquals(len(local_groups), 2)
@@ -294,6 +306,8 @@ _CHANGED_EXPORT = """\
  <ldap-servers>
   <ldap-server host="localhost" port="636" protocol="ldaps" conn_timeout="10"
      op_timeout="10"/>
+ <ldap-server host="/var/spool/ldapi" port="0" protocol="ldapi" conn_timeout="2"
+     op_timeout="2"/>
  </ldap-servers>
  <ldap-schema>
   <schema-item binary="False" friendly_name="uid" ldap_name="uid" 

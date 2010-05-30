@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 2.18 (unreleased)
 -----------------
 
+- The export/import code did not handle server definitions 
+  using the ``ldapi`` protocol correctly.
+  (part of https://bugs.launchpad.net/bugs/586970)
+
 - When adding a new server definition, the comparison to avoid 
   duplicate server definitions was faulty. Furthermore, operations 
   and connection timeout values were disregarded for duplicate 
