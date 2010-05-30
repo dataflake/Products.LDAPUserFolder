@@ -175,16 +175,31 @@ class TestLDAPUserFolder(LDAPTest):
 
     def testServerManagement(self):
         acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getServers()), 1)
+        self.assertEqual(len(acl.getServers()), 1)
         acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
-        ae(len(acl.getServers()), 2)
+        self.assertEqual(len(acl.getServers()), 2)
+        acl.manage_addServer('ldap.some.com', port='636', use_ssl=1)
+        self.assertEqual(len(acl.getServers()), 2)
         acl.manage_addServer('localhost')
-        ae(len(acl.getServers()), 2)
+        self.assertEqual(len(acl.getServers()), 2)
         acl.manage_deleteServers([1])
-        ae(len(acl.getServers()), 1)
+        self.assertEqual(len(acl.getServers()), 1)
         acl.manage_deleteServers()
-        ae(len(acl.getServers()), 1)
+        self.assertEqual(len(acl.getServers()), 1)
+
+        acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
+        svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
+        self.assertEquals(svr['conn_timeout'], 5)
+        self.assertEquals(svr['op_timeout'], -1)
+        acl.manage_addServer( 'ldap.some.com'
+                            , port=636
+                            , use_ssl=1
+                            , op_timeout=10
+                            , conn_timeout=15
+                            )
+        svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
+        self.assertEquals(svr['conn_timeout'], 15)
+        self.assertEquals(svr['op_timeout'], 10)
 
     def testImplicitMapping(self):
         acl = self.folder.acl_users

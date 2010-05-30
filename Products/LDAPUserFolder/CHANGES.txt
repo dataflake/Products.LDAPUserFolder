@@ -7,6 +7,12 @@ To see changes for older releases please see HISTORY.txt.
 2.18 (unreleased)
 -----------------
 
+- When adding a new server definition, the comparison to avoid 
+  duplicate server definitions was faulty. Furthermore, operations 
+  and connection timeout values were disregarded for duplicate 
+  server definitions.
+  (https://bugs.launchpad.net/bugs/586967)
+
 
 2.17 (2010-05-28)
 -----------------
