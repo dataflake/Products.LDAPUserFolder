@@ -7,6 +7,12 @@ To see changes for older releases please see HISTORY.txt.
 2.18 (unreleased)
 -----------------
 
+- Added a new flag ``purge`` to the ``ldap-servers`` and 
+  ``ldap-schema`` export/import XML elements for finer-grained 
+  control over value purging for those two settings if the 
+  global purge flag is not set.
+  (https://bugs.launchpad.net/bugs/586970)
+
 - The export/import code did not handle server definitions 
   using the ``ldapi`` protocol correctly.
   (part of https://bugs.launchpad.net/bugs/586970)

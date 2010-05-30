@@ -204,7 +204,7 @@ else:
                    , 'protocol': 'ldapi'
                    , 'conn_timeout': 2
                    , 'op_timeout': 2
-                    }
+                   }
             self.failUnless(svr1 in servers)
             self.failUnless(svr2 in servers)
 
@@ -213,6 +213,108 @@ else:
             self.failUnless(('user1', ['posixAdmin', 'foobar']) in local_groups)
             self.failUnless(('user2', ['baz']) in local_groups)
 
+
+        def test_servers_purge(self):
+            from Products.LDAPUserFolder.exportimport import \
+                importLDAPUserFolder
+
+            site = self._initSite(use_changed=True)
+            acl = site.acl_users
+
+            context = DummyImportContext(site, purge=False)
+            context._files['ldapuserfolder.xml'] = _SERVERS_SCHEMA_PURGE
+            importLDAPUserFolder(context)
+
+            servers = acl.getServers()
+            self.assertEquals(len(servers), 2)
+            svr1 = { 'host' : 'otherhost'
+                   , 'port' : 1389
+                   , 'protocol' : 'ldap'
+                   , 'conn_timeout' : 1
+                   , 'op_timeout' : 1
+                   }
+            svr2 = { 'host': '/tmp/ldapi'
+                   , 'port': 0
+                   , 'protocol': 'ldapi'
+                   , 'conn_timeout': 20
+                   , 'op_timeout': 20
+                    }
+            self.failUnless(svr1 in servers)
+            self.failUnless(svr2 in servers)
+
+        def test_servers_nopurge(self):
+            from Products.LDAPUserFolder.exportimport import \
+                importLDAPUserFolder
+
+            site = self._initSite(use_changed=True)
+            acl = site.acl_users
+
+            context = DummyImportContext(site, purge=False)
+            context._files['ldapuserfolder.xml'] = _SERVERS_SCHEMA_NOPURGE
+            importLDAPUserFolder(context)
+
+            servers = acl.getServers()
+            self.assertEquals(len(servers), 4)
+            svr1 = { 'host' : 'otherhost'
+                   , 'port' : 1389
+                   , 'protocol' : 'ldap'
+                   , 'conn_timeout' : 1
+                   , 'op_timeout' : 1
+                   }
+            svr2 = { 'host': '/tmp/ldapi'
+                   , 'port': 0
+                   , 'protocol': 'ldapi'
+                   , 'conn_timeout': 20
+                   , 'op_timeout': 20
+                   }
+            svr3 = { 'host' : 'localhost'
+                   , 'port' : '636'
+                   , 'protocol' : 'ldaps'
+                   , 'conn_timeout' : 10
+                   , 'op_timeout' : 10
+                   }
+            svr4 = { 'host': '/var/spool/ldapi'
+                   , 'port': 0
+                   , 'protocol': 'ldapi'
+                   , 'conn_timeout': 2
+                   , 'op_timeout': 2
+                   }
+            self.failUnless(svr1 in servers)
+            self.failUnless(svr2 in servers)
+            self.failUnless(svr3 in servers)
+            self.failUnless(svr4 in servers)
+
+        def test_schema_purge(self):
+            from Products.LDAPUserFolder.exportimport import \
+                importLDAPUserFolder
+
+            site = self._initSite(use_changed=True)
+            acl = site.acl_users
+
+            context = DummyImportContext(site, purge=False)
+            context._files['ldapuserfolder.xml'] = _SERVERS_SCHEMA_PURGE
+            importLDAPUserFolder(context)
+
+            schema = acl.getSchemaConfig()
+            self.assertEquals(len(schema.keys()), 2)
+            self.assertEquals(set(schema.keys()), set(['o', 'dc']))
+
+        def test_schema_nopurge(self):
+            from Products.LDAPUserFolder.exportimport import \
+                importLDAPUserFolder
+
+            site = self._initSite(use_changed=True)
+            acl = site.acl_users
+
+            context = DummyImportContext(site, purge=False)
+            context._files['ldapuserfolder.xml'] = _SERVERS_SCHEMA_NOPURGE
+            importLDAPUserFolder(context)
+
+            schema = acl.getSchemaConfig()
+            self.assertEquals(len(schema.keys()), 6)
+            self.assertEquals( set(schema.keys())
+                             , set(['cn', 'dc', 'o', 'sn', 'mail', 'uid'])
+                             )
 
     def test_suite():
         return unittest.TestSuite((
@@ -322,3 +424,38 @@ _CHANGED_EXPORT = """\
 </object>
 """
 
+_SERVERS_SCHEMA_PURGE = """\
+<?xml version="1.0"?>
+<object name="acl_users" meta_type="LDAPUserFolder">
+ <ldap-servers purge="True">
+  <ldap-server host="otherhost" port="1389" protocol="ldap" conn_timeout="1"
+     op_timeout="1"/>
+  <ldap-server host="/tmp/ldapi" port="0" protocol="ldapi" conn_timeout="20"
+     op_timeout="20"/>
+ </ldap-servers>
+ <ldap-schema purge="True">
+  <schema-item binary="False" friendly_name="Organisation" ldap_name="o" 
+     multivalued="False" public_name=""/>
+  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc" 
+     multivalued="True" public_name=""/>
+ </ldap-schema>
+</object>
+"""
+
+_SERVERS_SCHEMA_NOPURGE = """\
+<?xml version="1.0"?>
+<object name="acl_users" meta_type="LDAPUserFolder">
+ <ldap-servers purge="False">
+  <ldap-server host="otherhost" port="1389" protocol="ldap" conn_timeout="1"
+     op_timeout="1"/>
+  <ldap-server host="/tmp/ldapi" port="0" protocol="ldapi" conn_timeout="20"
+     op_timeout="20"/>
+ </ldap-servers>
+ <ldap-schema purge="False">
+  <schema-item binary="False" friendly_name="Organisation" ldap_name="o" 
+     multivalued="False" public_name=""/>
+  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc" 
+     multivalued="True" public_name=""/>
+ </ldap-schema>
+</object>
+"""

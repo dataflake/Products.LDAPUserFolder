@@ -301,6 +301,10 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
             if child.nodeName != 'ldap-servers':
                 continue
 
+            if child.getAttribute('purge').lower() == 'true':
+                server_count = len(self.context.getServers())
+                self.context.manage_deleteServers(range(0, server_count))
+
             for grandchild in child.childNodes:
                 if grandchild.nodeName != 'ldap-server':
                     continue
@@ -326,32 +330,26 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         """ Initialize LDAP schema information
         """
         # ldap-schema/schema-item/friendly_name/ldap_name/multivalued/binary/public_name
-        schema = {}
-
         for child in node.childNodes:
             if child.nodeName != 'ldap-schema':
                 continue
 
+            if child.getAttribute('purge').lower() == 'true':
+                self.context._ldapschema = {}
+            
             for grandchild in child.childNodes:
                 if grandchild.nodeName != 'schema-item':
                     continue
-
-                get = grandchild.getAttribute
-                ldap_name = get('ldap_name').encode(self._encoding)
-                binary = get('binary').encode(self._encoding)
-                binary = binary.lower() in ('true', 'yes') and True or False
-                mv = get('multivalued').encode(self._encoding)
-                mv = mv.lower() in ('true', 'yes') and True or False
-                    
-                s_item = { 'ldap_name' : ldap_name
-                 , 'friendly_name' : get('friendly_name').encode(self._encoding)
-                 , 'multivalued' : mv
-                 , 'public_name' : get('public_name').encode(self._encoding)
-                 , 'binary' : binary
-                 }
-                schema[ldap_name] = s_item
-
-        self.context._ldapschema = schema
+                get = lambda n: grandchild.getAttribute(n).encode(self._encoding)
+                
+                ldap_name = get('ldap_name')
+                item = self.context._ldapschema.setdefault(ldap_name, {})
+                
+                item['binary'] = get('binary').lower() in ('true','yes')
+                item['friendly_name'] = get('friendly_name')
+                item['multivalued'] = get('multivalued').lower() in ('true','yes')
+                item['public_name'] = get('public_name')
+                item['ldap_name'] = ldap_name
 
 
 def importLDAPUserFolder(context):
