@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.18 (unreleased)
+2.18 (2010-07-29)
 -----------------
 
 - Added a new flag ``purge`` to the ``ldap-servers`` and 
