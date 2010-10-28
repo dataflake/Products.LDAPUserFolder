@@ -412,7 +412,8 @@ class LDAPUserFolder(BasicUserFolder):
         self._roles = roles
 
         self._binduid = binduid
-        self._bindpwd = bindpwd
+        if bindpwd != self.getEncryptedBindPassword():
+            self._bindpwd = bindpwd
         self._binduid_usage = int(binduid_usage)
 
         self._local_groups = not not local_groups
@@ -1974,6 +1975,12 @@ class LDAPUserFolder(BasicUserFolder):
             conn = None
 
         return getattr(conn, '_uri', '-- not connected --')
+
+    security.declareProtected(manage_users, 'getEncryptedPassword')
+    def getEncryptedBindPassword(self):
+        """ Return a hashed bind password for safe use in forms etc.
+        """
+        return sha_new(self.getProperty('_bindpwd')).hexdigest()
 
 
 def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate', REQUEST=None):

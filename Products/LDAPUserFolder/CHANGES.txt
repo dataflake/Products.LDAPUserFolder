@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 2.19 (unreleased)
 -----------------
 
+- The Manager DN Password value on the ``Configure`` tab in the 
+  ZMI showed up in clear text when viewing the HTML source for 
+  the rendered page.
+  (https://bugs.launchpad.net/bugs/664976)
+
 
 2.18 (2010-07-29)
 -----------------
