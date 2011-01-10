@@ -189,6 +189,7 @@ class LDAPUserFolder(BasicUserFolder):
         self._authenticated_timeout = 600
 
         # Set up some safe defaults
+        self.title = ''
         self._login_attr = 'cn'
         self._uid_attr = ''
         self._bindpwd = ''
