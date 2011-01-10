@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 2.19 (unreleased)
 -----------------
 
+- Add attribute name to the negative_cache_key so requests 
+  for same value but different attribute do not poison the 
+  cache.
+  (https://bugs.launchpad.net/bugs/695821)
+
 - The changed base classes in Zope 2.13 did not define 
   isPrincipiaFolderish, so the user folder would no longer show
   up in the left hand navigation pane in the ZMI.

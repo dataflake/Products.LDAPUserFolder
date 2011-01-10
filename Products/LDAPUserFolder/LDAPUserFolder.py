@@ -707,7 +707,10 @@ class LDAPUserFolder(BasicUserFolder):
             return None
         
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s' % (value, sha_new(pwd or '').hexdigest())
+        negative_cache_key = '%s:%s:%s' % ( name
+                                          , value
+                                          , sha_new(pwd or '').hexdigest()
+                                          )
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -1898,9 +1901,13 @@ class LDAPUserFolder(BasicUserFolder):
 
         # This only removes records from the negative cache which
         # were retrieved without a password, since down here we do not
-        # know that password.
-        negative_cache_key = '%s:%s' % (user, sha_new('').hexdigest())
-        self._cache('negative').remove(negative_cache_key)
+        # know that password. Only login and uid records are removed.
+        for name in (self._login_attr, self._uid_attr):
+            negative_cache_key = '%s:%s:%s' % ( name
+                                              , user
+                                              , sha_new('').hexdigest()
+                                              )
+            self._cache('negative').remove(negative_cache_key)
 
 
     security.declareProtected(manage_users, 'isUnique')

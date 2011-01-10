@@ -1004,11 +1004,49 @@ class TestLDAPUserFolder(LDAPTest):
     def testNegativeCaching(self):
         ae = self.assertEqual
         acl = self.folder.acl_users
+
         ae(len(acl._cache('negative').getCache()), 0)
         ae(acl.getUser('missing'), None)
         ae(len(acl._cache('negative').getCache()), 1)
         acl.manage_addUser(REQUEST=None, kwargs=user)
         ae(len(acl._cache('negative').getCache()), 0)
+
+
+    def testNegativeCachePoisoning(self):
+        # Test against cache poisoning
+        # https://bugs.launchpad.net/bugs/695821
+        # The requested attribute value is part of the cache key now
+        ae = self.assertEqual
+        acl = self.folder.acl_users
+
+        # Prep: Make sure the login and UID attributes are different
+        old_login_attr = acl._login_attr
+        old_uid_attr = acl._uid_attr
+        acl._login_attr = 'cn'
+        acl._uid_attr = 'uid'
+
+        # Lookup by the login attrbute
+        ignored = acl.getUser('missing2')
+        ignored = acl.getUser('missing2')
+        ae(len(acl._cache('negative').getCache()), 1)
+
+        # Lookup by the UID
+        ignored = acl.getUserById('missing2')
+        ignored = acl.getUserById('missing2')
+        ae(len(acl._cache('negative').getCache()), 2)
+
+        # Lookup by arbitrary attribute
+        ignored = acl.getUserByAttr('sn', 'missing2', cache=True)
+        ignored = acl.getUserByAttr('sn', 'missing2', cache=True)
+        ae(len(acl._cache('negative').getCache()), 3)
+
+        # _expireUser only removes entries for the login and UID
+        acl._expireUser('missing2')
+        ae(len(acl._cache('negative').getCache()), 1)
+
+        # Cleanup
+        acl._login_attr = old_login_attr
+        acl._uid_attr = old_uid_attr
 
 
     def testGroupsWithCharactersNeedingEscaping(self):
@@ -1105,7 +1143,10 @@ class TestLDAPUserFolder(LDAPTest):
         self.failUnless(nonexisting is None)
     
         # The retrieval above will add the invalid user to the negative cache
-        negative_cache_key = '%s:%s' % ('invalid', sha_new('').hexdigest())
+        negative_cache_key = '%s:%s:%s' % ( acl._uid_attr
+                                          , 'invalid'
+                                          , sha_new('').hexdigest()
+                                          )
         self.failIf(acl._cache('negative').get(negative_cache_key) is None)
     
         # Expiring the user must remove it from the negative cache
