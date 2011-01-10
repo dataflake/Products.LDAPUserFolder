@@ -32,8 +32,13 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
 from AccessControl.SecurityManagement import getSecurityManager
-from AccessControl.User import BasicUserFolder
-from AccessControl.User import domainSpecMatch
+try:
+    from AccessControl.users import domainSpecMatch
+    from OFS.userfolder import BasicUserFolder
+except ImportError:
+    # BBB Zope < 2.13
+    from AccessControl.User import domainSpecMatch
+    from AccessControl.User import BasicUserFolder
 from Acquisition import aq_base
 from App.class_init import default__class_init__ as InitializeClass
 from App.Common import package_home

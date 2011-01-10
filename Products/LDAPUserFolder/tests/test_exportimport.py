@@ -18,7 +18,11 @@ $Id$
 import unittest
 
 from OFS.Folder import Folder
-from Products.Five import zcml
+try:
+    from Zope2.App import zcml
+except ImportError:
+    # BBB Zope < 2.12.11
+    from Products.Five import zcml
 
 from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
 
