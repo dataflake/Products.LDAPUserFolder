@@ -4,6 +4,9 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
+2.20 (unreleased)
+-----------------
+
 2.19 (2011-01-10)
 -----------------
 
