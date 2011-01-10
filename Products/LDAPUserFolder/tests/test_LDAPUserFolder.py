@@ -48,6 +48,7 @@ class TestLDAPUserFolder(LDAPTest):
     def testLUFInstantiation(self):
         acl = self.folder.acl_users
         ae = self.assertEqual
+        self.failUnless(acl.isPrincipiaFolderish)
         ae(self.folder.__allow_groups__, self.folder.acl_users)
         ae(acl.getProperty('title'), dg('title'))
         ae(acl.getProperty('_login_attr'), dg('login_attr'))

@@ -86,6 +86,7 @@ class LDAPUserFolder(BasicUserFolder):
     meta_type = 'LDAPUserFolder'
     id = 'acl_users'
     isAUserFolder = 1
+    isPrincipiaFolderish = 1
 
 
     #################################################################

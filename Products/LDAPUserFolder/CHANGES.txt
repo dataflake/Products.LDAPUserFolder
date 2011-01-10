@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 2.19 (unreleased)
 -----------------
 
+- The changed base classes in Zope 2.13 did not define 
+  isPrincipiaFolderish, so the user folder would no longer show
+  up in the left hand navigation pane in the ZMI.
+  (https://bugs.launchpad.net/bugs/693315)
+
 - Fixed a faulty check for unicode so user expiration will not
   fail if a unicode value is passed in. Changed all checks for
   string and unicode to use basestring.
