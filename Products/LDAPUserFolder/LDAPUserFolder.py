@@ -413,7 +413,7 @@ class LDAPUserFolder(BasicUserFolder):
                              read_only=read_only,
                            )
 
-        if isinstance(roles, str) or isinstance (roles, unicode):
+        if isinstance(roles, basestring):
             roles = [x.strip() for x in roles.split(',')]
         self._roles = roles
 
@@ -431,7 +431,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         self._pwd_encryption = encryption
 
-        if isinstance(obj_classes, str) or isinstance(obj_classes, unicode):
+        if isinstance(obj_classes, basestring):
             obj_classes = [x.strip() for x in obj_classes.split(',')]
         self._user_objclasses = obj_classes
 
@@ -1748,7 +1748,7 @@ class LDAPUserFolder(BasicUserFolder):
         prop_info = schema.get(prop_name, {})
         is_binary = prop_info.get('binary', None)
 
-        if isinstance(prop_value, str) or isinstance(prop_value, unicode):
+        if isinstance(prop_value, basestring):
             if is_binary:
                 prop_value = [prop_value]
             elif not prop_info.get('multivalued', ''):
@@ -1812,7 +1812,7 @@ class LDAPUserFolder(BasicUserFolder):
         for attr, attr_info in schema.items():
             if source.has_key(attr):
                 new = source.get(attr, '')
-                if isinstance(new, str) or isinstance(new, unicode):
+                if isinstance(new, basestring):
                     if attr_info.get('binary', ''):
                         new = [new]
                         attr = '%s;binary' % attr
@@ -1889,7 +1889,7 @@ class LDAPUserFolder(BasicUserFolder):
         """ Purge user object from caches """
         user = user or ''
 
-        if not isinstance(user, str) or isinstance(user, unicode):
+        if not isinstance(user, basestring):
             user = user.getUserName()
 
         self._cache('anonymous').remove(user)

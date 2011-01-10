@@ -7,6 +7,11 @@ To see changes for older releases please see HISTORY.txt.
 2.19 (unreleased)
 -----------------
 
+- Fixed a faulty check for unicode so user expiration will not
+  fail if a unicode value is passed in. Changed all checks for
+  string and unicode to use basestring.
+  (https://bugs.launchpad.net/bugs/700071)
+
 - Fixed an export/import test error so all tests run again.
 
 - The Manager DN Password value on the ``Configure`` tab in the 

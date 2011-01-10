@@ -186,7 +186,7 @@ class LDAPDelegate(Persistent):
         self.read_only = not not read_only
         self.u_base = users_base
 
-        if isinstance(objectclasses, str) or isinstance(objectclasses, unicode):
+        if isinstance(objectclasses, basestring):
             objectclasses = [x.strip() for x in objectclasses.split(',')]
         self.u_classes = objectclasses
 

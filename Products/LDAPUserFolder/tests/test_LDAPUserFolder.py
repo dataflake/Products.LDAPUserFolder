@@ -1111,6 +1111,10 @@ class TestLDAPUserFolder(LDAPTest):
         acl._expireUser('invalid')
         self.failUnless(acl._cache('negative').get(negative_cache_key) is None)
 
+        # User IDs that come in as unicode should not break anything.
+        # https://bugs.launchpad.net/bugs/700071
+        acl._expireUser(u'invalid')
+
     def test_manage_reinit(self):
         # part of http://www.dataflake.org/tracker/issue_00629
         acl = self.folder.acl_users
