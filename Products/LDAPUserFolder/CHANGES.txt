@@ -7,6 +7,8 @@ To see changes for older releases please see HISTORY.txt.
 2.19 (unreleased)
 -----------------
 
+- Fixed an export/import test error so all tests run again.
+
 - The Manager DN Password value on the ``Configure`` tab in the 
   ZMI showed up in clear text when viewing the HTML source for 
   the rendered page.

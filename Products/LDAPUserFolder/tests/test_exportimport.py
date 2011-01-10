@@ -331,7 +331,7 @@ else:
 _LDAPUSERFOLDER_BODY = """\
 <?xml version="1.0"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
- <property name="title">User Folder</property>
+ <property name="title"></property>
  <property name="_login_attr">cn</property>
  <property name="_uid_attr"></property>
  <property name="users_base">ou=people,dc=mycompany,dc=com</property>
