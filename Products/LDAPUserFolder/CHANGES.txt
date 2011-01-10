@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.19 (unreleased)
+2.19 (2011-01-10)
 -----------------
 
 - Add attribute name to the negative_cache_key so requests 
