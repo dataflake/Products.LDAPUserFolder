@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.20 (unreleased)
+2.20 (2011-05-04)
 -----------------
 
 - Fix for CVE-2010-2944
