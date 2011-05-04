@@ -835,13 +835,15 @@ class LDAPUserFolder(BasicUserFolder):
 
 
     def authenticate(self, name, password, request):
-        super = self._emergency_user
+        superuser = self._emergency_user
 
         if not name:
             return None
 
-        if super and name == super.getUserName():
-            user = super
+        if ( superuser and 
+             name == superuser.getUserName() and 
+             superuser.authenticate(password, request) ):
+            user = superuser
         else:
             user = self.getUser(name, password)
 

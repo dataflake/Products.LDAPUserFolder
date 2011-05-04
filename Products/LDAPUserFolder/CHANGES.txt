@@ -7,6 +7,14 @@ To see changes for older releases please see HISTORY.txt.
 2.20 (unreleased)
 -----------------
 
+- Fix for CVE-2010-2944
+  (http://secunia.com/advisories/cve_reference/CVE-2010-2944/),
+  which was never reported upstream by the Debian people, who
+  found the problem 8 months ago (see
+  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=593466).
+  Thanks guys.
+
+
 2.19 (2011-01-10)
 -----------------
 
