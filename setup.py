@@ -41,19 +41,12 @@ setup(name='Products.%s' % NAME,
       namespace_packages=['Products'],
       zip_safe=False,
       install_requires=[
-        #"Zope >= 2.8",
-        "setuptools",
-        "dataflake.ldapconnection",
+        'Zope2',
+        'dataflake.ldapconnection',
         ],
       extras_require={
-          'cmfldap': [
-                #'Zope >= 2.10.4',
-                'Products.CMFDefault >= 2.1.0'
-                ],
-          'exportimport': [
-                #'Zope >= 2.10.0
-                'Products.GenericSetup >= 1.4.0'
-                ],
+          'cmfldap': ['Products.CMFDefault >= 2.1.0'],
+          'exportimport': ['Products.GenericSetup >= 1.4.0'],
           },
       entry_points="""
       [zope2.initialize]
