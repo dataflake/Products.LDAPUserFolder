@@ -6,6 +6,10 @@ To see changes for older releases please see HISTORY.txt.
 
 3.0 (unreleased)
 -----------------
+- Moved all documentary text files into the egg root
+
+- The code has moved to the new Git repository at 
+  https://git.dataflake.org
 
 - Added GenericSetup magic to fully provide the INode interface
   for the exporter and importer classes, making it easier to nest
