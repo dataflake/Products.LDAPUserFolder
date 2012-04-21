@@ -4,12 +4,12 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.21 (unreleased)
+2.21 (2012-04-21)
 -----------------
 
 - Make sure to raise OverflowError if no users can be found 
   when calling ``getUserNames``
-  (https://bugs.launchpad.net/bugs/972408
+  (https://bugs.launchpad.net/bugs/972408)
 
 - switch to using the standalone ``dataflake.fakeldap`` package 
   for unit tests
