@@ -7,6 +7,9 @@ To see changes for older releases please see HISTORY.txt.
 2.21 (unreleased)
 -----------------
 
+- switch to using the standalone ``dataflake.fakeldap`` package 
+  for unit tests
+
 
 2.20 (2011-05-04)
 -----------------

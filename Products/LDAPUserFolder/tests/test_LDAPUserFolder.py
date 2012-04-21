@@ -30,7 +30,7 @@ from App.Common import package_home
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
 # Tests imports
-from dataflake.ldapconnection.tests import fakeldap
+from dataflake.fakeldap import FakeLDAPConnection
 from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
@@ -750,7 +750,7 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEqual(user_ob.getProperty('sn'), ug('sn'))
 
     def testEditUserPassword(self):
-        conn = fakeldap.FakeLDAPConnection()
+        conn = FakeLDAPConnection()
         acl = self.folder.acl_users
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assert_(not msg)
@@ -767,7 +767,7 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertNotEqual(old_pw, new_pw)
 
     def testEditUserPasswordReadOnly(self):
-        conn = fakeldap.FakeLDAPConnection()
+        conn = FakeLDAPConnection()
         acl = self.folder.acl_users
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assert_(not msg)
