@@ -622,7 +622,8 @@ class LDAPUserFolder(BasicUserFolder):
             self.users_base, self._delegate.getScopes()[self.users_scope],
             user_filter, (self._login_attr,))
 
-        if len(loginlistinfo) == 0:
+        if ( len(loginlistinfo) == 0 or
+             loginlistinfo.get(self._login_attr, None) == [] ):
             # Special case: Either there really is no user, or the server
             # got angry about requesting every single record and threw back
             # an exception as a result. In order to show the simple text

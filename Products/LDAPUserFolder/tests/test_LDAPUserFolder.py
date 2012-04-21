@@ -585,7 +585,6 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEquals(len(result), 1)
         self.assertEquals(result[0].get(key), user_cn)
 
-
     def testGetUserNames(self):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
@@ -600,6 +599,12 @@ class TestLDAPUserFolder(LDAPTest):
             self.assert_(not msg)
         userlist = acl.getUserNames()
         self.assertEqual(userlist, tuple(expected))
+
+    def testGetUserNames_nouser(self):
+        # Special behavior for the ZMI, which will show a different
+        # widget if OverflowError is encountered
+        acl = self.folder.acl_users
+        self.assertRaises(OverflowError, acl.getUserNames)
 
     def testUserIds(self):
         acl = self.folder.acl_users

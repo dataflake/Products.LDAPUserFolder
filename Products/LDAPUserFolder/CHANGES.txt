@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 2.21 (unreleased)
 -----------------
 
+- Make sure to raise OverflowError if no users can be found 
+  when calling ``getUserNames``
+  (https://bugs.launchpad.net/bugs/972408
+
 - switch to using the standalone ``dataflake.fakeldap`` package 
   for unit tests
 
