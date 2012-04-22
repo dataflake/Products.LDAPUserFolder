@@ -3,21 +3,18 @@ from setuptools import setup
 from setuptools import find_packages
 
 NAME = 'LDAPUserFolder'
-here = os.path.abspath(os.path.dirname(__file__))
-package = os.path.join(here, 'Products', NAME)
 
-def _read(name):
-    f = open(os.path.join(package, name))
-    return f.read()
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 _boundary = '\n' + ('-' * 60) + '\n\n'
 
 setup(name='Products.%s' % NAME,
-      version=_read('VERSION.txt').strip(),
+      version=read('VERSION.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=( _read('README.txt') 
+      long_description=( read('README.txt') 
                        + _boundary
-                       + _read('CHANGES.txt')
+                       + read('CHANGES.txt')
                        + _boundary
                        + "Download\n========"
                        ),

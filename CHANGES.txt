@@ -7,6 +7,8 @@ To see changes for older releases please see HISTORY.txt.
 2.22 (unreleased)
 -----------------
 
+- Moved all documentary text files into the egg root
+
 
 2.21 (2012-04-21)
 -----------------
