@@ -23,7 +23,7 @@ import transaction
 from zope.component import getSiteManager
 from zope.component.interfaces import IFactory
 
-from dataflake.ldapconnection.tests import fakeldap
+from dataflake.fakeldap import FakeLDAPConnection
 
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
@@ -39,13 +39,11 @@ u2g = user2.get
 class LDAPTest(unittest.TestCase):
 
     def setUp(self):
-        gsm = getSiteManager()
-        gsm.registerUtility( fakeldap.ldapobject.SmartLDAPObject
-                           , IFactory
-                           , 'LDAP connection factory'
-                           )
-        fakeldap.clearTree()
+        from dataflake.fakeldap import TREE
+        self.db = TREE
+        self.db.clear()
         transaction.begin()
+
         self.app = self.root = ZopeTestCase.app()
         self.root._setObject('luftest', Folder('luftest'))
         self.folder = self.root.luftest
@@ -53,6 +51,14 @@ class LDAPTest(unittest.TestCase):
         luf = self.folder.acl_users
         host, port = dg('server').split(':')
         luf.manage_addServer(host, port=port)
+
+        # Stitch in the fake LDAP connection
+        gsm = getSiteManager()
+        gsm.registerUtility( FakeLDAPConnection
+                           , IFactory
+                           , 'LDAP connection factory'
+                           )
+
         luf.manage_edit( dg('title')
                        , dg('login_attr')
                        , dg('uid_attr')
@@ -70,12 +76,12 @@ class LDAPTest(unittest.TestCase):
                        , encryption = dg('encryption')
                        , read_only = dg('read_only')
                        )
-        fakeldap.addTreeItems(dg('users_base'))
-        fakeldap.addTreeItems(dg('groups_base'))
+        self.db.addTreeItems(dg('users_base'))
+        self.db.addTreeItems(dg('groups_base'))
 
     def tearDown( self ):
         gsm = getSiteManager()
-        gsm.unregisterUtility( fakeldap.ldapobject.SmartLDAPObject
+        gsm.unregisterUtility( FakeLDAPConnection
                              , IFactory
                              , 'LDAP connection factory'
                              )

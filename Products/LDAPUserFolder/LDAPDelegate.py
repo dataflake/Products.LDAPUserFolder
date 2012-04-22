@@ -183,7 +183,7 @@ class LDAPDelegate(Persistent):
                                               , 'LDAP connection factory'
                                               )
                     except ComponentLookupError:
-                        c_factory = ldap.ldapobject.SmartLDAPObject
+                        c_factory = ldap.ldapobject.ReconnectLDAPObject
 
                     connection_manager = LDAPConnection( svr['host']
                                              , svr['port']
@@ -267,5 +267,5 @@ class LDAPDelegate(Persistent):
     def getScopes(self):
         return (ldap.SCOPE_BASE, ldap.SCOPE_ONELEVEL, ldap.SCOPE_SUBTREE)
 
-connectionFactory = Factory(ldap.ldapobject.SmartLDAPObject)
+connectionFactory = Factory(ldap.ldapobject.ReconnectLDAPObject)
 

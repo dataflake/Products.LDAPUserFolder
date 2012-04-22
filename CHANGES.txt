@@ -6,6 +6,8 @@ To see changes for older releases please see HISTORY.txt.
 
 3.0 (unreleased)
 -----------------
+- switch to using ``dataflake.fakeldap`` for testing
+
 - Moved all documentary text files into the egg root
 
 - The code has moved to the new Git repository at 

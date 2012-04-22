@@ -59,6 +59,7 @@ setup(name=NAME,
         'setuptools',
         'Zope2',
         'dataflake.ldapconnection >= 0.2',
+        'dataflake.fakeldap',
         ],
       extras_require={
           'exportimport': [
