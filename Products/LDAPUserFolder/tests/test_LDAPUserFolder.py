@@ -174,156 +174,6 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_pwd_encryption'), ag('encryption'))
         ae(acl.getProperty('read_only'), not not ag('read_only'))
 
-    def testServerManagement(self):
-        acl = self.folder.acl_users
-        self.assertEqual(len(acl.getServers()), 1)
-        acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
-        self.assertEqual(len(acl.getServers()), 2)
-        acl.manage_addServer('ldap.some.com', port='636', use_ssl=1)
-        self.assertEqual(len(acl.getServers()), 2)
-        acl.manage_addServer('localhost')
-        self.assertEqual(len(acl.getServers()), 2)
-        acl.manage_deleteServers([1])
-        self.assertEqual(len(acl.getServers()), 1)
-        acl.manage_deleteServers()
-        self.assertEqual(len(acl.getServers()), 1)
-
-        acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
-        svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
-        self.assertEquals(svr['conn_timeout'], 5)
-        self.assertEquals(svr['op_timeout'], -1)
-        acl.manage_addServer( 'ldap.some.com'
-                            , port=636
-                            , use_ssl=1
-                            , op_timeout=10
-                            , conn_timeout=15
-                            )
-        svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
-        self.assertEquals(svr['conn_timeout'], 15)
-        self.assertEquals(svr['op_timeout'], 10)
-
-    def testImplicitMapping(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getGroupMappings()), 0)
-        have_roles = ['ldap_group', 'some_group']
-        ae(acl._mapRoles(have_roles), [])
-        gp = acl.getProperty
-        ae(gp('_implicit_mapping'), 0)
-        acl.manage_edit( title = gp('title')
-                       , login_attr = gp('login_attr')
-                       , uid_attr = gp('uid_attr')
-                       , users_base = gp('users_base')
-                       , users_scope = gp('users_scope')
-                       , roles = gp('roles')
-                       , groups_base = gp('groups_base')
-                       , groups_scope = gp('groups_scope')
-                       , binduid = gp('binduid')
-                       , bindpwd = gp('bindpwd')
-                       , binduid_usage = gp('binduid_usage')
-                       , rdn_attr = gp('rdn_attr')
-                       , obj_classes = gp('obj_classes')
-                       , local_groups = gp('local_groups')
-                       , implicit_mapping = 1
-                       , encryption = gp('encryption')
-                       , read_only = gp('read_only')
-                       )
-        ae(gp('_implicit_mapping'), 1)
-        mapped_roles = acl._mapRoles(have_roles)
-        ae(len(mapped_roles), 2)
-        for role in have_roles:
-            self.assert_(role in mapped_roles)
-        acl.manage_edit( title = gp('title')
-                       , login_attr = gp('login_attr')
-                       , uid_attr = gp('uid_attr')
-                       , users_base = gp('users_base')
-                       , users_scope = gp('users_scope')
-                       , roles = gp('roles')
-                       , groups_base = gp('groups_base')
-                       , groups_scope = gp('groups_scope')
-                       , binduid = gp('binduid')
-                       , bindpwd = gp('bindpwd')
-                       , binduid_usage = gp('binduid_usage')
-                       , rdn_attr = gp('rdn_attr')
-                       , obj_classes = gp('obj_classes')
-                       , local_groups = gp('local_groups')
-                       , implicit_mapping = 0
-                       , encryption = gp('encryption')
-                       , read_only = gp('read_only')
-                       )
-        ae(gp('_implicit_mapping'), 0)
-
-    def testGroupMapping(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getGroupMappings()), 0)
-        have_roles = ['ldap_group', 'some_group']
-        ae(acl._mapRoles(have_roles), [])
-        acl.manage_addGroupMapping('ldap_group', 'Manager')
-        ae(len(acl.getGroupMappings()), 1)
-        roles = acl._mapRoles(have_roles)
-        ae(len(roles), 1)
-        self.assert_('Manager' in roles)
-        acl.manage_deleteGroupMappings('unknown')
-        ae(len(acl.getGroupMappings()), 1)
-        acl.manage_deleteGroupMappings(['ldap_group'])
-        ae(len(acl.getGroupMappings()), 0)
-        ae(acl._mapRoles(have_roles), [])
-
-    def testLDAPSchema(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getLDAPSchema()), 2)
-        ae(len(acl.getSchemaDict()), 2)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'public'
-                                    )
-        ae(len(acl.getLDAPSchema()), 3)
-        ae(len(acl.getSchemaDict()), 3)
-        cur_schema = acl.getSchemaConfig()
-        self.assert_('mail' in cur_schema.keys())
-        acl.manage_addLDAPSchemaItem( 'cn'
-                                    , 'exists'
-                                    , ''
-                                    , 'exists'
-                                    )
-        ae(len(acl.getLDAPSchema()), 3)
-        ae(len(acl.getSchemaDict()), 3)
-        acl.manage_deleteLDAPSchemaItems(['cn', 'unknown', 'mail'])
-        ae(len(acl.getLDAPSchema()), 1)
-        ae(len(acl.getSchemaDict()), 1)
-        cur_schema = acl.getSchemaConfig()
-        self.assert_('mail' not in cur_schema.keys())
-        self.assert_('cn' not in cur_schema.keys())
-
-    def testSchemaMappedAttrs(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getMappedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'public'
-                                    )
-        ae(len(acl.getMappedUserAttrs()), 1)
-        ae(acl.getMappedUserAttrs(), (('mail', 'public'),))
-        acl.manage_deleteLDAPSchemaItems(['mail'])
-        ae(len(acl.getMappedUserAttrs()), 0)
-
-    def testSchemaMultivaluedAttrs(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getMultivaluedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , 'yes'
-                                    , 'public'
-                                    )
-        ae(len(acl.getMultivaluedUserAttrs()), 1)
-        ae(acl.getMultivaluedUserAttrs(), ('mail',))
-
     def testAddUser(self):
         acl = self.folder.acl_users
         ae=self.assertEqual
@@ -468,68 +318,6 @@ class TestLDAPUserFolder(LDAPTest):
         result = acl.findUser(key, crippled_cn, exact_match=True)
         self.assertEquals(len(result), 0)
 
-
-    def testSearchGroups(self):
-        # test finding a group with specific or wildcard match on
-        # multiple attributes
-        acl = self.folder.acl_users
-
-        # let's create some users
-        msg = acl.manage_addUser(REQUEST=None, kwargs=user2)
-        self.assert_(not msg)
-        # and put them in groups that match the uniqueMember shortcut in fakeldap
-        ldapconn = acl._delegate.connect()
-        group_cn = 'group1'
-        crippled_cn = group_cn[:-1]
-        group_description = 'a description'
-        ldapconn.add_s("cn=" + group_cn + "," + dg('groups_base'),
-                       dict(objectClass=['groupOfUniqueNames', 'top'],
-                            uniqueMember=['cn=test2,' + dg('users_base')],
-                            description=[group_description],
-                            mail=['group1@example.com'],
-                            ).items())
-
-        # now let's check these groups work
-        u = acl.getUser('test2')
-        self.failIf('Manager' in u.getRoles())
-        acl.manage_addGroupMapping(group_cn, 'Manager')
-        u = acl.getUser('test2')
-        self.failIf('Manager' not in u.getRoles())
-
-        # ok, so now we can try group searches by attributes
-        # Search on a bogus attribute, must return error result
-        result = acl.searchGroups(foobarkey='baz')
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result[0].get('cn'), 'n/a')
-
-        # Search on valid attribute with invalid term, must return empty result
-        result = acl.searchGroups(cn='invalid_cn', description=group_description)
-        self.assertEquals(len(result), 0, result)
-
-        # Search with wildcard - both user_cn and crippled_cn must return
-        # the data for user2.
-        result = acl.searchGroups(cn=group_cn, description=group_description)
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result[0].get('cn'), group_cn)
-
-        result = acl.searchGroups(cn=crippled_cn, description=group_description)
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result[0].get('cn'), group_cn)
-
-        # Now we ask for exact matches. Only group_cn returns results.
-        result = acl.searchGroups( cn=group_cn
-                                 , description=group_description
-                                 , exact_match=True
-                                 )
-        self.assertEquals(len(result), 1)
-        self.assertEquals(result[0].get('cn'), group_cn)
-
-        result = acl.searchGroups( cn=crippled_cn
-                                 , description=group_description
-                                 , exact_match=True
-                                 )
-        self.assertEquals(len(result), 0)
-
     def testSearchUsers(self):
         # test finding a user with specific or wildcard match on
         # multiple attributes
@@ -635,52 +423,6 @@ class TestLDAPUserFolder(LDAPTest):
             self.assert_(not msg)
         userlist = acl.getUserIdsAndNames()
         self.assertEqual(userlist, tuple(expected))
-
-    def testAuthenticateUser(self):
-        acl = self.folder.acl_users
-        for role in ug('user_roles'):
-            acl.manage_addGroup(role)
-        msg = acl.manage_addUser(REQUEST=None, kwargs=user)
-        self.assert_(not msg)
-        user_ob = acl.authenticate( ug(acl.getProperty('_login_attr'))
-                                  , ug('user_pw')
-                                  , {}
-                                  )
-        self.assertNotEqual(user_ob, None)
-        user_ob = acl.authenticate( ug(acl.getProperty('_login_attr'))
-                                  , ''
-                                  , {}
-                                  )
-        self.assertEqual(user_ob, None)
-        user_ob = acl.authenticate( ug(acl.getProperty('_login_attr'))
-                                  , 'falsepassword'
-                                  , {}
-                                  )
-        self.assertEqual(user_ob, None)
-
-    def testAuthenticateUserWithCache(self):
-        acl = self.folder.acl_users
-        for role in ug('user_roles'):
-            acl.manage_addGroup(role)
-        msg = acl.manage_addUser(REQUEST=None, kwargs=user)
-        self.assert_(not msg)
-
-        user_ob = acl.authenticate( ug(acl.getProperty('_login_attr'))
-                        , 'falsepassword'
-                        , {}
-                        )
-
-        # make sure the user could not connect
-        self.assertEqual(user_ob, None)
-
-        # now let's try again with the right password
-        user_ob = acl.authenticate( ug(acl.getProperty('_login_attr'))
-                        , ug('user_pw')
-                        , {}
-                        )
-    
-        # now we should be OK
-        self.assertNotEqual(user_ob, None)
 
     def testDeleteUser(self):
         acl = self.folder.acl_users
@@ -828,23 +570,6 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertNotEqual(user_ob, None)
         self.assert_(new_role not in user_ob.getRoles())
 
-    def testUserMappedAttrs(self):
-        acl = self.folder.acl_users
-        ae = self.assertEqual
-        ae(len(acl.getMappedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'email'
-                                    )
-        for role in ug('user_roles'):
-            acl.manage_addGroup(role)
-        msg = acl.manage_addUser(REQUEST=None, kwargs=user)
-        user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
-        self.assertEqual(ug('mail'), user_ob.getProperty('mail'))
-        self.assertEqual(ug('mail'), user_ob.getProperty('email'))
-
-
     def testModRDN(self):
         acl = self.folder.acl_users
         ae = self.assertEqual
@@ -983,29 +708,6 @@ class TestLDAPUserFolder(LDAPTest):
         for attr in attributes:
             self.failUnless(res.has_key(attr))
 
-    def testGroupLifecycle_nonutf8(self):
-        # http://www.dataflake.org/tracker/issue_00527
-        # Make sure groups with non-UTF8/non-ASCII characters can be
-        # added and deleted.
-        groupid = 'gr\xc3\xbcppe' # Latin-1 Umlaut-U
-        acl = self.folder.acl_users
-
-        # Add the group with the odd character in it
-        acl.manage_addGroup(groupid)
-        all_groups = acl.getGroups()
-
-        # Only one group record should exist, the one we just entered
-        self.failUnless(len(all_groups) == 1)
-        self.failUnless(all_groups[0][0] == groupid)
-
-        # Now delete the group. The DN we get back from getGroups will have been
-        # recoded into whatever is set in utils.py (normally latin-1). Due to
-        # a lack of encoding into UTF-8 in the deletion code, the deletion
-        # would fail silently and the group would still exist.
-        group_dn = all_groups[0][1]
-        acl.manage_deleteGroups(dns=[group_dn])
-        self.failUnless(len(acl.getGroups()) == 0)
-
     def testNegativeCaching(self):
         ae = self.assertEqual
         acl = self.folder.acl_users
@@ -1052,32 +754,6 @@ class TestLDAPUserFolder(LDAPTest):
         # Cleanup
         acl._login_attr = old_login_attr
         acl._uid_attr = old_uid_attr
-
-
-    def testGroupsWithCharactersNeedingEscaping(self):
-        # http://www.dataflake.org/tracker/issue_00507
-        # Make sure groups with hash characters can be
-        # added, deleted and used
-        groupid = '"#APPLIKATIONEN LAUFWERK(a)#"'
-        acl = self.folder.acl_users
-
-        # Add the group with the odd character in it
-        acl.manage_addGroup(groupid)
-        all_groups = acl.getGroups()
-
-        # Only one group record should exist, the one we just entered
-        self.failUnless(len(all_groups) == 1)
-        self.failUnless(all_groups[0][0] == groupid)
-
-        # Now delete the group.
-        group_dn = all_groups[0][1]
-        # XXX Shortcoming in fakeldap: DNs are not "unescaped", meaning escaping
-        # done during insertion will be retained in the real record, unlike
-        # a real LDAP server which will store and return unescaped DNs.
-        # That means we cannot use the returned DN, we must construct it anew.
-        group_dn = 'cn=%s,%s' % (groupid, acl.groups_base)
-        acl.manage_deleteGroups(dns=[group_dn])
-        self.failUnless(len(acl.getGroups()) == 0)
 
     def testGetUserFilterString(self):
         acl = self.folder.acl_users

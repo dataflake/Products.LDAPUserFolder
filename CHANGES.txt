@@ -7,6 +7,9 @@ To see changes for older releases please see HISTORY.txt.
 2.22 (unreleased)
 -----------------
 
+- factored some tests into separate modules to increase 
+  maintainability
+
 - Moved all documentary text files into the egg root
 
 
