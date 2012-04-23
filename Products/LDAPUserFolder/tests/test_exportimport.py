@@ -49,11 +49,6 @@ else:
             return LDAPUserFolderXMLAdapter
 
         def setUp(self):
-            try:
-                import Products.CMFCore
-                zcml.load_config('meta.zcml', Products.CMFCore)
-            except ImportError:
-                pass
             import Products.LDAPUserFolder
             super(LDAPUserFolderXMLAdapterTests, self).setUp()
             zcml.load_config('configure.zcml', Products.LDAPUserFolder)

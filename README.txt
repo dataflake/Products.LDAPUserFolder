@@ -110,20 +110,3 @@ who, as an added bonus, can delete and create user folders. This is
 a breach of the standard "the superuser cannot create / own anything" 
 policy, but can save your skin in so many ways.
 
-LDAP Schema considerations when used with the CMF
-=================================================
-The CMF (and by extension, Plone) expect that every user has an email
-address. In order to make everything work correctly your LDAP user
-records must have a "mail" attribute, and this attribute must be set
-up in the "LDAP Schema" tab of your LDAPUserFolder. When you add the
-"mail" schema item make sure you set the "Map to Name" field to
-"email". 
-The attributes that show up on the join form and the personalize view
-are governed by the properties you 'register' using the 
-'Member Properties' tab in the portal_memberdata tool ZMI view, which
-in turn is sourced from the 'LDAP Schema' tab in the LDAPUserFolder
-ZMI view. Attributes you would like to enable for portal members
-must be set up on the LDAPUserFolder 'LDAP Schema' tab first, and
-then registered using the 'Membeer properties' screen in the 
-Member data tool ZMI view.
-

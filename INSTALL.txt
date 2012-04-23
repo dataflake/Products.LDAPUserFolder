@@ -1,14 +1,6 @@
 Installing the LDAPUserFolder Product
 
-  **NOTE**: Do not install the CMFLDAP extensions into a Plone site. 
-  They are meant for pure CMF sites only and will break Plone. You have 
-  been warned!
-
-  The former CMFLDAP product has been folded into the LDAPUserFolder 
-  package. The CMF-related pieces and their unit tests run on Zope 
-  version > 2.8 and CMF 2.1.0 and up.
-
-  You will also need a (working) python-ldap module installed for the 
+  You will need a (working) python-ldap module installed for the 
   Python binary that is used to run your Zope install, see 
   "Important Hints" below.
 
@@ -26,20 +18,6 @@ Installing the LDAPUserFolder Product
   folder to your Zope installation's lib/python/Products-folder.
 
   That's all. Do not forget to restart Zope afterwards.
-
-
-  **Installing the CMF-related pieces into your CMF site**
-
-  When you create a new CMF Site you can activate CMFLDAP
-  by checking the CMFLDAP checkbox after selecting
-  'Configured CMF Site' from the Add List dropdown in the ZMI.
-
-  To activate CMFLDAP in an existing CMF site you need to
-  visit the portal_setup tool at the root of your CMF site from
-  the ZMI. On the 'Properties' tab, select 'CMFLDAP' in the
-  'Active site configuration' dropdown list. Then visit the
-  'Import' tab and click on 'Import all steps' at the bottom.
-
 
   **Upgraders beware**
 

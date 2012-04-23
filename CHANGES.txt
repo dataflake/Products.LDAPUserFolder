@@ -3,6 +3,8 @@ Change log for Products.LDAPUserFolder
 
 2.24 (unreleased)
 -----------------
+- Removed the CMF tools, please use the package ``Products.CMFLDAP``
+  (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
 - moved change log entries for version 2.18 and older from CHANGES.txt
   to HISTORY.txt
 - reformat HISTORY.txt and make it ReST-compliant

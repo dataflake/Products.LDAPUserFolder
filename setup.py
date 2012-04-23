@@ -49,7 +49,6 @@ setup(name='Products.%s' % NAME,
         'python-ldap',
         ],
       extras_require={
-          'cmfldap': ['Products.CMFDefault >= 2.1.0'],
           'exportimport': ['Products.GenericSetup >= 1.4.0'],
           },
       entry_points="""
