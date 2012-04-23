@@ -7,6 +7,10 @@ To see changes for older releases please see HISTORY.txt.
 2.23 (unreleased)
 -----------------
 
+- Add ``setuptools-git`` to ``setup_requires`` to prevent missing 
+  files in the egg release - versions 2.22 and 2.21 will not build
+  due to a missing ``VERSION.txt``.
+
 
 2.22 (2012-04-23)
 -----------------
