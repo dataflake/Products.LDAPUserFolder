@@ -190,7 +190,7 @@
       </td>
       <td align="left" valign="top">
         <input type="password" name="bindpwd:string" size="13" 
-               value="<dtml-var expr="getProperty('_bindpwd')">">
+               value="<dtml-var expr="getEncryptedBindPassword()">">
       </td>
     </tr>
 

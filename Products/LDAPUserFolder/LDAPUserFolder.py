@@ -20,7 +20,10 @@ import logging
 import os
 import random
 from sets import Set
-import sha
+try:
+    from hashlib import sha1 as sha_new
+except ImportError:
+    from sha import new as sha_new
 import time
 import urllib
 
@@ -29,8 +32,13 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
 from AccessControl.SecurityManagement import getSecurityManager
-from AccessControl.User import BasicUserFolder
-from AccessControl.User import domainSpecMatch
+try:
+    from AccessControl.users import domainSpecMatch
+    from OFS.userfolder import BasicUserFolder
+except ImportError:
+    # BBB Zope < 2.13
+    from AccessControl.User import domainSpecMatch
+    from AccessControl.User import BasicUserFolder
 from Acquisition import aq_base
 from App.class_init import default__class_init__ as InitializeClass
 from App.Common import package_home
@@ -78,6 +86,7 @@ class LDAPUserFolder(BasicUserFolder):
     meta_type = 'LDAPUserFolder'
     id = 'acl_users'
     isAUserFolder = 1
+    isPrincipiaFolderish = 1
 
 
     #################################################################
@@ -181,6 +190,7 @@ class LDAPUserFolder(BasicUserFolder):
         self._authenticated_timeout = 600
 
         # Set up some safe defaults
+        self.title = ''
         self._login_attr = 'cn'
         self._uid_attr = ''
         self._bindpwd = ''
@@ -213,6 +223,8 @@ class LDAPUserFolder(BasicUserFolder):
             returns a record's DN and the groups a uid belongs to
             as well as a dictionary containing user attributes
         """
+        users_base = self.users_base
+
         if name == 'dn':
             if value.find(',') == -1:
                 # micro-optimization: this is not a valid dn because it
@@ -225,7 +237,6 @@ class LDAPUserFolder(BasicUserFolder):
             users_base = to_utf8(value)
             search_str = '(objectClass=*)'
         elif name == 'objectGUID':
-            users_base = self.users_base
             # we need to convert the GUID to a specially formatted string
             # for the query to work
             value = guid2string(value)
@@ -233,16 +244,10 @@ class LDAPUserFolder(BasicUserFolder):
             # because it replaces backslashes, which we need as a result
             # of guid2string
             ob_flt = ['(%s=%s)' % (name, value)]
-            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
-                            for o in self._user_objclasses] )
-            search_str = '(&%s)' % ''.join(ob_flt)
-
+            search_str = self._getUserFilterString(filters=ob_flt)
         else:
-            users_base = self.users_base
             ob_flt = [filter_format('(%s=%s)', (name, value))]
-            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
-                            for o in self._user_objclasses] )
-            search_str = '(&%s)' % ''.join(ob_flt)
+            search_str = self._getUserFilterString(filters=ob_flt)
 
         # Step 1: Bind either as the Manager or anonymously to look
         #         up the user from the login given
@@ -340,6 +345,9 @@ class LDAPUserFolder(BasicUserFolder):
     def manage_reinit(self, REQUEST=None):
         """ re-initialize and clear out users and log """
         self._clearCaches()
+        self._hash = '%s-%s' % ( str(self.getPhysicalPath())
+                               , str(random.random())
+                               )
         logger.info('manage_reinit: Cleared caches')
 
         if REQUEST:
@@ -406,12 +414,13 @@ class LDAPUserFolder(BasicUserFolder):
                              read_only=read_only,
                            )
 
-        if isinstance(roles, str) or isinstance (roles, unicode):
+        if isinstance(roles, basestring):
             roles = [x.strip() for x in roles.split(',')]
         self._roles = roles
 
         self._binduid = binduid
-        self._bindpwd = bindpwd
+        if bindpwd != self.getEncryptedBindPassword():
+            self._bindpwd = bindpwd
         self._binduid_usage = int(binduid_usage)
 
         self._local_groups = not not local_groups
@@ -423,7 +432,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         self._pwd_encryption = encryption
 
-        if isinstance(obj_classes, str) or isinstance(obj_classes, unicode):
+        if isinstance(obj_classes, basestring):
             obj_classes = [x.strip() for x in obj_classes.split(',')]
         self._user_objclasses = obj_classes
 
@@ -613,7 +622,8 @@ class LDAPUserFolder(BasicUserFolder):
             self.users_base, self._delegate.getScopes()[self.users_scope],
             user_filter, (self._login_attr,))
 
-        if len(loginlistinfo) == 0:
+        if ( len(loginlistinfo) == 0 or
+             loginlistinfo.get(self._login_attr, None) == [] ):
             # Special case: Either there really is no user, or the server
             # got angry about requesting every single record and threw back
             # an exception as a result. In order to show the simple text
@@ -698,7 +708,10 @@ class LDAPUserFolder(BasicUserFolder):
             return None
         
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s' % (value, sha.new(pwd or '').digest())
+        negative_cache_key = '%s:%s:%s' % ( name
+                                          , value
+                                          , sha_new(pwd or '').hexdigest()
+                                          )
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -823,13 +836,15 @@ class LDAPUserFolder(BasicUserFolder):
 
 
     def authenticate(self, name, password, request):
-        super = self._emergency_user
+        superuser = self._emergency_user
 
         if not name:
             return None
 
-        if super and name == super.getUserName():
-            user = super
+        if ( superuser and 
+             name == superuser.getUserName() and 
+             superuser.authenticate(password, request) ):
+            user = superuser
         else:
             user = self.getUser(name, password)
 
@@ -1740,7 +1755,7 @@ class LDAPUserFolder(BasicUserFolder):
         prop_info = schema.get(prop_name, {})
         is_binary = prop_info.get('binary', None)
 
-        if isinstance(prop_value, str) or isinstance(prop_value, unicode):
+        if isinstance(prop_value, basestring):
             if is_binary:
                 prop_value = [prop_value]
             elif not prop_info.get('multivalued', ''):
@@ -1804,7 +1819,7 @@ class LDAPUserFolder(BasicUserFolder):
         for attr, attr_info in schema.items():
             if source.has_key(attr):
                 new = source.get(attr, '')
-                if isinstance(new, str) or isinstance(new, unicode):
+                if isinstance(new, basestring):
                     if attr_info.get('binary', ''):
                         new = [new]
                         attr = '%s;binary' % attr
@@ -1881,7 +1896,7 @@ class LDAPUserFolder(BasicUserFolder):
         """ Purge user object from caches """
         user = user or ''
 
-        if not isinstance(user, str) or isinstance(user, unicode):
+        if not isinstance(user, basestring):
             user = user.getUserName()
 
         self._cache('anonymous').remove(user)
@@ -1889,9 +1904,13 @@ class LDAPUserFolder(BasicUserFolder):
 
         # This only removes records from the negative cache which
         # were retrieved without a password, since down here we do not
-        # know that password.
-        negative_cache_key = '%s:%s' % (user, sha.new('').digest())
-        self._cache('negative').remove(negative_cache_key)
+        # know that password. Only login and uid records are removed.
+        for name in (self._login_attr, self._uid_attr):
+            negative_cache_key = '%s:%s:%s' % ( name
+                                              , user
+                                              , sha_new('').hexdigest()
+                                              )
+            self._cache('negative').remove(negative_cache_key)
 
 
     security.declareProtected(manage_users, 'isUnique')
@@ -1973,6 +1992,12 @@ class LDAPUserFolder(BasicUserFolder):
             conn = None
 
         return getattr(conn, '_uri', '-- not connected --')
+
+    security.declareProtected(manage_users, 'getEncryptedPassword')
+    def getEncryptedBindPassword(self):
+        """ Return a hashed bind password for safe use in forms etc.
+        """
+        return sha_new(self.getProperty('_bindpwd')).hexdigest()
 
 
 def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate', REQUEST=None):

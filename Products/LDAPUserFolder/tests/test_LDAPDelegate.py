@@ -36,6 +36,12 @@ class TestSimple(unittest.TestCase):
         dn = 'cn="Joe Miller, Sr.", ou="odds+sods <1>", dc="host;new"'
         dn_clean = 'cn=Joe Miller\\, Sr.,ou=odds\\+sods \\<1\\>,dc=host\\;new'
         self.assertEquals(delegate._clean_dn(dn), dn_clean)
+
+    def test_clean_empty_dn(self):
+        delegate = self._makeOne()
+
+        self.assertEquals(delegate._clean_dn(''), '')
+        self.assertEquals(delegate._clean_dn(None), '')
         
         
 def test_suite():

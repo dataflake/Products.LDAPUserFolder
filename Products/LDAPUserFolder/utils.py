@@ -17,7 +17,10 @@ $Id$
 
 import base64
 import codecs
-import md5
+try:
+    from hashlib import md5 as md5_new
+except ImportError:
+    from md5 import new as md5_new
 from sets import Set
 import string
 
@@ -84,7 +87,7 @@ def _createLDAPPassword(password, encoding='SHA'):
     if encoding in ('SSHA', 'SHA', 'CRYPT'):
         pwd_str = AuthEncoding.pw_encrypt(password, encoding)
     elif encoding == 'MD5':
-        m = md5.new(password)
+        m = md5_new(password)
         pwd_str = '{MD5}' + base64.encodestring(m.digest())
     elif encoding == 'CLEAR':
         pwd_str = password

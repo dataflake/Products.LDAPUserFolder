@@ -122,8 +122,12 @@ class LDAPDelegate(Persistent):
 
         already_exists = 0
         for server in self._servers:
-            if str(server['host']) == host and str(server['port']) == port:
+            if ( str(server['host']) == str(host) and 
+                 str(server['port']) == str(port) and 
+                 str(server['protocol']) == str(protocol) ):
                 already_exists = 1
+                server['conn_timeout'] = conn_timeout
+                server['op_timeout'] = op_timeout
                 break
 
         if not already_exists:
@@ -182,7 +186,7 @@ class LDAPDelegate(Persistent):
         self.read_only = not not read_only
         self.u_base = users_base
 
-        if isinstance(objectclasses, str) or isinstance(objectclasses, unicode):
+        if isinstance(objectclasses, basestring):
             objectclasses = [x.strip() for x in objectclasses.split(',')]
         self.u_classes = objectclasses
 
