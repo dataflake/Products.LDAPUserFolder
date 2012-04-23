@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder server management tests
-
-$Id$
 """
 
 import unittest

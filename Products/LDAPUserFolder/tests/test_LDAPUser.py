@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ Tests for the LDAPUser class
-
-$Id$
 """
 
 # General Python imports

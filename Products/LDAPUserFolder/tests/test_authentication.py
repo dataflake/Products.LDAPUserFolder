@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder authentication tests
-
-$Id$
 """
 
 import unittest

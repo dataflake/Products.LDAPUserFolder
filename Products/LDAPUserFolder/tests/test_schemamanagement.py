@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder schema handling tests
-
-$Id$
 """
 
 import unittest

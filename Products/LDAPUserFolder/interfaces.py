@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ Interfaces for LDAPUserFolder package classes
-
-$Id$
 """
 
 from zope.interface import Interface

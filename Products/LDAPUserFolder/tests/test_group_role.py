@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder group and role functionality tests
-
-$Id$
 """
 
 import unittest

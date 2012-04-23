@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ Shared LDAPUserFolder test configuration data
-
-$Id$
 """
 
 defaults = { 'title'  : 'LDAP User Folder'

@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ A test case class for LDAPUserFolder tests
-
-$Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
 # General Python imports

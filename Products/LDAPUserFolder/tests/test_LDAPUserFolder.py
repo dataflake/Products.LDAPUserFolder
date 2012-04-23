@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder class tests
-
-$Id$
 """
 
 # General Python imports

@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ Tests for the SimpleCache class
-
-$Id$
 """
 
 # General Python imports

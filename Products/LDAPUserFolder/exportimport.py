@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder GenericSetup support
-
-$Id$
 """
 
 from Acquisition import aq_base

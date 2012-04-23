@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPDelegate: A delegate that performs LDAP operations
-
-$Id$
 """
 
 # General python imports

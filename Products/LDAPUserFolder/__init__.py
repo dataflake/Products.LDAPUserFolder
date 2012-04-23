@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserFolder package initialization code
-
-$Id$
 """
 
 from AccessControl.Permissions import add_user_folders

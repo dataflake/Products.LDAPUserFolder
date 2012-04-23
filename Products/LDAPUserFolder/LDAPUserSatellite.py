@@ -11,8 +11,6 @@
 #
 ##############################################################################
 """ LDAPUserSatellite: Fake user folder for role manipulation
-
-$Id$
 """
 
 # General Python imports
