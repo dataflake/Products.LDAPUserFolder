@@ -1,16 +1,16 @@
-Changelog for Products.LDAPUserFolder
-=====================================
-
-This file contains change information for the LDAPUserFolder product.
-To see changes for older releases please see HISTORY.txt.
+Change log for Products.LDAPUserFolder
+======================================
 
 2.24 (unreleased)
 -----------------
+- moved change log entries for version 2.18 and older from CHANGES.txt
+  to HISTORY.txt
+- reformat HISTORY.txt and make it ReST-compliant
+- clean up formatting of CHANGES.txt
 
 
 2.23 (2012-04-23)
 -----------------
-
 - Add ``setuptools-git`` to ``setup_requires`` to prevent missing 
   files in the egg release - versions 2.22 and 2.21 will not build
   due to a missing ``VERSION.txt``.
@@ -18,27 +18,22 @@ To see changes for older releases please see HISTORY.txt.
 
 2.22 (2012-04-23)
 -----------------
-
 - factored some tests into separate modules to increase 
   maintainability
-
 - Moved all documentary text files into the egg root
 
 
 2.21 (2012-04-21)
 -----------------
-
 - Make sure to raise OverflowError if no users can be found 
   when calling ``getUserNames``
   (https://bugs.launchpad.net/bugs/972408)
-
 - switch to using the standalone ``dataflake.fakeldap`` package 
   for unit tests
 
 
 2.20 (2011-05-04)
 -----------------
-
 - Fix for CVE-2010-2944
   (http://secunia.com/advisories/cve_reference/CVE-2010-2944/),
   which was never reported upstream by the Debian people, who
@@ -49,267 +44,26 @@ To see changes for older releases please see HISTORY.txt.
 
 2.19 (2011-01-10)
 -----------------
-
 - Add attribute name to the negative_cache_key so requests 
   for same value but different attribute do not poison the 
   cache.
   (https://bugs.launchpad.net/bugs/695821)
-
 - The changed base classes in Zope 2.13 did not define 
   isPrincipiaFolderish, so the user folder would no longer show
   up in the left hand navigation pane in the ZMI.
   (https://bugs.launchpad.net/bugs/693315)
-
 - Fixed a faulty check for unicode so user expiration will not
   fail if a unicode value is passed in. Changed all checks for
   string and unicode to use basestring.
   (https://bugs.launchpad.net/bugs/700071)
-
 - Fixed an export/import test error so all tests run again.
-
 - The Manager DN Password value on the ``Configure`` tab in the 
   ZMI showed up in clear text when viewing the HTML source for 
   the rendered page.
   (https://bugs.launchpad.net/bugs/664976)
 
 
-2.18 (2010-07-29)
------------------
-
-- Added a new flag ``purge`` to the ``ldap-servers`` and 
-  ``ldap-schema`` export/import XML elements for finer-grained 
-  control over value purging for those two settings if the 
-  global purge flag is not set.
-  (https://bugs.launchpad.net/bugs/586970)
-
-- The export/import code did not handle server definitions 
-  using the ``ldapi`` protocol correctly.
-  (part of https://bugs.launchpad.net/bugs/586970)
-
-- When adding a new server definition, the comparison to avoid 
-  duplicate server definitions was faulty. Furthermore, operations 
-  and connection timeout values were disregarded for duplicate 
-  server definitions.
-  (https://bugs.launchpad.net/bugs/586967)
-
-
-2.17 (2010-05-28)
------------------
-
-- Added GenericSetup magic to fully provide the INode interface
-  for the exporter and importer classes, making it easier to nest
-  within other importers.
-  (https://bugs.launchpad.net/bugs/586531)
-
-
-2.16 (2010-04-15)
------------------
-
-- depend on dataflake.ldapconnection so tests run without 
-  any hassle.
-
-- Use sha hexdigests instead of digests to build cache keys,
-  digest values can contain non-ASCII characters.
-
-
-2.15 (2010-04-12)
------------------
-
-- Changed import/export test code to be compatible with 
-  GenericSetup 1.5
-
-- No longer force-inject the "fakeldap" module into the module
-  namespace sys.modules as "ldap" for testing
-
-
-2.14 (2009-12-22)
------------------
-
-- Updated compatibility with CMF 2.1 and the upcoming 
-  dataflake.ldapconnection 1.0
-
-- Potential Bug: Avoid cache hash clashes by recomputing the hash 
-  when the admin clears the caches in the ZMI
-  (http://www.dataflake.org/tracker/issue_00629)
-
-- Bug: _lookupuserbyattr created its own user search filter and 
-  did not take the _extra_user_filter attribute into account
-  (http://www.dataflake.org/tracker/issue_00640)
-
-
-2.13 (2009-05-02)
------------------
-
-- Factoring: Removed the SSHA module in favor of using Zope's 
-  AccessControl.AuthEncoding module to handle password creation for 
-  most types of encryption.
-
-- Bug: Binary attribute handling in manage_addUser was broken. Only the
-  first character in the binary attribute's value would be stored.
-
-- Miscellaneous: Weed out all LDAP search calls that would indiscriminately
-  pull all attributes from a user record. This will reduce server load if
-  the user record contains large attributes such as jpegPhoto.
-
-- Feature: Added GenericSetup support with import/export steps for the
-  LDAPUserFolder. When installing the LDAPUserFolder via Buildout, make
-  sure to specify the extra name "exportimport" to automatically pull
-  the GenericSetup dependency: Products.LDAPUserFolder[exportimport]
-
-- Factoring: GenericSetup profile registration and CMF skin folder 
-  registration now moved from code to ZCML. Renamed profile
-  "default" to "cmfldap", that's a more descriptive name. The minimum CMF
-  version required for installing the CMF integration is now 2.1.0, which
-  implies Zope 2.10.4 or later.
-
-
-2.12 (2008-10-21)
------------------
-
-- Bug/LDAPDelegate: Use the canonical explode_dn method when splitting
-  up a DN for escaping its values instead of hand-splitting on ",", which
-  breaks if the DN contains commas in any value. Patch by Russell Sim.
-  This also required cleaning up one test that used an invalid DN format.
-  (http://www.dataflake.org/tracker/issue_00623)
-
-- Factoring: For testing, use the fakeldap module from the 
-  dataflake.ldapconnection package instead of maintaining a copy here.
-
-- Factoring: Refactored unit tests to use ZopeTestCase and ZopeLite instead 
-  of hand-rolling ZODB connections etc.
-
-- Bug: Added explicit CMFDefault dependency for the CMF-related functions
-  by adding an extras_require in setup.py.
-
-- Bug: Make sure a user is purged from the negative cache when the user
-  is explicitly expired.
-  (http://www.dataflake.org/tracker/issue_00617)
-
-
-2.11 (2008-08-01)
------------------
-
-- Feature: The site administrator may now set an arbitrary LDAP search
-  filter expression that will be applied to all user searches in 
-  addition to the default filters. Only those user records matching both
-  the default filter and this arbitrary filter expression will be
-  returned. CAUTION: The filter expression must conform to standard LDAP
-  filter syntax. Setting a wrong value will lock out your users!
-  (http://www.dataflake.org/tracker/issue_00615)
-
-- Factoring: Move the LDAP server configuration off the Configure
-  tab in the ZMI to its own LDAP Servers tab to avoid overcrowding the
-  configuration view even more.
-
-- Bug: The unit tests for the LDAPMemberDataTool and the 
-  LDAPMembershipTool did not run due to a faulty import.
-
-- Bug: The ZMI Caches tab erroneously suggested that a cached user's 
-  last access time would be recorded and/or updated. This was not the case, 
-  it is recorded at user object creation and then never updated. The Caches
-  tab will now reflect the creation time. Since the API to set or query the
-  last access time was not used anywhere it has been removed.
-  (in response to http://www.dataflake.org/tracker/issue_00614 by Stefan
-  Loidl)
-
-
-2.10 (2008-07-21)
------------------
-
-- Bug: Recreating the internal cache hash key inside 
-  LDAPUserFolder.__setstate__ can lead to values differring from one thread 
-  to the next, leading to unnecessary extra LDAP lookups for values already 
-  cached under the original key.
-  (http://www.dataflake.org/tracker/issue_00608 by Stefan Loidl)
-
-- Factoring: LDAPUserFolder.__setstate__: Removed old backwards-compatibility 
-  gyrations.
-
-- Bug: FakeLDAP could not handle BASE-scoped searches
-
-- Bug: LDAPUserFolder.searchUsers mishandled searches on DN by not passing
-  the correct BASE search scope through. Found by Nico Grubert.
-
-
-2.9 (2008-06-04)
-----------------
-
-- Bug: LDAPUserFolder.getUserByAttr: The negative login cache used for 
-  preventing repeated LDAP requests when a user enters wrong
-  creadentials was keyed on user login alone. This would prevent 
-  subsequent logins with the correct password. Thanks to Tarek 
-  Ziade for test and patch and Gilles Lenfant for filing the issue.
-  (http://www.dataflake.org/tracker/issue_00605)
-
-- Refactoring: test suite: Rearrange imports to prevent error messages when 
-  the CMF is not present.
-
-- Bug: LDAPDelegate.search: Improve searches on binary attributes such as
-  objectGUID by introducing a method argument that prevents 
-  UTF*-conversion of the filter expression passed in.
-  (http://www.dataflake.org/tracker/issue_00576 by Wichert Akkerman)
-
-- Feature: Improve binary attribute handlng by introducing a binary flag 
-  for LDAP schema items that is consulted when inserting/modifying an
-  attribute flagged that way. Introduce a hardcoded list of 
-  binary attributes to no convert from UTF-8 when searching.
-  (http://www.dataflake.org/tracker/issue_00598 Dragos Chirila)
-
-- Bug: LDAPUserFolder.getUserByAttr: made login attribute and uid attribute
-  retrieval safer by explicitly providing a default.
-  (http://www.dataflake.org/tracker/issue_00602 by Martin Gfeller)
-
-- Bug: ZMI Groups tab: Asking for the type of group via a separate
-  LDAP search for every group listed is unfeasible for installations
-  with large numbers of groups, it is now only done if the total
-  number of groups is less than 50.
-
-
-2.9-beta (2008-01-01)
----------------------
-
-NOTE: In order to use the LDAP-based CMF membership components
-      you need CMF version 2.1.0 or higher.
-
-- Bug: Added a __setstate__ hook for deleting old-style logger
-  instances which were removed for version 2.7 but are now showing
-  up as "broken" objects and may prevent Plone migration scripts
-  from working correctly, pointed out by Martijn Pieters.
-  (http://www.dataflake.org/tracker/issue_00574)
-
-- Bug: Removed failing unit test for old-style Zope 2 interfaces that
-  no longer exist in the CMF
-
-- Bug: CMFLDAP skins: Cleanups and changes to align the custom skin
-  scripts and templates with their CMF 2.1.0 counterparts
-
-- Bug: LDAPMemberDataTool: The "Member Properties" ZMI tab was broken
-  due to a typo in the ZPT code.
-
-- Bug: LDAPMemberDataTool: Adjusted wrapUser to match the changed 
-  behavior in CMF 2.1.0 and up.
-
-- Bug: LDAPMembershipTool/LDAPMemberDataTool: Since the core CMF tools 
-  no longer support the IActionProvider interface the tests to
-  prove the LDAP-based versions support these interfaces have been
-  removed.
-
-- Bug: The functional test rig setup has been changed to avoid 
-  DeprecationWarning-Messages from GenericSetup 1.3 and up.
-
-- Bug: LDAPUserFolder.searchGroups: Make the code more defensive for 
-  situations where a search would return groups without members,
-  suggested by Nick Davis.
-  (http://www.dataflake.org/tracker/issue_00584)
-
-- Feature: Added negative caching for users to avoid querying the LDAP 
-  server again and again for invalid logins. Patch provided by Wichert
-  Akkerman.
-  (http://www.dataflake.org/tracker/issue_00572)
-
-- Feature: added a group/membership mapping for group type "univentionGroup"
-  (http://www.dataflake.org/tracker/issue_00569)
-
-- Documentation: Noted the danger of trying to install the CMFLDAP 
-  extensions into a Plone site: Just don't do it, you will suffer!
+Older releases
+--------------
+Please see the file `HISTORY.txt` in this package.
 
