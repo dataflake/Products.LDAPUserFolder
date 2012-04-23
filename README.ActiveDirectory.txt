@@ -19,6 +19,17 @@ advice from users who have been successful. I cannot vouch that any of this
 will work for all M$ users and have no way of verifying. Please treat 
 this information with that in mind.
 
+AD emitting unicode?
+--------------------
+There may be situations when AD emits unicode in response to a query, as
+opposed to the expected and standards-compliant UTF-8-encoded string.
+I cannot verify this myself, but if you see an issue like this...
+
+ http://www.dataflake.org/tracker/issue_00629
+
+then you may want to follow his workaround and filter out unicode
+before it hits the user folder code.
+
 Nested Groups
 -------------
 Nested groups as used by AD are not supported at this time.
