@@ -76,8 +76,6 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         self._logger.info('LDAPUserFolder at %s imported.' % (
                                     self.context.absolute_url_path()))
 
-    node = property(_exportNode, _importNode)
-
     def _purgeSettings(self):
         """ Purge all settings before applying them
         """

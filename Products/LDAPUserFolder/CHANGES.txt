@@ -2,53 +2,10 @@ Changelog for Products.LDAPUserFolder
 =====================================
 
 This file contains change information for the LDAPUserFolder product.
-To see changes for older releases please see HISTORY.txt.
+To see changes made to revisions prior to the latest version see
+HISTORY.txt.
 
-3.0 (unreleased)
------------------
-- switch to using ``dataflake.fakeldap`` for testing
-
-- Moved all documentary text files into the egg root
-
-- The code has moved to the new Git repository at 
-  https://git.dataflake.org
-
-- Added GenericSetup magic to fully provide the INode interface
-  for the exporter and importer classes, making it easier to nest
-  within other importers.
-  (https://bugs.launchpad.net/bugs/586531)
-
-- Feature: The kind of LDAP connection object to be used can be 
-  changed by the administrator through ZCML instead of monkey
-  patching a module-level constant in the LDAPDelegate module
-
-- Refactoring: Remove the delegate registration mechanism
-
-- Refactoring: The fakeldap module is only used to provide the 
-  LDAP connection factory, and not as a full python-ldap module
-  facade. For testing it is no longer necessary to mess with
-  the sys.modules registry.
-
-- Refactoring: Now using dataflake.ldapconnection, the LDAPDelegate
-  is just a wrapper. Remove obsolete LDAPDelegate methods.
-
-- Potential Bug: Avoid cache hash clashes by recomputing the hash 
-  when the admin clears the caches in the ZMI
-  (http://www.dataflake.org/tracker/issue_00629)
-
-- Bug: _lookupuserbyattr created its own user search filter and 
-  did not take the _extra_user_filter attribute into account
-  (http://www.dataflake.org/tracker/issue_00640)
-
-- Removed the LDAPUserSatellite code due to severe bit-rot. Please use 
-  the PluggableAuthService package in conjunction with LDAPMultiPlugins
-  to gain the same functionality.
-
-- Factoring: Moved the CMF LDAP tools out into their own package
-  named Products.CMFLDAP.
-
-
-2.13 (2009-05-02)
+2.13 (unreleased)
 -----------------
 
 - Factoring: Removed the SSHA module in favor of using Zope's 

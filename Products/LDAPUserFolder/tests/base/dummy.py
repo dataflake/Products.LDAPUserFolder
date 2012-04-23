@@ -15,15 +15,15 @@
 $Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
-import time
-
 from Acquisition import Implicit
-from DateTime.DateTime import DateTime
+
+from Products.CMFCore.tests.base.dummy import DummyUser
+from Products.CMFCore.tests.base.dummy import DummyUserFolder
 
 DN_BASE = 'dc=example,dc=com'
 
 
-class LDAPDummyUser(Implicit):
+class LDAPDummyUser(Implicit, DummyUser):
     """ LDAP-enabled dummy user """
 
     def __init__(self, name, password='', roles=(), domains=()):
@@ -31,7 +31,6 @@ class LDAPDummyUser(Implicit):
         self.__ = password
         self.roles = tuple(roles)
         self.domains = tuple(domains)
-        self._created = time.time()
 
     def getId(self):
         return self.name
@@ -45,14 +44,6 @@ class LDAPDummyUser(Implicit):
     def getRolesInContext(self, context):
         return self.roles
 
-    def allowed(self, object, object_roles=None):
-        if object_roles is None or 'Anonymous' in object_roles:
-            return 1
-        for role in object_roles:
-            if role in self.getRolesInContext(object):
-                return 1
-        return 0
-
     def getDomains(self):
         return self.domains
 
@@ -62,11 +53,10 @@ class LDAPDummyUser(Implicit):
     def _getPassword(self):
         return self.__
 
-    def getCreationTime(self):
-        return DateTime(self._created)
 
 
-class LDAPDummyUserFolder(Implicit):
+
+class LDAPDummyUserFolder(DummyUserFolder):
     """ LDAP-enabled dummy user folder """
 
     _rdnattr = 'cn'
@@ -112,12 +102,6 @@ class LDAPDummyUserFolder(Implicit):
 
     def getProperty(self, property_name):
         return getattr(self, property_name, None)
-
-    def getUser(self, name):
-        return getattr(self, name, None)
-
-    def getUserById(self, id, default=None):
-        return self.getUser(id)
 
     def getGroups(self):
         return ( ('Role', 'cn=Role,ou=groups,%s' % DN_BASE)

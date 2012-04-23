@@ -19,10 +19,6 @@ import unittest
 
 from OFS.Folder import Folder
 from Products.Five import zcml
-from zope.component import getSiteManager
-from zope.component.interfaces import IFactory
-
-from dataflake.ldapconnection.tests import fakeldap
 
 from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
 
@@ -38,7 +34,7 @@ except ImportError:
 
 else:
 
-    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase, unittest.TestCase):
+    class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase):
 
         layer = ExportImportZCMLLayer
     
@@ -49,8 +45,13 @@ else:
             return LDAPUserFolderXMLAdapter
 
         def setUp(self):
+            try:
+                import Products.CMFCore
+                zcml.load_config('meta.zcml', Products.CMFCore)
+            except ImportError:
+                pass
             import Products.LDAPUserFolder
-            super(LDAPUserFolderXMLAdapterTests, self).setUp()
+            BodyAdapterTestCase.setUp(self)
             zcml.load_config('configure.zcml', Products.LDAPUserFolder)
             self._obj = LDAPUserFolder()
             self._BODY = _LDAPUSERFOLDER_BODY
@@ -59,35 +60,12 @@ else:
 
         layer = ExportImportZCMLLayer
 
-        def setUp(self):
-            gsm = getSiteManager()
-            gsm.registerUtility( fakeldap.ldapobject.SmartLDAPObject
-                               , IFactory
-                               , 'LDAP connection factory'
-                               )
-            super(_LDAPUserFolderSetup, self).setUp()
-
-        def tearDown(self):
-            gsm = getSiteManager()
-            gsm.unregisterUtility( fakeldap.ldapobject.SmartLDAPObject
-                                 , IFactory
-                                 , 'LDAP connection factory'
-                                 )
-            super(_LDAPUserFolderSetup, self).tearDown()
-
-
         def _initSite(self, use_changed=False):
             self.root.site = Folder(id='site')
             site = self.root.site
             acl = self.root.site.acl_users = LDAPUserFolder()
 
             if use_changed:
-                acl.manage_addServer( 'localhost'
-                                    , port='636'
-                                    , use_ssl=True
-                                    , conn_timeout=10
-                                    , op_timeout=10
-                                    )
                 acl.manage_edit( 'changed title'
                                , 'uid'
                                , 'cn'
@@ -113,6 +91,12 @@ else:
                                             , public_name='publicmail'
                                             , binary=True
                                             )
+                acl.manage_addServer( 'localhost'
+                                    , port='636'
+                                    , use_ssl=True
+                                    , conn_timeout=10
+                                    , op_timeout=10
+                                    )
                 acl.manage_addGroup('posixAdmin')
                 acl.manage_addGroupMapping('posixAdmin', 'Manager')
                 acl._anonymous_timeout = 60

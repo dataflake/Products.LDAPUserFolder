@@ -15,18 +15,26 @@
 $Id: __init__.py 58 2008-05-28 21:33:24Z jens $
 """
 
+# General Python imports
 import unittest, sys
 
+# Zope imports
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
 import transaction
-from zope.component import getSiteManager
-from zope.component.interfaces import IFactory
 
-from dataflake.fakeldap import FakeLDAPConnection
+# Do some namespace manipulation to make use of fakeldap
+from dataflake.ldapconnection.tests import fakeldap
+if sys.modules.has_key('_ldap'):
+    del sys.modules['_ldap']
+sys.modules['ldap'] = fakeldap
+from Products.LDAPUserFolder import LDAPDelegate
+LDAPDelegate.c_factory = fakeldap.ldapobject.ReconnectLDAPObject
 
+# LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
+# Tests imports
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
 from Products.LDAPUserFolder.tests.config import user
@@ -39,11 +47,8 @@ u2g = user2.get
 class LDAPTest(unittest.TestCase):
 
     def setUp(self):
-        from dataflake.fakeldap import TREE
-        self.db = TREE
-        self.db.clear()
+        fakeldap.clearTree()
         transaction.begin()
-
         self.app = self.root = ZopeTestCase.app()
         self.root._setObject('luftest', Folder('luftest'))
         self.folder = self.root.luftest
@@ -51,14 +56,6 @@ class LDAPTest(unittest.TestCase):
         luf = self.folder.acl_users
         host, port = dg('server').split(':')
         luf.manage_addServer(host, port=port)
-
-        # Stitch in the fake LDAP connection
-        gsm = getSiteManager()
-        gsm.registerUtility( FakeLDAPConnection
-                           , IFactory
-                           , 'LDAP connection factory'
-                           )
-
         luf.manage_edit( dg('title')
                        , dg('login_attr')
                        , dg('uid_attr')
@@ -76,15 +73,10 @@ class LDAPTest(unittest.TestCase):
                        , encryption = dg('encryption')
                        , read_only = dg('read_only')
                        )
-        self.db.addTreeItems(dg('users_base'))
-        self.db.addTreeItems(dg('groups_base'))
+        fakeldap.addTreeItems(dg('users_base'))
+        fakeldap.addTreeItems(dg('groups_base'))
 
     def tearDown( self ):
-        gsm = getSiteManager()
-        gsm.unregisterUtility( FakeLDAPConnection
-                             , IFactory
-                             , 'LDAP connection factory'
-                             )
         transaction.abort()
         ZopeTestCase.close(self.app)
 

@@ -1,0 +1,14 @@
+LDAPUserSatellite - Caches: View Cached User role maps
+
+    Description
+
+        This view shows the currently cached role manipulations.
+
+    Elements
+
+        'Purge All caches' -- This will purge all caches inside the 
+          LDAPUserSatellite.
+
+        'Cached role map' -- These are the currently cached user-role
+          mappings and their expiration.
+

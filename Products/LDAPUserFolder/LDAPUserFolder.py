@@ -15,17 +15,16 @@
 $Id$
 """
 
-try:
-    from hashlib import sha1 as sha_new
-except ImportError:
-    from sha import new as sha_new
+# General python imports
 import logging
 import os
 import random
 from sets import Set
+import sha
 import time
 import urllib
 
+# Zope imports
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
@@ -40,16 +39,15 @@ from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem
 from zope.interface import implements
 
-from dataflake.ldapconnection.connection import explode_dn
-from dataflake.ldapconnection.connection import filter_format
-
+# LDAPUserFolder package imports
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
-from Products.LDAPUserFolder.LDAPDelegate import LDAPDelegate
+from Products.LDAPUserFolder.LDAPDelegate import filter_format
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
 from Products.LDAPUserFolder.SimpleCache import SharedObject
 from Products.LDAPUserFolder.SimpleCache import SimpleCache
+from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
 from Products.LDAPUserFolder.utils import crypt
 from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
@@ -156,7 +154,7 @@ class LDAPUserFolder(BasicUserFolder):
     def __init__(self, delegate_type='LDAP delegate'):
         """ Create a new LDAPUserFolder instance """
         self._hash = '%s%s' % (self.meta_type, str(random.random()))
-        self._delegate = LDAPDelegate()
+        self._delegate = _createDelegate(delegate_type)
         self._ldapschema = { 'cn' : { 'ldap_name' : 'cn'
                                     , 'friendly_name' : 'Canonical Name'
                                     , 'multivalued' : False
@@ -215,8 +213,6 @@ class LDAPUserFolder(BasicUserFolder):
             returns a record's DN and the groups a uid belongs to
             as well as a dictionary containing user attributes
         """
-        users_base = self.users_base
-
         if name == 'dn':
             if value.find(',') == -1:
                 # micro-optimization: this is not a valid dn because it
@@ -229,6 +225,7 @@ class LDAPUserFolder(BasicUserFolder):
             users_base = to_utf8(value)
             search_str = '(objectClass=*)'
         elif name == 'objectGUID':
+            users_base = self.users_base
             # we need to convert the GUID to a specially formatted string
             # for the query to work
             value = guid2string(value)
@@ -236,10 +233,16 @@ class LDAPUserFolder(BasicUserFolder):
             # because it replaces backslashes, which we need as a result
             # of guid2string
             ob_flt = ['(%s=%s)' % (name, value)]
-            search_str = self._getUserFilterString(filters=ob_flt)
+            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
+                            for o in self._user_objclasses] )
+            search_str = '(&%s)' % ''.join(ob_flt)
+
         else:
+            users_base = self.users_base
             ob_flt = [filter_format('(%s=%s)', (name, value))]
-            search_str = self._getUserFilterString(filters=ob_flt)
+            ob_flt.extend( [filter_format('(%s=%s)', ('objectClass', o))
+                            for o in self._user_objclasses] )
+            search_str = '(&%s)' % ''.join(ob_flt)
 
         # Step 1: Bind either as the Manager or anonymously to look
         #         up the user from the login given
@@ -262,7 +265,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         res = self._delegate.search( base=users_base
                                    , scope=self.users_scope
-                                   , fltr=search_str
+                                   , filter=search_str
                                    , attrs=known_attrs
                                    , bind_dn=bind_dn
                                    , bind_pwd=bind_pwd
@@ -306,7 +309,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             auth_res = self._delegate.search( base=utf8_dn
                                             , scope=self._delegate.BASE
-                                            , fltr='(objectClass=*)'
+                                            , filter='(objectClass=*)'
                                             , attrs=known_attrs
                                             , bind_dn=user_dn
                                             , bind_pwd=user_pwd
@@ -337,9 +340,6 @@ class LDAPUserFolder(BasicUserFolder):
     def manage_reinit(self, REQUEST=None):
         """ re-initialize and clear out users and log """
         self._clearCaches()
-        self._hash = '%s-%s' % ( str(self.getPhysicalPath())
-                               , str(random.random())
-                               )
         logger.info('manage_reinit: Cleared caches')
 
         if REQUEST:
@@ -547,7 +547,7 @@ class LDAPUserFolder(BasicUserFolder):
         res = self._delegate.search( base=base_dn
                                    , scope=scope
                                    , attrs=attrnames
-                                   , fltr=filter_str
+                                   , filter=filter_str
                                    )
 
         if res['size'] == 0 or res['exception']:
@@ -698,7 +698,7 @@ class LDAPUserFolder(BasicUserFolder):
             return None
         
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s' % (value, sha_new(pwd or '').digest())
+        negative_cache_key = '%s:%s' % (value, sha.new(pwd or '').digest())
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -841,6 +841,12 @@ class LDAPUserFolder(BasicUserFolder):
         return user
 
 
+    #################################################################
+    #
+    # Stuff formerly in LDAPShared.py
+    #
+    #################################################################
+
     security.declareProtected(manage_users, 'getUserDetails')
     def getUserDetails(self, encoded_dn, format=None, attrs=()):
         """ Return all attributes for a given DN """
@@ -886,7 +892,7 @@ class LDAPUserFolder(BasicUserFolder):
             member_attrs = list(Set(GROUP_MEMBER_MAP.values()))
             res = self._delegate.search( base=self.groups_base
                                        , scope=self.groups_scope
-                                       , fltr=filter_format('(cn=%s)', (cn,))
+                                       , filter=filter_format('(cn=%s)', (cn,))
                                        , attrs=member_attrs
                                        )
 
@@ -1042,7 +1048,7 @@ class LDAPUserFolder(BasicUserFolder):
             search_str = self._getUserFilterString(filters=filt_list)
             res = self._delegate.search( base=users_base
                                        , scope=search_scope
-                                       , fltr=search_str
+                                       , filter=search_str
                                        , attrs=attrs
                                        )
 
@@ -1131,7 +1137,7 @@ class LDAPUserFolder(BasicUserFolder):
             search_str = '(&%s)' % ''.join(filt_list)
             res = self._delegate.search( base=groups_base
                                        , scope=self.groups_scope
-                                       , fltr=search_str
+                                       , filter=search_str
                                        , attrs=attrs
                                        )
 
@@ -1226,7 +1232,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             res = self._delegate.search( base=self.groups_base
                                        , scope=gscope
-                                       , fltr=group_filter
+                                       , filter=group_filter
                                        , attrs=['cn']
                                        , bind_dn=''
                                        , bind_pwd=''
@@ -1245,7 +1251,7 @@ class LDAPUserFolder(BasicUserFolder):
                     try:
                         cn = res_dicts[i]['cn'][0]
                     except KeyError:    # NDS oddity
-                        cn = explode_dn(dn, 1)[0]
+                        cn = self._delegate.explode_dn(dn, 1)[0]
 
                     if attr is None:
                         group_list.append((cn, dn))
@@ -1553,7 +1559,7 @@ class LDAPUserFolder(BasicUserFolder):
 
                         for role in user_roles:
                             try:
-                                exploded = explode_dn(role)
+                                exploded = self._delegate.explode_dn(role)
                                 elements = len(exploded)
                             except:
                                 elements = 1
@@ -1837,7 +1843,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if new_cn and new_utf8_rdn != old_utf8_rdn:
             old_dn = utf8_dn
-            old_dn_exploded = explode_dn(old_dn)
+            old_dn_exploded = self._delegate.explode_dn(old_dn)
             old_dn_exploded[0] = new_rdn
             new_dn = ','.join(old_dn_exploded)
             old_groups = self.getGroups(dn=user_dn, attr='dn')
@@ -1884,7 +1890,7 @@ class LDAPUserFolder(BasicUserFolder):
         # This only removes records from the negative cache which
         # were retrieved without a password, since down here we do not
         # know that password.
-        negative_cache_key = '%s:%s' % (user, sha_new('').digest())
+        negative_cache_key = '%s:%s' % (user, sha.new('').digest())
         self._cache('negative').remove(negative_cache_key)
 
 
@@ -1899,7 +1905,7 @@ class LDAPUserFolder(BasicUserFolder):
         search_str = filter_format('(%s=%s)', (attr, str(value)))
         res = self._delegate.search( base=self.users_base
                                    , scope=self.users_scope
-                                   , fltr=search_str
+                                   , filter=search_str
                                    )
 
         if res['exception']:

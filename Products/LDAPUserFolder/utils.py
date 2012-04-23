@@ -17,10 +17,7 @@ $Id$
 
 import base64
 import codecs
-try:
-    from hashlib import md5 as md5_new
-except ImportError:
-    from md5 import new as md5_new
+import md5
 from sets import Set
 import string
 
@@ -87,7 +84,7 @@ def _createLDAPPassword(password, encoding='SHA'):
     if encoding in ('SSHA', 'SHA', 'CRYPT'):
         pwd_str = AuthEncoding.pw_encrypt(password, encoding)
     elif encoding == 'MD5':
-        m = md5_new(password)
+        m = md5.new(password)
         pwd_str = '{MD5}' + base64.encodestring(m.digest())
     elif encoding == 'CLEAR':
         pwd_str = password
@@ -126,3 +123,33 @@ def guid2string(val):
     return ''.join(s)
 
 
+############################################################
+# LDAP delegate registry
+############################################################
+
+delegate_registry = {}
+
+def registerDelegate(name, klass, description=''):
+    """ Register delegates that handle the LDAP-related work
+
+    name is a short ID-like moniker for the delegate
+    klass is a reference to the delegate class itself
+    description is a more verbose delegate description
+    """
+    delegate_registry[name] = { 'name'        : name
+                              , 'klass'       : klass
+                              , 'description' : description
+                              }
+
+def registeredDelegates():
+    """ Return the currently-registered delegates """
+    return delegate_registry
+
+def _createDelegate(name='LDAP delegate'):
+    """ Create a delegate based on the name passed in """
+    default = delegate_registry.get('LDAP delegate')
+    info = delegate_registry.get(name, None) or default
+    klass = info['klass']
+    delegate = klass()
+
+    return delegate

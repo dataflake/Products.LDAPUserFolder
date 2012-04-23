@@ -1,0 +1,218 @@
+<dtml-var manage_page_header>
+<dtml-var manage_tabs>
+
+<p class="form-help">
+  Change the basic properties of your LDAPUserSatellite
+  on this form.
+</p>
+
+<form action="manage_edit" method="post">
+
+  <table cellspacing="0" cellpadding="3">
+  
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Title
+      </td>
+      <td align="left" valign="top" colspan="3">
+        <input type="text" name="title" size="40" value="&dtml-title;" />
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-label">
+        LDAP User Folder
+      </td>
+      <td align="left" valign="top" class="form-element">
+        <select name="luf">
+          <dtml-let my_path="_.string.join( this().getPhysicalPath(), '/' )">
+            <dtml-in "superValues( [ 'LDAPUserFolder' ] )">
+              <dtml-let luf_path="_.string.join(getPhysicalPath(), '/')"
+                        my_luf_path="_.string.join(getLUF().getPhysicalPath(), '/')"
+                        sel="luf_path == my_luf_path and 'selected' or ''">
+                <dtml-if "my_path != luf_path">
+                  <option value="&dtml-luf_path;" &dtml-sel;>
+                    &dtml-luf_path;
+                  </option>
+                </dtml-if>
+              </dtml-let>
+            </dtml-in>
+          </dtml-let>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Groups Base DN
+      </td>
+      <td align="left" valign="top" class="form-element">
+        <input type="text" name="groups_base" size="40" 
+               value="&dtml-groups_base;" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Groups search scope
+      </td>
+      <td align="left" valign="top" class="form-element">
+        <select name="groups_scope:int">
+          <option value="0" <dtml-if "groups_scope==0">selected</dtml-if>>
+            BASE
+          </option>
+          <option value="1" <dtml-if "groups_scope==1">selected</dtml-if>>
+            ONELEVEL
+          </option>
+          <option value="2"<dtml-if "groups_scope==2">selected</dtml-if>>
+            SUBTREE
+          </options>
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <td align="left" valign="top" class="form-optional">
+        Operation *
+      </td>
+      <td align="left" valign="top" class="form-element">
+        <select name="recurse:int">
+          <option value="0" <dtml-if "recurse == 0">selected</dtml-if>>
+            No recursion (Apply only local role manipulations)
+          </option>
+          <option value="1" <dtml-if "recurse == 1">selected</dtml-if>>
+            Recursion (Seek out and use all LDAPUserSatellites above here)
+          </option>
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="3">
+        <br>
+        <input type="submit" value=" Apply Changes ">
+      </td>
+    </tr>
+  
+  </table>
+
+</form>
+
+<p>* Recursive mode is potentially very expensive. Use with caution.</p>
+
+<p><hr></p>
+
+<table cellspacing="0" cellpadding="2" width="95%">
+  <tr>
+    <td align="left" valign="top" class="form-text">
+      This section determines if LDAP groups are mapped to Zope roles
+      and what they map to.
+    </td>
+  </tr>
+</table>
+
+<br />
+
+<table border="0" cellpadding="2" cellspacing="0" width="95%">
+  <tr class="list-header">
+    <td align="left" valign="top" width="16">&nbsp;</td>
+    <td class="form-label">
+      LDAP Group
+    </td>
+    <td class="form-label">
+      Zope Role
+    </td>
+  </tr>
+</table>
+
+
+<dtml-in getGroupMappings>
+
+  <dtml-if name="sequence-start">
+    <form action="&dtml-URL1;" method="post">
+    <table border="0" cellpadding="2" cellspacing="0" width="95%">
+      </tr>
+  </dtml-if>
+
+  <dtml-if sequence-odd>
+    <tr class="row-normal">
+  <dtml-else>
+    <tr class="row-hilite">
+  </dtml-if>
+      <td align="left" valign="top" width="16">
+        <input type="checkbox" name="group_names:list" value="&dtml-sequence-key;" />
+      </td>
+      <td class="form-text">
+        <dtml-var name="sequence-key">
+      </td>
+      <td class="form-text">
+        <dtml-var "_.string.join( _['sequence-item'], ', ' )">
+      </td>
+    </tr>
+
+  <dtml-if name="sequence-end">
+      <tr>
+        <td align="left" valign="top" width="16">&nbsp;</td>
+        <td align="left" valign="top" colspan="2" class="form-element">
+          <input class="form-element" type="submit"
+                 name="manage_deleteGroupMappings:method"
+                 value="Delete" />
+        </td>
+      </tr>
+    </table>
+  </dtml-if>
+
+<dtml-else>
+  <p>(No group mappings specified at this time.)</p>
+
+</dtml-in>
+
+<p>&nbsp;</p>
+
+<form action="&dtml-URL1;" method="post">
+<table cellspacing="0" cellpadding="2" width="95%">
+
+  <tr class="section-bar">
+    <td colspan="4" align="left" valign="top" class="form-label">
+      Add LDAP group to Zope role mapping
+    </td>
+  </tr>
+
+  <tr>
+    <td align="left" valign="absmiddle" class="form-label">
+      Map this LDAP Group... &nbsp;
+    </td>
+    <td align="left" valign="top">
+      <select name="group_name">
+        <dtml-in getAllGroups sort>
+          <option>&dtml-sequence-key;</option>
+        </dtml-in>
+      </select>
+    </td>
+    <td align="left" valign="absmiddle" class="form-label">
+      ... to these Zope Roles &nbsp;
+    </td>
+    <td align="left" valign="top">
+      <dtml-in expr="_.reorder( valid_roles()
+                              , without=( 'Anonymous', 'Authenticated', 'Owner' )
+                              )" sort>
+        <input type="checkbox" name="role_names:list"
+               value="&dtml-sequence-item;"> &dtml-sequence-item; <br />
+      </dtml-in>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="left" valign="top" colspan="4">
+      <input class="form-element" type="submit"
+             name="manage_addGroupMapping:method"
+             value=" Add " />
+    </td>
+  </tr>
+
+</table>
+</form>
+
+<dtml-var manage_page_footer>
+

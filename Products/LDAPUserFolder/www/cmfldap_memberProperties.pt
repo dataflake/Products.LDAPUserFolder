@@ -1,0 +1,95 @@
+<h1 tal:replace="structure context/manage_page_header">HEADER</h1>
+<h1 tal:replace="structure context/manage_tabs">TABS</h1>
+
+<h3>Member data properties</h3>
+
+<p class="form-help">
+  Use this view to manage member properties available to portal members.
+  These properties are used on the Join form as well as the member
+  preference screen in the portal.
+</p>
+
+<p class="form-help">
+  The properties on this page are sourced from the LDAP schema items defined
+  on the <tt>LDAP Schema</tt> tab of your LDAPUserFolder instance.
+</p>
+
+<form method="post" action="."
+      tal:define="props context/getSortedMemberProperties"
+      tal:on-error="nothing">
+
+  <table width="98%">
+    <tr class="list-header">
+      <td colspan="2" class="form-label"> Registered member properties </td>
+    </tr>
+  
+    <tr tal:repeat="prop_info props">
+      <td with="16">
+        <input type="radio" name="property_id" class="form-element" value=""
+               tal:attributes="value prop_info/ldap_name" />
+      </td>
+      <td class="form-text"
+          tal:define="ln prop_info/ldap_name;
+                      fn prop_info/friendly_name|string:n/a;
+                      mn prop_info/public_name|nothing"
+          tal:content="string:${ln} (${fn})">
+        sn (Last Name)
+      </td>
+    </tr>
+
+    <tr tal:condition="not: props">
+      <td colspan="2" class="form-help"> No properties registered. </td>
+    </tr>
+
+    <tr tal:condition="props">
+      <td width="16">&nbsp;</td>
+      <td>
+        <input type="submit" name="manage_removeMemberProperty:method"
+               value=" Remove " />
+        <input type="submit" name="manage_moveMemberPropertyUp:method"
+               value=" Move up " />
+        <input type="submit" name="manage_moveMemberPropertyDown:method"
+               value=" Move down " />
+      </td>
+    </tr>
+
+  </table>
+
+</form>
+
+<form method="post" action="manage_addMemberProperty"
+      tal:define="available context/getAvailableMemberProperties">
+
+  <table width="98%">
+    <tr class="list-header">
+      <td class="form-label"> Register member properties </td>
+    </tr>
+  
+    <tr>
+      <td>
+        <select name="property_id"
+                tal:condition="available">
+          <option tal:repeat="prop_info available"
+                  tal:attributes="value prop_info/ldap_name"
+                  tal:content="string:${prop_info/ldap_name} (${prop_info/friendly_name})">
+            sn (Last Name)
+          </option>
+        </select>
+      </td>
+    </tr>
+
+    <tr tal:condition="not: available">
+      <td class="form-help"> All available properties registered. </td>
+    </tr>
+
+    <tr tal:condition="available">
+      <td>
+        <input type="submit" name="manage_addMemberProperty" value=" Add " />
+      </td>
+    </tr>
+
+  </table>
+
+</form>
+
+<h1 tal:replace="structure context/manage_page_footer">FOOTER</h1>

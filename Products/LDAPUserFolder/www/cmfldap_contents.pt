@@ -1,0 +1,13 @@
+<h1 tal:replace="structure context/manage_page_header">HEADER</h1>
+<h1 tal:replace="structure context/manage_tabs">TABS</h1>
+
+<h3>Membership data tool contents</h3>
+
+<p class="form-help">
+  Retrieving all users in the user folder in order to compare them to the
+  list of members stored in this tool is not supported since retrieving
+  all known user records from LDAP has the potential of bringing the site
+  and your LDAP server to a standstill.
+</p>
+
+<h1 tal:replace="structure context/manage_page_footer">FOOTER</h1>

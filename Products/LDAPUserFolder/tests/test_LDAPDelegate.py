@@ -30,8 +30,20 @@ class TestSimple(unittest.TestCase):
 
         return klass(*args, **kw)
 
+    def test_clean_dn(self):
+        # http://www.dataflake.org/tracker/issue_00623
+        delegate = self._makeOne()
+        dn = 'cn="Joe Miller, Sr.", ou="odds+sods <1>", dc="host;new"'
+        dn_clean = 'cn=Joe Miller\\, Sr.,ou=odds\\+sods \\<1\\>,dc=host\\;new'
+        self.assertEquals(delegate._clean_dn(dn), dn_clean)
+        
         
 def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TestSimple),
-        ))
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestSimple))
+
+    return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')
+    

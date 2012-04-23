@@ -1,0 +1,73 @@
+Installing the LDAPUserFolder Product
+
+  **NOTE**: Do not install the CMFLDAP extensions into a Plone site. 
+  They are meant for pure CMF sites only and will break Plone. You have 
+  been warned!
+
+  The former CMFLDAP product has been folded into the LDAPUserFolder 
+  package. The CMF-related pieces and their unit tests run on Zope 
+  version > 2.8 and CMF 2.1.0 and up.
+
+  You will also need a (working) python-ldap module installed for the 
+  Python binary that is used to run your Zope install, see 
+  "Important Hints" below.
+
+  This product does not require any special handling after unzipping
+  and untarring it in the Zope Products directory. You should do 
+  something like::
+
+    $ cp LDAPUserFolder-xyz.tgz <zope_root>/lib/python/Products
+    $ cd <zope_root>/lib/python/Products
+    $ tar zxvf LDAPUserFolder-xyz.tgz
+    <watch files being decompressed>
+
+  Windows users can use WinZip or similar, it can handle tarred 
+  gzip files. Make sure to move the extracted LDAPUserFolder 
+  folder to your Zope installation's lib/python/Products-folder.
+
+  That's all. Do not forget to restart Zope afterwards.
+
+
+  **Installing the CMF-related pieces into your CMF site**
+
+  When you create a new CMF Site you can activate CMFLDAP
+  by checking the CMFLDAP checkbox after selecting
+  'Configured CMF Site' from the Add List dropdown in the ZMI.
+
+  To activate CMFLDAP in an existing CMF site you need to
+  visit the portal_setup tool at the root of your CMF site from
+  the ZMI. On the 'Properties' tab, select 'CMFLDAP' in the
+  'Active site configuration' dropdown list. Then visit the
+  'Import' tab and click on 'Import all steps' at the bottom.
+
+
+  **Upgraders beware**
+
+  In order to avoid problems everyone who upgrades from a prior 
+  version of the LDAPUserFolder should delete and recreate any
+  LDAPUserFolder instance they have!
+
+  
+  **Important Hints**
+
+  Depending on your choice of Zope install (e.g. compiled from source
+  or binary version) you need to make sure that the python-ldap 
+  module (see README.txt) can be found by Zope.
+
+  The first step after compiling the python-ldap module is to find 
+  out if it works correctly by firing up your Python interpreter 
+  (the same one that runs your Zope, that is) and typing "import ldap". 
+  Then hit return. If no error message shows up the module is compiled 
+  and installed correctly. Many people get tripped up by the fact that
+  Zope binary distributions come with their own Python binaries, you must
+  install python-ldap using that specific Python binary that is used
+  by Zope.
+
+  If you for some reason decide to run Zope on a certain OS from Redmond
+  you might have difficulties getting python-ldap in a precompiled 
+  version. The official python-ldap website lists some sources::
+
+    http://python-ldap.sourceforge.net/
+
+  See README.txt for any other dependencies and requirements.
+

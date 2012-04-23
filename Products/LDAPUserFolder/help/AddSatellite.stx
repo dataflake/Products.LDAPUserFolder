@@ -1,0 +1,18 @@
+LDAPUserSatellite - Add: Create a new LDAPUserSatellite object
+
+    Description
+
+      The LDAPUserSatellite provides a way to add roles in the context
+      where the LDAPUserSatellite is situated. It works in conjunction
+      with a LDAPUserFolder to add roles to existing users, depending
+      on the context the user requests access to.
+
+
+    Controls
+
+     'Title' -- The (optional) title for this object
+
+     'LDAP User Folder' -- Select the LDAPUserFolder where the Satellite 
+       will look for user objects
+
+     'Add' -- Instantiate the LDAPUserSatellite.

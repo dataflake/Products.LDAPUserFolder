@@ -1,33 +1,19 @@
-############################################################################
-#
-# Copyright (c) 2009-2011 Jens Vagelpohl and Contributors. All Rights Reserved.
-#
-# This software is subject to the provisions of the Zope Public License,
-# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
-# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
-# FOR A PARTICULAR PURPOSE.
-#
-##############################################################################
-
-__version__ = '3.0dev'
-
 import os
 from setuptools import setup
 from setuptools import find_packages
 
-NAME = 'Products.LDAPUserFolder'
+NAME = 'LDAPUserFolder'
 here = os.path.abspath(os.path.dirname(__file__))
+package = os.path.join(here, 'Products', NAME)
 
 def _read(name):
-    f = open(os.path.join(here, name))
+    f = open(os.path.join(package, name))
     return f.read()
 
 _boundary = '\n' + ('-' * 60) + '\n\n'
 
-setup(name=NAME,
-      version=__version__,
+setup(name='Products.%s' % NAME,
+      version=_read('VERSION.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
       long_description=( _read('README.txt') 
                        + _boundary
@@ -48,27 +34,33 @@ setup(name=NAME,
       keywords='web application server zope zope2 ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url="http://pypi.python.org/pypi/%s" % NAME,
+      url="http://pypi.python.org/pypi/Products.LDAPUserFolder",
       license="ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)",
       packages=find_packages(),
       include_package_data=True,
       namespace_packages=['Products'],
       zip_safe=False,
-      setup_requires=['setuptools-git'],
       install_requires=[
-        'setuptools',
-        'Zope2',
-        'dataflake.ldapconnection >= 0.2',
-        'dataflake.fakeldap',
+        #"Zope >= 2.8",
+        "setuptools",
+        "python-ldap >= 2.0.6",
         ],
       extras_require={
+          'cmfldap': [
+                #'Zope >= 2.10.4',
+                'Products.CMFDefault >= 2.1.0'
+                ],
           'exportimport': [
+                #'Zope >= 2.10.0
                 'Products.GenericSetup >= 1.4.0'
                 ],
           },
+      tests_require=[
+        'dataflake.ldapconnection >= 0.2',
+        ],
       entry_points="""
       [zope2.initialize]
-      %s = %s:initialize
+      Products.%s = Products.%s:initialize
       """ % (NAME, NAME),
       )
 
