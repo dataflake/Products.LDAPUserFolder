@@ -17,6 +17,7 @@ $Id$
 
 # General Python imports
 import copy
+from hashlib import sha1
 import ldap
 import os.path
 import unittest
@@ -812,11 +813,6 @@ class TestLDAPUserFolder(LDAPTest):
 
     def test_expireUser(self):
         # http://www.dataflake.org/tracker/issue_00617 etc.
-        try:
-            from hashlib import sha1 as sha_new
-        except ImportError:
-            from sha import new as sha_new
-
         acl = self.folder.acl_users
     
         # Retrieving an invalid user should return None
@@ -826,7 +822,7 @@ class TestLDAPUserFolder(LDAPTest):
         # The retrieval above will add the invalid user to the negative cache
         negative_cache_key = '%s:%s:%s' % ( acl._uid_attr
                                           , 'invalid'
-                                          , sha_new('').hexdigest()
+                                          , sha1('').hexdigest()
                                           )
         self.failIf(acl._cache('negative').get(negative_cache_key) is None)
     

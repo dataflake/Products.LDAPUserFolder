@@ -16,14 +16,11 @@ $Id$
 """
 
 # General python imports
+from hashlib import sha1
 import logging
 import os
 import random
 from sets import Set
-try:
-    from hashlib import sha1 as sha_new
-except ImportError:
-    from sha import new as sha_new
 import time
 import urllib
 
@@ -710,7 +707,7 @@ class LDAPUserFolder(BasicUserFolder):
         cache_type = pwd and 'authenticated' or 'anonymous'
         negative_cache_key = '%s:%s:%s' % ( name
                                           , value
-                                          , sha_new(pwd or '').hexdigest()
+                                          , sha1(pwd or '').hexdigest()
                                           )
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
@@ -1908,7 +1905,7 @@ class LDAPUserFolder(BasicUserFolder):
         for name in (self._login_attr, self._uid_attr):
             negative_cache_key = '%s:%s:%s' % ( name
                                               , user
-                                              , sha_new('').hexdigest()
+                                              , sha1('').hexdigest()
                                               )
             self._cache('negative').remove(negative_cache_key)
 
@@ -1997,7 +1994,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getEncryptedBindPassword(self):
         """ Return a hashed bind password for safe use in forms etc.
         """
-        return sha_new(self.getProperty('_bindpwd')).hexdigest()
+        return sha1(self.getProperty('_bindpwd')).hexdigest()
 
 
 def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate', REQUEST=None):
