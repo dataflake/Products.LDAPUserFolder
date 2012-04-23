@@ -4,7 +4,7 @@ Changelog for Products.LDAPUserFolder
 This file contains change information for the LDAPUserFolder product.
 To see changes for older releases please see HISTORY.txt.
 
-2.23 (unreleased)
+2.23 (2012-04-23)
 -----------------
 
 - Add ``setuptools-git`` to ``setup_requires`` to prevent missing 
