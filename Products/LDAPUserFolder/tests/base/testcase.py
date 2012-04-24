@@ -13,10 +13,9 @@
 """ A test case class for LDAPUserFolder tests
 """
 
-# General Python imports
-import unittest, sys
+import unittest
+import sys
 
-# Zope imports
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
 import transaction
@@ -25,18 +24,18 @@ from dataflake.fakeldap import FakeLDAPConnection
 from Products.LDAPUserFolder import LDAPDelegate
 LDAPDelegate.c_factory = FakeLDAPConnection
 
-# LDAPUserFolder package imports
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
 
-# Tests imports
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
 from Products.LDAPUserFolder.tests.config import user
 from Products.LDAPUserFolder.tests.config import user2
+
 dg = defaults.get
 ag = alternates.get
 ug = user.get
 u2g = user2.get
+
 
 class LDAPTest(unittest.TestCase):
 

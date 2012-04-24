@@ -17,7 +17,9 @@ import unittest
 
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import user
+
 ug = user.get
+
 
 class TestAuthentication(LDAPTest):
 

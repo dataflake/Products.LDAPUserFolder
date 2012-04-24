@@ -21,7 +21,8 @@ A shared resource is identified by an id. The application
 is responsible that id s are unique.
 """
 
-from threading import _RLock, Lock
+from threading import _RLock
+from threading import Lock
 
 _ResourceMap = {}
 _ResourceLock = Lock()

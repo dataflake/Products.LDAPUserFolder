@@ -13,18 +13,17 @@
 """ Tests for the LDAPUser class
 """
 
-# General Python imports
 import unittest
 
-# Zope imports
 from DateTime.DateTime import DateTime
 
-# LDAPUserFolder package imports
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.tests.config import user
 from Products.LDAPUserFolder.tests.config import defaults
+
 ug = user.get
 dg = defaults.get
+
 
 class TestLDAPUser(unittest.TestCase):
 

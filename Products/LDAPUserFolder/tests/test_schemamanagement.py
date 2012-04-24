@@ -18,6 +18,7 @@ import unittest
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import user
 
+
 class TestSchema(LDAPTest):
 
     def test_schema(self):

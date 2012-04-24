@@ -13,7 +13,6 @@
 """ The LDAPUserFolder class
 """
 
-# General python imports
 from hashlib import sha1
 import logging
 import os
@@ -22,7 +21,6 @@ from sets import Set
 import time
 import urllib
 
-# Zope imports
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
@@ -42,7 +40,6 @@ from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem
 from zope.interface import implements
 
-# LDAPUserFolder package imports
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser

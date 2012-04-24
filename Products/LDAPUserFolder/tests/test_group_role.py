@@ -19,6 +19,7 @@ from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import user2
 
+
 class TestGroups(LDAPTest):
 
     def test_implicitRoleMapping(self):

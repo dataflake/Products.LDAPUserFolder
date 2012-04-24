@@ -13,23 +13,18 @@
 """ LDAPUserFolder class tests
 """
 
-# General Python imports
 import copy
 from hashlib import sha1
 import ldap
 import os.path
 import unittest
 
-# Zope imports
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from App.Common import package_home
 
-# LDAPUserFolder package imports
-from Products.LDAPUserFolder import manage_addLDAPUserFolder
-
-# Tests imports
 from dataflake.fakeldap import FakeLDAPConnection
+
 from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
@@ -37,10 +32,12 @@ from Products.LDAPUserFolder.tests.config import alternates
 from Products.LDAPUserFolder.tests.config import user
 from Products.LDAPUserFolder.tests.config import user2
 from Products.LDAPUserFolder.tests.config import manager_user
+
 dg = defaults.get
 ag = alternates.get
 ug = user.get
 u2g = user2.get
+
 
 class TestLDAPUserFolder(LDAPTest):
 
@@ -77,6 +74,7 @@ class TestLDAPUserFolder(LDAPTest):
         ae(len(acl.getServers()), 1)
 
     def testAlternateLUFInstantiation(self):
+        from Products.LDAPUserFolder import manage_addLDAPUserFolder
         ae = self.assertEqual
         self.folder._delObject('acl_users')
         manage_addLDAPUserFolder(self.folder)

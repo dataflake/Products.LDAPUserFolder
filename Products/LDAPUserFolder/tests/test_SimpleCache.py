@@ -13,18 +13,13 @@
 """ Tests for the SimpleCache class
 """
 
-# General Python imports
 import time
 import unittest
 
-# Zope Imports
 from DateTime.DateTime import DateTime
 
-# LDAPUserFolder package imports
-from Products.LDAPUserFolder.SimpleCache import SimpleCache
-from Products.LDAPUserFolder.SimpleCache import SharedObject
-
 TESTPWD = 'test'
+
 
 class CacheObject:
 
@@ -42,6 +37,7 @@ class CacheObject:
 class TestSimpleCache(unittest.TestCase):
 
     def setUp(self):
+        from Products.LDAPUserFolder.SimpleCache import SimpleCache
         self.cache = SimpleCache()
         self.cache.setTimeout(0.1)
 
@@ -92,7 +88,9 @@ class TestSimpleCache(unittest.TestCase):
         self.assertEqual(len(self.cache.getCache()), 0)
         
 class TestSharedObject(unittest.TestCase):
+
     def setUp(self):
+        from Products.LDAPUserFolder.SimpleCache import SharedObject
         self.cache = SharedObject()
 
     def tearDown(self):

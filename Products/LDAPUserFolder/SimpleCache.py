@@ -15,6 +15,7 @@
 
 import time
 
+
 class SimpleCache:
     """ A simple non-persistent cache for user objects """
 

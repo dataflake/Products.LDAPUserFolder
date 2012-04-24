@@ -13,7 +13,6 @@
 """ LDAPDelegate: A delegate that performs LDAP operations
 """
 
-# General python imports
 import ldap
 from ldapurl import LDAPUrl
 from ldapurl import isLDAPUrl
@@ -22,11 +21,9 @@ from ldap.filter import filter_format
 import logging
 import random
 
-# Zope imports
 from Persistence import Persistent
 from AccessControl.SecurityManagement import getSecurityManager
 
-# LDAPUserFolder package imports
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
 from Products.LDAPUserFolder.SharedResource import setResource
