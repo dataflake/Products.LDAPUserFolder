@@ -67,9 +67,3 @@ class TestAuthentication(LDAPTest):
         # now we should be OK
         self.failIf(user_ob is None)
 
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TestAuthentication),
-        ))
-

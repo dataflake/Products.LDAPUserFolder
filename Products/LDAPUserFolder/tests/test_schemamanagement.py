@@ -87,9 +87,3 @@ class TestSchema(LDAPTest):
         self.assertEqual(user.get('mail'), user_ob.getProperty('mail'))
         self.assertEqual(user.get('mail'), user_ob.getProperty('email'))
 
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TestSchema),
-        ))
-

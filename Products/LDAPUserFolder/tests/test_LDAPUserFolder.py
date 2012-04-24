@@ -853,12 +853,3 @@ class TestLDAPUserFolder(LDAPTest):
         self.failIf(acl._cache('negative').get('user1'))
         self.failIf(acl._hash == old_hash)
 
-
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestLDAPUserFolder))
-    return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
-

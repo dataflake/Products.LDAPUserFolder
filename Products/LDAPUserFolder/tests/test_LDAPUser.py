@@ -91,13 +91,3 @@ class TestLDAPUser(unittest.TestCase):
         self.failIf(isinstance(u.getUserName(), unicode))
         self.failIf(isinstance(u.getId(), unicode))
 
-
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestLDAPUser))
-
-    return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
-    

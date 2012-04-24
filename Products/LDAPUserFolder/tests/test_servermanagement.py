@@ -48,9 +48,3 @@ class TestServerManagement(LDAPTest):
         self.assertEquals(svr['conn_timeout'], 15)
         self.assertEquals(svr['op_timeout'], 10)
 
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TestServerManagement),
-        ))
-

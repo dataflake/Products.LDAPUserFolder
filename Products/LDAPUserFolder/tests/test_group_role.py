@@ -197,9 +197,3 @@ class TestGroups(LDAPTest):
         acl.manage_deleteGroups(dns=[group_dn])
         self.failUnless(len(acl.getGroups()) == 0)
 
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TestGroups),
-        ))
-

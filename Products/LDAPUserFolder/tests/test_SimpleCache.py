@@ -114,15 +114,4 @@ class TestSharedObject(unittest.TestCase):
         self.assertEqual(items, [('baz', 'fleeb'), ('foo', 'feez')])
         self.cache.clear()
         self.assertEqual(self.cache.values.keys(), [])
-    
 
-def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSimpleCache))
-    suite.addTest(unittest.makeSuite(TestSharedObject))
-
-    return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
-    
