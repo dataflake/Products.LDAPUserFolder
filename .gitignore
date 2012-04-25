@@ -3,4 +3,8 @@ bin/
 develop-eggs/
 dist/
 parts/
+.tox/
+.coverage
+coverage.xml
+nosetests.xml
 *.egg

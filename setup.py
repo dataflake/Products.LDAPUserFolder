@@ -48,8 +48,11 @@ setup(name='Products.%s' % NAME,
         'dataflake.fakeldap',
         'python-ldap',
         ],
+      tests_require = ['Products.GenericSetup >= 1.4.0'],
+      test_suite='Products.LDAPUserFolder.tests',
       extras_require={
           'exportimport': ['Products.GenericSetup >= 1.4.0'],
+          'testing': ['nose', 'coverage'],
           },
       entry_points="""
       [zope2.initialize]
