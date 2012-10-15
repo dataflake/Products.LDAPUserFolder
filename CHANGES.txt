@@ -3,6 +3,11 @@ Change log for Products.LDAPUserFolder
 
 2.24 (unreleased)
 -----------------
+- LDAPDelegate: When using a user from the Zope security machinery 
+  for the purpose of finding a suitable bind DN and password for 
+  connecting to a LDAP server, discard it when it's not been created
+  as the result of a real login and thus has an invalid password
+  (https://bugs.launchpad.net/bugs/1060112)
 - use a known set of component versions (versions.txt from Zope 
   2.3.18) to avoid having to micromanage dependency versions
 - moved change log entries for version 2.18 and older from CHANGES.txt
