@@ -3,6 +3,8 @@ Change log for Products.LDAPUserFolder
 
 2.24 (unreleased)
 -----------------
+- use a known set of component versions (versions.txt from Zope 
+  2.3.18) to avoid having to micromanage dependency versions
 - moved change log entries for version 2.18 and older from CHANGES.txt
   to HISTORY.txt
 - reformat HISTORY.txt and make it ReST-compliant
