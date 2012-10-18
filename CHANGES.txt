@@ -3,6 +3,11 @@ Change log for Products.LDAPUserFolder
 
 2.24 (unreleased)
 -----------------
+- When comparing a login value to login values found on the LDAP 
+  server strip the login value first. This follows OpenLDAP behavior
+  which considers values as matches even with trailing or leading 
+  spaces in the value query filter.
+  (https://bugs.launchpad.net/bugs/1060080)
 - LDAPDelegate: When using a user from the Zope security machinery 
   for the purpose of finding a suitable bind DN and password for 
   connecting to a LDAP server, discard it when it's not been created

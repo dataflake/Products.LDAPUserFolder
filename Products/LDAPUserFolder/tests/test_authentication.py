@@ -33,6 +33,24 @@ class TestAuthentication(LDAPTest):
                                   , {}
                                   )
         self.failIf(user_ob is None)
+        user_ob = acl.authenticate( "%s " % # extra space after login attr
+                                    user.get(acl.getProperty('_login_attr'))
+                                  , user.get('user_pw')
+                                  , {}
+                                  )
+        self.failIf(user_ob is None)
+        user_ob = acl.authenticate( " %s" % # extra space before login attr
+                                    user.get(acl.getProperty('_login_attr'))
+                                  , user.get('user_pw')
+                                  , {}
+                                  )
+        self.failIf(user_ob is None)
+        user_ob = acl.authenticate( " %s " % # extra spaces around login attr
+                                    user.get(acl.getProperty('_login_attr'))
+                                  , user.get('user_pw')
+                                  , {}
+                                  )
+        self.failIf(user_ob is None)
         user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
                                   , ''
                                   , {}
