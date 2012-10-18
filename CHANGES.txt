@@ -1,7 +1,7 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
-2.24 (unreleased)
+2.24 (2012-10-18)
 -----------------
 - When comparing a login value to login values found on the LDAP 
   server strip the login value first. This follows OpenLDAP behavior
