@@ -1,6 +1,10 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
+2.26 (unreleased)
+-----------------
+
+
 2.25 (2013-06-03)
 -----------------
 - Refactor some definitions in the utils module to make them easier 
