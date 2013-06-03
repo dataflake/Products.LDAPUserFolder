@@ -5,6 +5,8 @@ Change log for Products.LDAPUserFolder
 -----------------
 - Refactor some definitions in the utils module to make them easier 
   to override (Patch by Godefroid Chapelle)
+- Fixed a missing string conversion in getGroupedUsers (Patch by 
+  Godefroid Chapelle)
 
 
 2.24 (2012-10-18)
