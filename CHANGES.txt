@@ -3,6 +3,8 @@ Change log for Products.LDAPUserFolder
 
 2.25 (unreleased)
 -----------------
+- Refactor some definitions in the utils module to make them easier 
+  to override (Patch by Godefroid Chapelle)
 
 
 2.24 (2012-10-18)

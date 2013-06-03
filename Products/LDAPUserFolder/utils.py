@@ -50,16 +50,16 @@ GROUP_MEMBER_MAP = { 'groupOfUniqueNames' : 'uniqueMember'
                    , 'univentionGroup' : 'uniqueMember'
                    }
 
-VALID_GROUP_ATTRIBUTES = Set(list(GROUP_MEMBER_MAP.values()) +
-                             [ 'name'
+GROUP_MEMBER_ATTRIBUTES = Set(list(GROUP_MEMBER_MAP.values()))
+
+VALID_GROUP_ATTRIBUTES = Set([ 'name'
                              , 'displayName'
                              , 'cn'
                              , 'dn'
                              , 'objectGUID'
                              , 'description'
                              , 'mail'
-                             ]
-                            )
+                             ]).union(GROUP_MEMBER_ATTRIBUTES)
 
 encoding = 'latin1'
 
