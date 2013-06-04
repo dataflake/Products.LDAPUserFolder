@@ -1,6 +1,10 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
+2.27 (unreleased)
+-----------------
+
+
 2.26 (2013-06-04)
 -----------------
 - Fix python-ldap error when receiving sets instead of lists for 
