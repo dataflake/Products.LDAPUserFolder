@@ -22,7 +22,6 @@ try:
 except ImportError:
     from md5 import new as md5_new
 from sets import Set
-import string
 
 from AccessControl import AuthEncoding
 

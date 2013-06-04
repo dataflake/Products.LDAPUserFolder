@@ -5,7 +5,7 @@ Change log for Products.LDAPUserFolder
 -----------------
 - Fix python-ldap error when receiving sets instead of lists for 
   attributes to search on (Patch by Godefroid Chapelle)
-
+- Some cleanups found by pyflakes ((Patch by Godefroid Chapelle)
 
 2.25 (2013-06-03)
 -----------------
