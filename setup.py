@@ -57,4 +57,3 @@ setup(name='Products.%s' % NAME,
       Products.%s = Products.%s:initialize
       """ % (NAME, NAME),
       )
-
