@@ -1990,7 +1990,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         return getattr(conn, '_uri', '-- not connected --')
 
-    security.declareProtected(manage_users, 'getEncryptedPassword')
+    security.declareProtected(manage_users, 'getEncryptedBindPassword')
     def getEncryptedBindPassword(self):
         """ Return a hashed bind password for safe use in forms etc.
         """
