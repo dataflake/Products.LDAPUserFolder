@@ -5,6 +5,8 @@ Change log for Products.LDAPUserFolder
 -----------------
 - fix mismatch between method name and security declaration
   (https://bugs.launchpad.net/bugs/1221624)
+- ensure bind passwords used for the LDAP delegate and the user
+  folder do not get out of sync
 
 
 2.26 (2013-06-04)

@@ -165,7 +165,9 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('groups_base'), ag('groups_base'))
         ae(acl.getProperty('groups_scope'), ag('groups_scope'))
         ae(acl.getProperty('_binduid'), ag('binduid'))
+        ae(acl._delegate.bind_dn, ag('binduid'))
         ae(acl.getProperty('_bindpwd'), ag('bindpwd'))
+        ae(acl._delegate.bind_pwd, ag('bindpwd'))
         ae(acl.getProperty('_binduid_usage'), ag('binduid_usage'))
         ae(acl.getProperty('_rdnattr'), ag('rdn_attr'))
         ae(', '.join(acl.getProperty('_user_objclasses')), ag('obj_classes'))
@@ -173,6 +175,40 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_implicit_mapping'), not not ag('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), ag('encryption'))
         ae(acl.getProperty('read_only'), not not ag('read_only'))
+
+    def testLUFWebEdit(self):
+        # The Properties form uses a hashed password field. Need to make sure
+        # the hash does not end up as the actual password value anywhere.
+        acl = self.folder.acl_users
+        ae = self.assertEqual
+
+        ae(acl.getProperty('_binduid'), dg('binduid'))
+        ae(acl._delegate.bind_dn, dg('binduid'))
+        ae(acl.getProperty('_bindpwd'), dg('bindpwd'))
+        ae(acl._delegate.bind_pwd, dg('bindpwd'))
+
+        acl.manage_edit( title = ag('title')
+                       , login_attr = ag('login_attr')
+                       , uid_attr = ag('uid_attr')
+                       , users_base = ag('users_base')
+                       , users_scope = ag('users_scope')
+                       , roles = ag('roles')
+                       , groups_base = ag('groups_base')
+                       , groups_scope = ag('groups_scope')
+                       , binduid = ag('binduid')
+                       , bindpwd = acl.getEncryptedBindPassword()
+                       , binduid_usage = ag('binduid_usage')
+                       , rdn_attr = ag('rdn_attr')
+                       , obj_classes = ag('obj_classes')
+                       , local_groups = ag('local_groups')
+                       , implicit_mapping = ag('implicit_mapping')
+                       , encryption = ag('encryption')
+                       , read_only = ag('read_only')
+                       )
+        ae(acl.getProperty('_binduid'), ag('binduid'))
+        ae(acl._delegate.bind_dn, ag('binduid'))
+        ae(acl.getProperty('_bindpwd'), dg('bindpwd'))
+        ae(acl._delegate.bind_pwd, dg('bindpwd'))
 
     def testAddUser(self):
         acl = self.folder.acl_users
