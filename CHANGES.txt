@@ -1,7 +1,7 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
-2.27 (unreleased)
+2.27 (2014-04-23)
 -----------------
 - fix mismatch between method name and security declaration
   (https://bugs.launchpad.net/bugs/1221624)
