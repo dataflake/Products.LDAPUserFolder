@@ -10,7 +10,7 @@ def read(*rnames):
 _boundary = '\n' + ('-' * 60) + '\n\n'
 
 setup(name='Products.%s' % NAME,
-      version=read('VERSION.txt').strip(),
+      version=read('version.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
       long_description=( read('README.txt') 
                        + _boundary
