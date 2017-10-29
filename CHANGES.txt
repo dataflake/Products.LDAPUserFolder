@@ -1,8 +1,9 @@
-Change log for Products.LDAPUserFolder
-======================================
+Change log
+==========
 
 3.0 (unreleased)
 ----------------
+- moved documentation to Sphinx
 - add contents of ``HISTORY.txt`` back to the change log
 - pin several packages to avoid pulling in Zope version 4
 - sanitized buildout test script generation to always use the 
@@ -895,7 +896,7 @@ existing LDAPUserFolder and LDAPUserSatellite instances!
   roles had all roles removed that user would still show up in
   the user listing, even if the user record itself was removed 
   from LDAP. Now removal of all roles will clean the internal
-  roles storage mechanism correctly. Thanks go to Hans-Jürgen 
+  roles storage mechanism correctly. Thanks go to Hans-Juergen 
   Sell for letting me know.
 - When a user logs in the application will no longer construct
   the user object with the name typed in by the user but will
