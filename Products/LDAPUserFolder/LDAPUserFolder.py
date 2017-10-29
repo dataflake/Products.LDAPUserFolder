@@ -987,7 +987,6 @@ class LDAPUserFolder(BasicUserFolder):
         ldap name, the name an attribute is mapped to explicitly, and the
         friendly name it is known by.
         """
-        lscope = self._delegate.getScopes()[self.users_scope]
         users  = []
         users_base = self.users_base
         search_scope = self.users_scope
@@ -1645,7 +1644,7 @@ class LDAPUserFolder(BasicUserFolder):
                 # we do not know about. We still must try to clean up
                 # groups that might not have been affected by the
                 # directory fiddling someone else might have done.
-                ignored = self._delegate.delete(dn)
+                self._delegate.delete(dn)
 
                 if self._local_groups:
                     if dn in self._groups_store.keys():
@@ -1673,7 +1672,6 @@ class LDAPUserFolder(BasicUserFolder):
     security.declareProtected(manage_users, 'manage_editUserPassword')
     def manage_editUserPassword(self, dn, new_pw, REQUEST=None):
         """ Change a user password """
-        hidden = '<input type="hidden" name="user_dn" value="%s">' % (dn)
         err_msg = msg = ''
 
         if new_pw == '':

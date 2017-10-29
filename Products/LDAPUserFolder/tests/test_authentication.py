@@ -13,8 +13,6 @@
 """ LDAPUserFolder authentication tests
 """
 
-import unittest
-
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import user
 

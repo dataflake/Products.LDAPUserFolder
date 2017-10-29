@@ -17,7 +17,6 @@ import base64
 import codecs
 from hashlib import md5
 from sets import Set
-import string
 
 from AccessControl import AuthEncoding
 

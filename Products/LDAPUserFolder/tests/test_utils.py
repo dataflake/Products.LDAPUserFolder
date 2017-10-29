@@ -46,7 +46,6 @@ class PasswordCreationTests(unittest.TestCase):
     def test_createLDAPPassword_crypt(self):
         try:
             # Crypt is not available on all platforms
-            import crypt
             encoded = utils._createLDAPPassword(self.pwd, 'crypt')
             self.failUnless(encoded.startswith('{CRYPT}'))
             self.failUnless(AuthEncoding.pw_validate(encoded, self.pwd))

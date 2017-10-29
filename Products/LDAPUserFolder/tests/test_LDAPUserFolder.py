@@ -17,7 +17,6 @@ import copy
 from hashlib import sha1
 import ldap
 import os.path
-import unittest
 
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
@@ -597,7 +596,6 @@ class TestLDAPUserFolder(LDAPTest):
 
     def testSetUserProperty(self):
         acl = self.folder.acl_users
-        ae = self.assertEqual
         msg = acl.manage_addUser(REQUEST=None, kwargs=manager_user)
         self.assert_(not msg)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
@@ -730,18 +728,18 @@ class TestLDAPUserFolder(LDAPTest):
         acl._uid_attr = 'uid'
 
         # Lookup by the login attrbute
-        ignored = acl.getUser('missing2')
-        ignored = acl.getUser('missing2')
+        acl.getUser('missing2')
+        acl.getUser('missing2')
         ae(len(acl._cache('negative').getCache()), 1)
 
         # Lookup by the UID
-        ignored = acl.getUserById('missing2')
-        ignored = acl.getUserById('missing2')
+        acl.getUserById('missing2')
+        acl.getUserById('missing2')
         ae(len(acl._cache('negative').getCache()), 2)
 
         # Lookup by arbitrary attribute
-        ignored = acl.getUserByAttr('sn', 'missing2', cache=True)
-        ignored = acl.getUserByAttr('sn', 'missing2', cache=True)
+        acl.getUserByAttr('sn', 'missing2', cache=True)
+        acl.getUserByAttr('sn', 'missing2', cache=True)
         ae(len(acl._cache('negative').getCache()), 3)
 
         # _expireUser only removes entries for the login and UID

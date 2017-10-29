@@ -14,7 +14,6 @@
 """
 
 import unittest
-import sys
 
 from OFS.Folder import Folder
 from Testing import ZopeTestCase

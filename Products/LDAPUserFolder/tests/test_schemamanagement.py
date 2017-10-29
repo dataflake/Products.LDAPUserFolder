@@ -13,8 +13,6 @@
 """ LDAPUserFolder schema handling tests
 """
 
-import unittest
-
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import user
 
@@ -82,7 +80,7 @@ class TestSchema(LDAPTest):
                                     )
         for role in user.get('user_roles'):
             acl.manage_addGroup(role)
-        msg = acl.manage_addUser(REQUEST=None, kwargs=user)
+        acl.manage_addUser(REQUEST=None, kwargs=user)
         user_ob = acl.getUser(user.get(acl.getProperty('_login_attr')))
         self.assertEqual(user.get('mail'), user_ob.getProperty('mail'))
         self.assertEqual(user.get('mail'), user_ob.getProperty('email'))

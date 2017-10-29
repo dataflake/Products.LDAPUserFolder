@@ -18,8 +18,6 @@ import time
 from AccessControl.User import BasicUser
 from AccessControl.Permissions import access_contents_information
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from App.class_init import default__class_init__ as InitializeClass
 from DateTime import DateTime
 

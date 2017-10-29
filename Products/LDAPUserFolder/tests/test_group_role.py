@@ -13,8 +13,6 @@
 """ LDAPUserFolder group and role functionality tests
 """
 
-import unittest
-
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import user2

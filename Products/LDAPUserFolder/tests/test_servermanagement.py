@@ -13,8 +13,6 @@
 """ LDAPUserFolder server management tests
 """
 
-import unittest
-
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 
 
