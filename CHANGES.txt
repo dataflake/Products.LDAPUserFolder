@@ -4,24 +4,17 @@ Change log
 3.0 (unreleased)
 ----------------
 - moved documentation to Sphinx
-- add contents of ``HISTORY.txt`` back to the change log
 - pin several packages to avoid pulling in Zope version 4
 - sanitized buildout test script generation to always use the 
   ``exportimport`` extra and always test the `GenericSetup` 
   export/import support
 - Add a simple ``tox`` configuration file to support automated testing
   on all supported Python versions
-- Add a ``test_require`` and ``test_suite`` argument in ``setup.py``
-  to enable testing using just ``setup.py test``
 - Removed the LDAPUserSatellite code due to severe bit-rot. Please use
   the PluggableAuthService package in conjunction with LDAPMultiPlugins
   to gain the same functionality.
 - Removed the CMF tools, please use the package ``Products.CMFLDAP``
   (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
-- moved change log entries for version 2.18 and older from CHANGES.txt
-  to HISTORY.txt
-- reformat HISTORY.txt and make it ReST-compliant
-- clean up formatting of CHANGES.txt
 
 
 2.23 (2012-04-23)
