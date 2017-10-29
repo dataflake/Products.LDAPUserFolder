@@ -3,6 +3,7 @@ Change log for Products.LDAPUserFolder
 
 3.0 (unreleased)
 ----------------
+- pin several packages to avoid pulling in Zope version 4
 - sanitized buildout test script generation to always use the 
   ``exportimport`` extra and always test the `GenericSetup` 
   export/import support
