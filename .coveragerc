@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = Products.LDAPUserFolder
+
+[report]
+precision = 2
