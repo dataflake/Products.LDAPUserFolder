@@ -10,7 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-""" Tests for the SimpleCache class
+""" Tests for the UserCache class
 """
 
 import time
@@ -35,11 +35,11 @@ class CacheObject:
         return DateTime(self._created)
 
 
-class TestSimpleCache(unittest.TestCase):
+class TestUserCache(unittest.TestCase):
 
     def setUp(self):
-        from Products.LDAPUserFolder.SimpleCache import SimpleCache
-        self.cache = SimpleCache()
+        from Products.LDAPUserFolder.cache import UserCache
+        self.cache = UserCache()
         self.cache.setTimeout(0.1)
 
     def testInstantiation(self):
@@ -84,7 +84,7 @@ class TestSimpleCache(unittest.TestCase):
 class TestSharedObject(unittest.TestCase):
 
     def setUp(self):
-        from Products.LDAPUserFolder.SimpleCache import SharedObject
+        from Products.LDAPUserFolder.cache import SharedObject
         self.cache = SharedObject()
 
     def tearDown(self):

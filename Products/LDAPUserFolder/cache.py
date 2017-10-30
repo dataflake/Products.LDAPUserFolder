@@ -16,7 +16,7 @@
 import time
 
 
-class SimpleCache:
+class UserCache:
     """ A simple non-persistent cache for user objects """
 
     def __init__(self):

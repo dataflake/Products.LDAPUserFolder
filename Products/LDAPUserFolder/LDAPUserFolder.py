@@ -44,8 +44,8 @@ from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
-from Products.LDAPUserFolder.SimpleCache import SharedObject
-from Products.LDAPUserFolder.SimpleCache import SimpleCache
+from Products.LDAPUserFolder.cache import SharedObject
+from Products.LDAPUserFolder.cache import UserCache
 from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
 from Products.LDAPUserFolder.utils import crypt
@@ -1792,7 +1792,7 @@ class LDAPUserFolder(BasicUserFolder):
     def _cache(self, cache_type='anonymous'):
         """ Get the specified user cache """
         return getResource('%s-%scache' % (self._hash, cache_type),
-                           SimpleCache, ())
+                           UserCache, ())
 
     def _misc_cache(self):
         """ Return the miscellaneous cache """
