@@ -45,7 +45,7 @@ from zope.interface import implements
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
-from Products.LDAPUserFolder.SharedResource import getResource
+from Products.LDAPUserFolder.cache import getResource
 from Products.LDAPUserFolder.cache import UserCache
 from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
