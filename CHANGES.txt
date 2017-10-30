@@ -3,6 +3,7 @@ Change log
 
 3.0 (unreleased)
 ----------------
+- officially dropped Python 2.6 support, only Python 2.7 is supported.
 - moved documentation to Sphinx
 - pin several packages to avoid pulling in Zope version 4
 - sanitized buildout test script generation to always use the 

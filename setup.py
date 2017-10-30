@@ -1,33 +1,42 @@
+##############################################################################
+#
+# Copyright (c) 2009-2012 Jens Vagelpohl and Contributors. All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+
 import os
 from setuptools import setup
 from setuptools import find_packages
 
+
 NAME = 'LDAPUserFolder'
+
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-_boundary = '\n' + ('-' * 60) + '\n\n'
 
 setup(name='Products.%s' % NAME,
       version=read('version.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=( read('README.txt') 
-                       + _boundary
-                       + read('CHANGES.txt')
-                       + _boundary
-                       + "Download\n========"
-                       ),
+      long_description=read('README.txt'),
       classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 6 - Mature",
         "Framework :: Zope2",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 2 :: Only",
+        "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
         "Topic :: Software Development",
         "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
