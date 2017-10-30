@@ -26,7 +26,7 @@ def read(*rnames):
 setup(name='Products.%s' % NAME,
       version=read('version.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=read('README.txt'),
+      long_description=read('README.rst'),
       classifiers=[
         "Development Status :: 6 - Mature",
         "Framework :: Zope2",
