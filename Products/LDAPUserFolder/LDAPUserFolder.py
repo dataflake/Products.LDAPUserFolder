@@ -337,7 +337,7 @@ class LDAPUserFolder(BasicUserFolder):
             self._setProperty(prop_name, prop_value)
             self._clearCaches()
             msg = 'Attribute "%s" changed.' % prop_name
-        except AttributeError, e:
+        except AttributeError as e:
             msg = e.args[0]
 
         if REQUEST is not None:
@@ -1470,7 +1470,7 @@ class LDAPUserFolder(BasicUserFolder):
                 self._clearCaches()
 
                 msg = 'New user %s added' % user_dn
-            except Exception, e:
+            except Exception as e:
                 msg = str(e)
                 user_dn = ''
 

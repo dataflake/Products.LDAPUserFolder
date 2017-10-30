@@ -316,7 +316,7 @@ class LDAPDelegate(Persistent):
                 res = connection.search_s(base, scope, filter, attrs)
             except ldap.PARTIAL_RESULTS:
                 res_type, res = connection.result(all=0)
-            except ldap.REFERRAL, e:
+            except ldap.REFERRAL as e:
                 connection = self.handle_referral(e)
 
                 try:
@@ -345,7 +345,7 @@ class LDAPDelegate(Persistent):
                         try:
                             for i in range(len(value)):
                                 value[i] = from_utf8(value[i])
-                        except Exception, e:
+                        except Exception as e:
                             pass
 
                 rec_dict['dn'] = from_utf8(rec_dn)
@@ -371,7 +371,7 @@ class LDAPDelegate(Persistent):
         except (KeyboardInterrupt, SystemExit):
             raise
 
-        except Exception, e:
+        except Exception as e:
             msg = str(e)
             logger.error(msg, exc_info=1)
             result['exception'] = msg
@@ -409,23 +409,23 @@ class LDAPDelegate(Persistent):
         try:
             connection = self.connect()
             connection.add_s(dn, attribute_list)
-        except ldap.INVALID_CREDENTIALS, e:
+        except ldap.INVALID_CREDENTIALS as e:
             e_name = e.__class__.__name__
             msg = '%s No permission to insert "%s"' % (e_name, dn)
-        except ldap.ALREADY_EXISTS, e:
+        except ldap.ALREADY_EXISTS as e:
             e_name = e.__class__.__name__
             msg = '%s Record with dn "%s" already exists' % (e_name, dn)
-        except ldap.REFERRAL, e:
+        except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
                 connection.add_s(dn, attribute_list)
             except ldap.INVALID_CREDENTIALS:
                 e_name = e.__class__.__name__
                 msg = '%s No permission to insert "%s"' % (e_name, dn)
-            except Exception, e:
+            except Exception as e:
                 e_name = e.__class__.__name__
                 msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
-        except Exception, e:
+        except Exception as e:
             e_name = e.__class__.__name__
             msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
 
@@ -449,15 +449,15 @@ class LDAPDelegate(Persistent):
             connection.delete_s(utf8_dn)
         except ldap.INVALID_CREDENTIALS:
             msg = 'No permission to delete "%s"' % dn
-        except ldap.REFERRAL, e:
+        except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
                 connection.delete_s(utf8_dn)
             except ldap.INVALID_CREDENTIALS:
                 msg = 'No permission to delete "%s"' % dn
-            except Exception, e:
+            except Exception as e:
                 msg = 'LDAPDelegate.delete: %s' % str(e)
-        except Exception, e:
+        except Exception as e:
             msg = 'LDAPDelegate.delete: %s' % str(e)
 
         if msg != '':
@@ -519,22 +519,22 @@ class LDAPDelegate(Persistent):
                 debug_msg = 'Nothing to modify: %s' % utf8_dn
                 logger.debug('LDAPDelegate.modify: %s' % debug_msg)
 
-        except ldap.INVALID_CREDENTIALS, e:
+        except ldap.INVALID_CREDENTIALS as e:
             e_name = e.__class__.__name__
             msg = '%s No permission to modify "%s"' % (e_name, dn)
 
-        except ldap.REFERRAL, e:
+        except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
                 connection.modify_s(dn, mod_list)
-            except ldap.INVALID_CREDENTIALS, e:
+            except ldap.INVALID_CREDENTIALS as e:
                 e_name = e.__class__.__name__
                 msg = '%s No permission to modify "%s"' % (e_name, dn)
-            except Exception, e:
+            except Exception as e:
                 e_name = e.__class__.__name__
                 msg = '%s LDAPDelegate.modify: %s' % (e_name, str(e))
 
-        except Exception, e:
+        except Exception as e:
             e_name = e.__class__.__name__
             msg = '%s LDAPDelegate.modify: %s' % (e_name, str(e))
 
