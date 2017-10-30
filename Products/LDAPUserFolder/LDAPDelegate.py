@@ -403,7 +403,7 @@ class LDAPDelegate(Persistent):
 
             if attr_val != ['']:
                 if not is_binary:
-                    attr_val = map(to_utf8, attr_val)
+                    attr_val = list(map(to_utf8, attr_val))
                 attribute_list.append((attr_key, attr_val))
 
         try:
@@ -491,7 +491,7 @@ class LDAPDelegate(Persistent):
             if key.endswith(';binary'):
                 key = key[:-7]
             else:
-                values = map(to_utf8, values)
+                values = list(map(to_utf8, values))
 
             if mod_type is None:
                 if cur_rec.get(key, ['']) != values and values != ['']:
