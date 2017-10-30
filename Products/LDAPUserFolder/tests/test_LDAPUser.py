@@ -34,7 +34,7 @@ class TestLDAPUser(unittest.TestCase):
         self.u_ob = LDAPUser(ug('cn'), ug('mail'), ug('user_pw'),
                              ug('user_roles'), [], 'cn=%s,%s' % (ug('cn'),
                              dg('users_base')), u_attrs,
-                             ug('mapped_attrs').items(),
+                             list(ug('mapped_attrs').items()),
                              ug('multivalued_attrs'),
                              ldap_groups=ug('ldap_groups'))
 
@@ -67,9 +67,9 @@ class TestLDAPUser(unittest.TestCase):
     def testMappedAttrs(self):
         ae = self.assertEqual
         u = self.u_ob
-        map = ug('mapped_attrs')
+        attr_map = ug('mapped_attrs')
 
-        for key, mapped_key in map.items():
+        for key, mapped_key in attr_map.items():
             ae(u.getProperty(key), u.getProperty(mapped_key))
 
     def testMultivaluedAttributes(self):

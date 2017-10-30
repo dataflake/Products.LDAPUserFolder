@@ -801,8 +801,7 @@ class LDAPUserFolder(BasicUserFolder):
             value_dict = res['results'][0]
 
             if format is None:
-                result = value_dict.items()
-                result.sort()
+                result = sorted(value_dict.items())
             elif format == 'dictionary':
                 result = value_dict
         else:
@@ -833,8 +832,7 @@ class LDAPUserFolder(BasicUserFolder):
                 result = (('Exception', exc),)
 
             elif res['size'] > 0:
-                result = res['results'][0].items()
-                result.sort()
+                result = sorted(res['results'][0].items())
 
             else:
                 logger.debug('getGroupDetails: No group "%s"' % cn)
@@ -1215,7 +1213,7 @@ class LDAPUserFolder(BasicUserFolder):
         """ Return the dictionary that maps LDAP groups map to Zope roles """
         mappings = getattr(self, '_groups_mappings', {})
 
-        return mappings.items()
+        return list(mappings.items())
 
     security.declareProtected(manage_users, 'manage_addGroupMapping')
 
@@ -1284,8 +1282,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     def getSchemaDict(self):
         """ Retrieve schema as list of dictionaries """
-        all_items = self.getSchemaConfig().values()
-        all_items.sort()
+        all_items = sorted(self.getSchemaConfig().values())
 
         return tuple(all_items)
 

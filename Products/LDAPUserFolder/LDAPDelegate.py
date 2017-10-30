@@ -131,7 +131,7 @@ class LDAPDelegate(Persistent):
         servers = getattr(self, '_servers', [])
 
         if isinstance(servers, dict):
-            servers = servers.values()
+            servers = list(servers.values())
             self._servers = servers
 
         return servers
