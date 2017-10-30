@@ -107,4 +107,4 @@ class TestSharedObject(unittest.TestCase):
         items.sort()
         self.assertEqual(items, [('baz', 'fleeb'), ('foo', 'feez')])
         self.cache.clear()
-        self.assertEqual(self.cache.values.keys(), [])
+        self.assertEqual(len(self.cache.values), 0)

@@ -240,7 +240,7 @@ class LDAPUserFolder(BasicUserFolder):
         logger.debug('_lookupuserbyattr: Binding as "%s"' % bind_dn)
         logger.debug('_lookupuserbyattr: Using filter "%s"' % search_str)
 
-        known_attrs = self.getSchemaConfig().keys()
+        known_attrs = list(self.getSchemaConfig().keys())
 
         res = self._delegate.search(base=users_base, scope=self.users_scope,
                                     filter=search_str, attrs=known_attrs,
@@ -390,19 +390,19 @@ class LDAPUserFolder(BasicUserFolder):
             obj_classes = [x.strip() for x in obj_classes.split(',')]
         self._user_objclasses = obj_classes
 
-        my_attrs = self.getSchemaConfig().keys()
+        schema = self.getSchemaConfig()
 
-        if rdn_attr not in my_attrs:
+        if rdn_attr not in schema:
             self.manage_addLDAPSchemaItem(ldap_name=rdn_attr,
                                           friendly_name=rdn_attr)
         self._rdnattr = rdn_attr
 
-        if login_attr != 'dn' and login_attr not in my_attrs:
+        if login_attr != 'dn' and login_attr not in schema:
             self.manage_addLDAPSchemaItem(ldap_name=login_attr,
                                           friendly_name=login_attr)
         self._login_attr = login_attr
 
-        if uid_attr != 'dn' and uid_attr not in my_attrs:
+        if uid_attr != 'dn' and uid_attr not in schema:
             self.manage_addLDAPSchemaItem(ldap_name=uid_attr,
                                           friendly_name=uid_attr)
         self._uid_attr = uid_attr
@@ -787,7 +787,7 @@ class LDAPUserFolder(BasicUserFolder):
         dn = to_utf8(urllib.unquote(encoded_dn))
 
         if not attrs:
-            attrs = self.getSchemaConfig().keys()
+            attrs = list(self.getSchemaConfig().keys())
 
         res = self._delegate.search(base=dn, scope=self._delegate.BASE,
                                     attrs=attrs)
@@ -917,7 +917,7 @@ class LDAPUserFolder(BasicUserFolder):
         filt_list = []
 
         if not attrs:
-            attrs = self.getSchemaConfig().keys()
+            attrs = list(self.getSchemaConfig().keys())
 
         schema_translator = {}
         for ldap_key, info in self.getSchemaConfig().items():
@@ -1089,7 +1089,7 @@ class LDAPUserFolder(BasicUserFolder):
         """ Look up matching user records based on a single attribute """
         kw = {search_param: search_term}
         if not attrs:
-            attrs = self.getSchemaConfig().keys()
+            attrs = list(self.getSchemaConfig().keys())
 
         return self.searchUsers(attrs=attrs, exact_match=exact_match, **kw)
 
@@ -1198,8 +1198,7 @@ class LDAPUserFolder(BasicUserFolder):
                 logger.info(msg)
 
             else:
-                groups = GROUP_MEMBER_MAP.keys()
-                l_groups = [x.lower() for x in groups]
+                l_groups = [x.lower() for x in GROUP_MEMBER_MAP.keys()]
                 g_attrs = res['results'][0]
                 group_obclasses = g_attrs.get('objectClass', [])
                 group_obclasses.extend(g_attrs.get('objectclass', []))
@@ -1310,7 +1309,7 @@ class LDAPUserFolder(BasicUserFolder):
                                  binary=False, REQUEST=None):
         """ Add a schema item to my list of known schema items """
         schema = self.getSchemaConfig()
-        if ldap_name not in schema.keys():
+        if ldap_name not in schema:
             schema[ldap_name] = {'ldap_name': ldap_name,
                                  'friendly_name': friendly_name,
                                  'public_name': public_name,
@@ -1337,7 +1336,7 @@ class LDAPUserFolder(BasicUserFolder):
             removed = []
 
             for ldap_name in ldap_names:
-                if ldap_name in schema.keys():
+                if ldap_name in schema:
                     removed.append(ldap_name)
                     del schema[ldap_name]
 

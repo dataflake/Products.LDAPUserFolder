@@ -161,7 +161,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         self.assertEqual(group_mappings[0], ('posixAdmin', 'Manager'))
 
         schema = acl.getSchemaConfig()
-        self.assertEqual(len(schema.keys()), 4)
+        self.assertEqual(len(schema), 4)
         self.assertEqual(schema.get('mail'),
                           {'ldap_name': 'mail',
                            'friendly_name': 'Email Address',
@@ -243,7 +243,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         schema = acl.getSchemaConfig()
-        self.assertEqual(len(schema.keys()), 2)
+        self.assertEqual(len(schema), 2)
         self.assertEqual(set(schema.keys()), set(['o', 'dc']))
 
     def test_schema_nopurge(self):
@@ -259,7 +259,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         schema = acl.getSchemaConfig()
-        self.assertEqual(len(schema.keys()), 6)
+        self.assertEqual(len(schema), 6)
         self.assertEqual(set(schema.keys()),
                           set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
 

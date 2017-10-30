@@ -67,7 +67,7 @@ class TestLDAPUserFolder(LDAPTest):
         ae(len(acl._cache('anonymous').getCache()), 0)
         ae(len(acl._cache('authenticated').getCache()), 0)
         ae(len(acl._cache('negative').getCache()), 0)
-        ae(len(acl.getSchemaConfig().keys()), 2)
+        ae(len(acl.getSchemaConfig()), 2)
         ae(len(acl.getSchemaDict()), 2)
         ae(len(acl._groups_store), 0)
         ae(len(acl.getProperty('additional_groups')), 0)

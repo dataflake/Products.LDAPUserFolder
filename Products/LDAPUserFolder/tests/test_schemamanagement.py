@@ -27,7 +27,7 @@ class TestSchema(LDAPTest):
         self.assertEqual(len(acl.getLDAPSchema()), 3)
         self.assertEqual(len(acl.getSchemaDict()), 3)
         cur_schema = acl.getSchemaConfig()
-        self.assertTrue('mail' in cur_schema.keys())
+        self.assertTrue('mail' in cur_schema)
         acl.manage_addLDAPSchemaItem('cn', 'exists', '', 'exists')
         self.assertEqual(len(acl.getLDAPSchema()), 3)
         self.assertEqual(len(acl.getSchemaDict()), 3)
@@ -35,8 +35,8 @@ class TestSchema(LDAPTest):
         self.assertEqual(len(acl.getLDAPSchema()), 1)
         self.assertEqual(len(acl.getSchemaDict()), 1)
         cur_schema = acl.getSchemaConfig()
-        self.assertFalse('mail' in cur_schema.keys())
-        self.assertFalse('cn' in cur_schema.keys())
+        self.assertFalse('mail' in cur_schema)
+        self.assertFalse('cn' in cur_schema)
 
     def test_mapped_attributes(self):
         acl = self.folder.acl_users
