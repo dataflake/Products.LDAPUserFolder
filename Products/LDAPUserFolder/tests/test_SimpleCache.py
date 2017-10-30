@@ -18,6 +18,7 @@ import unittest
 
 from DateTime.DateTime import DateTime
 
+
 TESTPWD = 'test'
 
 
@@ -48,24 +49,16 @@ class TestSimpleCache(unittest.TestCase):
         nonauth_ob = CacheObject('nonauth')
         self.cache.set('TestId', nonauth_ob)
         self.assertEqual(len(self.cache.getCache()), 1)
-        self.assertEqual( self.cache.get('testid', password=None)
-                        , nonauth_ob
-                        )
+        self.assertEqual(self.cache.get('testid', password=None), nonauth_ob)
         time.sleep(0.5)
-        self.assertEqual( self.cache.get('testid', password=None)
-                        , None
-                        )
+        self.assertEqual(self.cache.get('testid', password=None), None)
         self.assertEqual(len(self.cache.getCache()), 0)
         auth_ob = CacheObject('auth')
         self.cache.set('NewId', auth_ob)
         self.assertEqual(len(self.cache.getCache()), 1)
-        self.assertEqual( self.cache.get('newid', password=TESTPWD)
-                        , auth_ob
-                        )
+        self.assertEqual(self.cache.get('newid', password=TESTPWD), auth_ob)
         time.sleep(0.5)
-        self.assertEqual( self.cache.get('newid', password=TESTPWD)
-                        , None
-                        )
+        self.assertEqual(self.cache.get('newid', password=TESTPWD), None)
         self.assertEqual(len(self.cache.getCache()), 0)
 
     def testRemove(self):
@@ -86,7 +79,8 @@ class TestSimpleCache(unittest.TestCase):
         self.cache.clear()
         self.assertEqual(len(self.cache.getCache()), 0)
         self.assertEqual(len(self.cache.getCache()), 0)
-        
+
+
 class TestSharedObject(unittest.TestCase):
 
     def setUp(self):
@@ -114,4 +108,3 @@ class TestSharedObject(unittest.TestCase):
         self.assertEqual(items, [('baz', 'fleeb'), ('foo', 'feez')])
         self.cache.clear()
         self.assertEqual(self.cache.values.keys(), [])
-

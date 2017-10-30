@@ -20,16 +20,16 @@ from Testing import ZopeTestCase
 import transaction
 
 from dataflake.fakeldap import FakeLDAPConnection
+
 from Products.LDAPUserFolder import LDAPDelegate
-LDAPDelegate.c_factory = FakeLDAPConnection
-
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
-
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import alternates
 from Products.LDAPUserFolder.tests.config import user
 from Products.LDAPUserFolder.tests.config import user2
 
+
+LDAPDelegate.c_factory = FakeLDAPConnection
 dg = defaults.get
 ag = alternates.get
 ug = user.get
@@ -50,27 +50,17 @@ class LDAPTest(unittest.TestCase):
         luf = self.folder.acl_users
         host, port = dg('server').split(':')
         luf.manage_addServer(host, port=port)
-        luf.manage_edit( dg('title')
-                       , dg('login_attr')
-                       , dg('uid_attr')
-                       , dg('users_base')
-                       , dg('users_scope')
-                       , dg('roles')
-                       , dg('groups_base')
-                       , dg('groups_scope')
-                       , dg('binduid')
-                       , dg('bindpwd')
-                       , binduid_usage = dg('binduid_usage')
-                       , rdn_attr = dg('rdn_attr')
-                       , local_groups = dg('local_groups')
-                       , implicit_mapping = dg('implicit_mapping')
-                       , encryption = dg('encryption')
-                       , read_only = dg('read_only')
-                       )
+        luf.manage_edit(dg('title'), dg('login_attr'), dg('uid_attr'),
+                        dg('users_base'), dg('users_scope'), dg('roles'),
+                        dg('groups_base'), dg('groups_scope'), dg('binduid'),
+                        dg('bindpwd'), binduid_usage=dg('binduid_usage'),
+                        rdn_attr=dg('rdn_attr'),
+                        local_groups=dg('local_groups'),
+                        implicit_mapping=dg('implicit_mapping'),
+                        encryption=dg('encryption'), read_only=dg('read_only'))
         self.db.addTreeItems(dg('users_base'))
         self.db.addTreeItems(dg('groups_base'))
 
-    def tearDown( self ):
+    def tearDown(self):
         transaction.abort()
         ZopeTestCase.close(self.app)
-

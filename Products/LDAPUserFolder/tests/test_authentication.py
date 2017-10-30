@@ -16,6 +16,7 @@
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import user
 
+
 ug = user.get
 
 
@@ -26,20 +27,14 @@ class TestAuthentication(LDAPTest):
         for role in user.get('user_roles'):
             acl.manage_addGroup(role)
         acl.manage_addUser(REQUEST=None, kwargs=user)
-        user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
-                                  , user.get('user_pw')
-                                  , {}
-                                  )
+        user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
+                                   user.get('user_pw'), {})
         self.failIf(user_ob is None)
-        user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
-                                  , ''
-                                  , {}
-                                  )
+        user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
+                                   '', {})
         self.failUnless(user_ob is None)
-        user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
-                                  , 'falsepassword'
-                                  , {}
-                                  )
+        user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
+                                   'falsepassword', {})
         self.failUnless(user_ob is None)
 
     def testAuthenticateUserWithCache(self):
@@ -48,20 +43,15 @@ class TestAuthentication(LDAPTest):
             acl.manage_addGroup(role)
         acl.manage_addUser(REQUEST=None, kwargs=user)
 
-        user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
-                                  , 'falsepassword'
-                                  , {}
-                                  )
+        user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
+                                   'falsepassword', {})
 
         # make sure the user could not connect
         self.failUnless(user_ob is None)
 
         # now let's try again with the right password
-        user_ob = acl.authenticate( user.get(acl.getProperty('_login_attr'))
-                                  , user.get('user_pw')
-                                  , {}
-                                  )
-    
+        user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
+                                   user.get('user_pw'), {})
+
         # now we should be OK
         self.failIf(user_ob is None)
-

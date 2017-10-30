@@ -18,6 +18,7 @@ import time
 from Acquisition import Implicit
 from DateTime.DateTime import DateTime
 
+
 DN_BASE = 'dc=example,dc=com'
 
 
@@ -66,40 +67,25 @@ class LDAPDummyUserFolder(Implicit):
 
     _rdnattr = 'cn'
     _login_attr = 'cn'
-    _schema = { 'cn' : { 'ldap_name' : 'cn'
-                       , 'friendly_name' : 'Canonical Name'
-                       , 'public_name' : 'fullname'
-                       , 'multivalued' : False
-                       }
-              , 'sn' : { 'ldap_name' : 'sn'
-                       , 'friendly_name' : 'Last Name'
-                       , 'multivalued' : False
-                       }
-              , 'givenName' : { 'ldap_name' : 'givenName'
-                              , 'friendly_name' : 'First Name'
-                              , 'multivalued' : False
-                              }
-              , 'mail' : { 'ldap_name' : 'mail'
-                         , 'friendly_name' : 'Email'
-                         , 'public_name' : 'email'
-                         , 'multivalued' : False
-                         }
-              , 'telephoneNumber' : { 'ldap_name' : 'telephoneNumber'
-                                    , 'friendly_name' : 'Telephone number'
-                                    , 'multivalued' : False
-                                    }
-              }
+    _schema = {'cn': {'ldap_name': 'cn', 'friendly_name': 'Canonical Name',
+                      'public_name': 'fullname', 'multivalued': False},
+               'sn': {'ldap_name': 'sn', 'friendly_name': 'Last Name',
+                      'multivalued': False},
+               'givenName': {'ldap_name': 'givenName',
+                             'friendly_name': 'First Name',
+                             'multivalued': False},
+               'mail': {'ldap_name': 'mail', 'friendly_name': 'Email',
+                        'public_name': 'email', 'multivalued': False},
+               'telephoneNumber': {'ldap_name': 'telephoneNumber',
+                                   'friendly_name': 'Telephone number',
+                                   'multivalued': False}}
 
     def __init__(self):
         self.id = 'acl_users'
-        user_foo = LDAPDummyUser( 'user_foo'
-                                , roles=['Dummy']
-                                )
+        user_foo = LDAPDummyUser('user_foo', roles=['Dummy'])
         setattr(self, 'user_foo', user_foo)
         setattr(self, 'user_bar', LDAPDummyUser('user_bar'))
-        omnipotent = LDAPDummyUser( 'all_powerful_Oz'
-                                  , roles=['Manager']
-                                  )
+        omnipotent = LDAPDummyUser('all_powerful_Oz', roles=['Manager'])
         setattr(self, 'all_powerful_Oz', omnipotent)
 
     def getId(self):
@@ -109,22 +95,18 @@ class LDAPDummyUserFolder(Implicit):
         return getattr(self, property_name, None)
 
     def getGroups(self):
-        return ( ('Role', 'cn=Role,ou=groups,%s' % DN_BASE)
-               , ('NewRole', 'cn=NewRole,ou=groups,%s' % DN_BASE)
-               )
-    
+        return (('Role', 'cn=Role,ou=groups,%s' % DN_BASE),
+                ('NewRole', 'cn=NewRole,ou=groups,%s' % DN_BASE))
+
     def manage_addUser(self, REQUEST, kwargs={}):
         user_id = kwargs.get(self._login_attr)
-        setattr( self
-               , user_id
-               , LDAPDummyUser(user_id, roles=kwargs.get('user_roles', []))
-               )
+        setattr(self, user_id,
+                LDAPDummyUser(user_id, roles=kwargs.get('user_roles', [])))
 
     def manage_editUser(self, dn, REQUEST=None, kwargs={}):
         user = self.getUserByDN(dn)
 
         if user is not None:
-            # XXX Change user here
             for key, value in kwargs.items():
                 setattr(user, key, value)
 
@@ -155,7 +137,7 @@ class LDAPDummyUserFolder(Implicit):
 
     def getLDAPSchema(self):
         return [(x['ldap_name'], x['friendly_name'])
-                          for x in self.getSchemaConfig().values()]
+                for x in self.getSchemaConfig().values()]
 
     def _expireUser(self, user_ob):
         pass

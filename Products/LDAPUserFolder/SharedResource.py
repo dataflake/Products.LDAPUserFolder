@@ -12,9 +12,9 @@
 ##############################################################################
 """ SharedResource: Unique resource store
 
-'Shared Resource' is a module that manages resources shared by all threads. 
+'Shared Resource' is a module that manages resources shared by all threads.
 Such resources can be controlled much more easily. A shared resource provides
-locking capabilities (via Python's RLock) and performs automatic locking for 
+locking capabilities (via Python's RLock) and performs automatic locking for
 function calls. Access to non-functions is not protected.
 
 A shared resource is identified by an id. The application
@@ -24,8 +24,10 @@ is responsible that id s are unique.
 from threading import _RLock
 from threading import Lock
 
+
 _ResourceMap = {}
 _ResourceLock = Lock()
+
 
 def getResource(id, factory, factoryArgs=()):
     """returns a resource for *id*.
@@ -45,8 +47,9 @@ def getResource(id, factory, factoryArgs=()):
         except KeyError:
             _ResourceMap[id] = _SharedResource(factory(*factoryArgs))
             return _ResourceMap[id]
-    finally: 
+    finally:
         _ResourceLock.release()
+
 
 def setResource(id, resource):
     """ Forcibly set the resource """
@@ -60,14 +63,9 @@ def setResource(id, resource):
 
 class _SharedResource(_RLock):
     # for __setattr__
-    _myAttributes = { '_target' : None
-      	            # _RLock instance variables
-      	            , '_RLock__block' : None
-      	            , '_RLock__count' : None
-      	            , '_RLock__owner' : None
-      	            # Verbose instance variables
-      	            , '_Verbose__verbose' : None
-      	            }
+    _myAttributes = {'_target': None, '_RLock__block': None,
+                     '_RLock__count': None, '_RLock__owner': None,
+                     '_Verbose__verbose': None}
     _myAttributes.update(_RLock.__dict__)
     _isMyAttribute = _myAttributes.has_key
     _target = None
@@ -78,13 +76,13 @@ class _SharedResource(_RLock):
 
     def __getattr__(self, key):
         a = getattr(self._target, key)
-        if callable(a): 
-            a = _SharedCallable(self,a)
+        if callable(a):
+            a = _SharedCallable(self, a)
 
         return a
 
     def __setattr__(self, key, value):
-        if self._isMyAttribute(key): 
+        if self._isMyAttribute(key):
             self.__dict__[key] = value
         else:
             setattr(self._target, key, value)
@@ -92,24 +90,28 @@ class _SharedResource(_RLock):
     def _type(self):
         return type(self._target)
 
-    # def __delattr__(self,key,value): # do not implement for the time being
+    def __len__(self):
+        return len(self._target)
 
-    def __len__(self): return len(self._target)
-    def __getitem__(self, key): return self._target[key]
-    def __setitem__(self, key, value): self._target[key] = value
-    def __delitem__(self, key): del self._target[key]
+    def __getitem__(self, key):
+        return self._target[key]
+
+    def __setitem__(self, key, value):
+        self._target[key] = value
+
+    def __delitem__(self, key):
+        del self._target[key]
 
 
 class _SharedCallable:
+
     def __init__(self, lock, callable):
         self._lock = lock
         self._callable = callable
 
     def __call__(self, *args, **kw):
         self._lock.acquire()
-        try: 
+        try:
             return self._callable(*args, **kw)
-        finally: 
+        finally:
             self._lock.release()
-
-

@@ -30,7 +30,8 @@ try:
     from Products.GenericSetup.testing import ExportImportZCMLLayer
     from Products.GenericSetup.tests.common import BaseRegistryTests
 except ImportError:
-    class FakeTests(object): pass
+    class FakeTests(object):
+        pass
     BaseRegistryTests = BodyAdapterTestCase = FakeTests
     ExportImportZCMLLayer = GenericSetup = None
 
@@ -63,43 +64,22 @@ class _LDAPUserFolderSetup(BaseRegistryTests):
         acl = self.root.site.acl_users = LDAPUserFolder()
 
         if use_changed:
-            acl.manage_edit( 'changed title'
-                           , 'uid'
-                           , 'cn'
-                           , 'ou=users,dc=localhost'
-                           , 1
-                           , 'Anonymous, Member'
-                           , 'ou=groups,dc=localhost'
-                           , 1
-                           , 'cn=Manager,dc=localhost'
-                           , 'secret'
-                           , binduid_usage=2
-                           , rdn_attr='uid'
-                           , obj_classes='top,inetOrgPerson'
-                           , local_groups=True
-                           , implicit_mapping=True
-                           , encryption='SSHA'
-                           , read_only=1
-                           , extra_user_filter='(usertype=privileged)'
-                           )
-            acl.manage_addLDAPSchemaItem( 'mail'
-                                        , friendly_name='Email Address'
-                                        , multivalued=True
-                                        , public_name='publicmail'
-                                        , binary=True
-                                        )
-            acl.manage_addServer( 'localhost'
-                                , port='636'
-                                , use_ssl=True
-                                , conn_timeout=10
-                                , op_timeout=10
-                                )
-            acl.manage_addServer( '/var/spool/ldapi'
-                                , port=''
-                                , use_ssl=2
-                                , conn_timeout=2
-                                , op_timeout=2
-                                )
+            acl.manage_edit('changed title', 'uid', 'cn',
+                            'ou=users,dc=localhost', 1, 'Anonymous, Member',
+                            'ou=groups,dc=localhost', 1,
+                            'cn=Manager,dc=localhost', 'secret',
+                            binduid_usage=2, rdn_attr='uid',
+                            obj_classes='top,inetOrgPerson',
+                            local_groups=True, implicit_mapping=True,
+                            encryption='SSHA', read_only=1,
+                            extra_user_filter='(usertype=privileged)')
+            acl.manage_addLDAPSchemaItem('mail', friendly_name='Email Address',
+                                         multivalued=True,
+                                         public_name='publicmail', binary=True)
+            acl.manage_addServer('localhost', port='636', use_ssl=True,
+                                 conn_timeout=10, op_timeout=10)
+            acl.manage_addServer('/var/spool/ldapi', port='', use_ssl=2,
+                                 conn_timeout=2, op_timeout=2)
             acl.manage_addGroup('posixAdmin')
             acl.manage_addGroupMapping('posixAdmin', 'Manager')
             acl._anonymous_timeout = 60
@@ -182,29 +162,18 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
         schema = acl.getSchemaConfig()
         self.assertEquals(len(schema.keys()), 4)
-        self.assertEquals( schema.get('mail')
-                         , { 'ldap_name' : 'mail'
-                           , 'friendly_name' : 'Email Address'
-                           , 'public_name' : 'publicmail'
-                           , 'multivalued' : True
-                           , 'binary' : True
-                           }
-                         )
+        self.assertEquals(schema.get('mail'),
+                          {'ldap_name': 'mail',
+                           'friendly_name': 'Email Address',
+                           'public_name': 'publicmail', 'multivalued': True,
+                           'binary': True})
 
         servers = acl.getServers()
         self.assertEquals(len(servers), 2)
-        svr1 = { 'host' : 'localhost'
-               , 'port' : 636
-               , 'protocol' : 'ldaps'
-               , 'conn_timeout' : 10
-               , 'op_timeout' : 10
-               }
-        svr2 = { 'host': '/var/spool/ldapi'
-               , 'port': 0
-               , 'protocol': 'ldapi'
-               , 'conn_timeout': 2
-               , 'op_timeout': 2
-               }
+        svr1 = {'host': 'localhost', 'port': 636, 'protocol': 'ldaps',
+                'conn_timeout': 10, 'op_timeout': 10}
+        svr2 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
+                'conn_timeout': 2, 'op_timeout': 2}
         self.failUnless(svr1 in servers)
         self.failUnless(svr2 in servers)
 
@@ -212,7 +181,6 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         self.assertEquals(len(local_groups), 2)
         self.failUnless(('user1', ['posixAdmin', 'foobar']) in local_groups)
         self.failUnless(('user2', ['baz']) in local_groups)
-
 
     def test_servers_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -228,18 +196,10 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
         servers = acl.getServers()
         self.assertEquals(len(servers), 2)
-        svr1 = { 'host' : 'otherhost'
-               , 'port' : 1389
-               , 'protocol' : 'ldap'
-               , 'conn_timeout' : 1
-               , 'op_timeout' : 1
-               }
-        svr2 = { 'host': '/tmp/ldapi'
-               , 'port': 0
-               , 'protocol': 'ldapi'
-               , 'conn_timeout': 20
-               , 'op_timeout': 20
-                }
+        svr1 = {'host': 'otherhost', 'port': 1389, 'protocol': 'ldap',
+                'conn_timeout': 1, 'op_timeout': 1}
+        svr2 = {'host': '/tmp/ldapi', 'port': 0, 'protocol': 'ldapi',
+                'conn_timeout': 20, 'op_timeout': 20}
         self.failUnless(svr1 in servers)
         self.failUnless(svr2 in servers)
 
@@ -257,30 +217,14 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
         servers = acl.getServers()
         self.assertEquals(len(servers), 4)
-        svr1 = { 'host' : 'otherhost'
-               , 'port' : 1389
-               , 'protocol' : 'ldap'
-               , 'conn_timeout' : 1
-               , 'op_timeout' : 1
-               }
-        svr2 = { 'host': '/tmp/ldapi'
-               , 'port': 0
-               , 'protocol': 'ldapi'
-               , 'conn_timeout': 20
-               , 'op_timeout': 20
-               }
-        svr3 = { 'host' : 'localhost'
-               , 'port' : '636'
-               , 'protocol' : 'ldaps'
-               , 'conn_timeout' : 10
-               , 'op_timeout' : 10
-               }
-        svr4 = { 'host': '/var/spool/ldapi'
-               , 'port': 0
-               , 'protocol': 'ldapi'
-               , 'conn_timeout': 2
-               , 'op_timeout': 2
-               }
+        svr1 = {'host': 'otherhost', 'port': 1389, 'protocol': 'ldap',
+                'conn_timeout': 1, 'op_timeout': 1}
+        svr2 = {'host': '/tmp/ldapi', 'port': 0, 'protocol': 'ldapi',
+                'conn_timeout': 20, 'op_timeout': 20}
+        svr3 = {'host': 'localhost', 'port': '636', 'protocol': 'ldaps',
+                'conn_timeout': 10, 'op_timeout': 10}
+        svr4 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
+                'conn_timeout': 2, 'op_timeout': 2}
         self.failUnless(svr1 in servers)
         self.failUnless(svr2 in servers)
         self.failUnless(svr3 in servers)
@@ -316,9 +260,9 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
         schema = acl.getSchemaConfig()
         self.assertEquals(len(schema.keys()), 6)
-        self.assertEquals( set(schema.keys())
-                         , set(['cn', 'dc', 'o', 'sn', 'mail', 'uid'])
-                         )
+        self.assertEquals(set(schema.keys()),
+                          set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
+
 
 def test_suite():
     if GenericSetup is None:
@@ -415,17 +359,17 @@ _CHANGED_EXPORT = """\
  <ldap-servers>
   <ldap-server host="localhost" port="636" protocol="ldaps" conn_timeout="10"
      op_timeout="10"/>
- <ldap-server host="/var/spool/ldapi" port="0" protocol="ldapi" conn_timeout="2"
-     op_timeout="2"/>
+ <ldap-server host="/var/spool/ldapi" port="0" protocol="ldapi"
+     conn_timeout="2" op_timeout="2"/>
  </ldap-servers>
  <ldap-schema>
-  <schema-item binary="False" friendly_name="uid" ldap_name="uid" 
+  <schema-item binary="False" friendly_name="uid" ldap_name="uid"
      multivalued="False" public_name=""/>
-  <schema-item binary="True" friendly_name="Email Address" ldap_name="mail" 
+  <schema-item binary="True" friendly_name="Email Address" ldap_name="mail"
      multivalued="True" public_name="publicmail"/>
-  <schema-item binary="False" friendly_name="Canonical Name" ldap_name="cn" 
+  <schema-item binary="False" friendly_name="Canonical Name" ldap_name="cn"
      multivalued="False" public_name=""/>
-  <schema-item binary="False" friendly_name="Last Name" ldap_name="sn" 
+  <schema-item binary="False" friendly_name="Last Name" ldap_name="sn"
      multivalued="False" public_name=""/>
  </ldap-schema>
 </object>
@@ -441,9 +385,9 @@ _SERVERS_SCHEMA_PURGE = """\
      op_timeout="20"/>
  </ldap-servers>
  <ldap-schema purge="True">
-  <schema-item binary="False" friendly_name="Organisation" ldap_name="o" 
+  <schema-item binary="False" friendly_name="Organisation" ldap_name="o"
      multivalued="False" public_name=""/>
-  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc" 
+  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc"
      multivalued="True" public_name=""/>
  </ldap-schema>
 </object>
@@ -459,9 +403,9 @@ _SERVERS_SCHEMA_NOPURGE = """\
      op_timeout="20"/>
  </ldap-servers>
  <ldap-schema purge="False">
-  <schema-item binary="False" friendly_name="Organisation" ldap_name="o" 
+  <schema-item binary="False" friendly_name="Organisation" ldap_name="o"
      multivalued="False" public_name=""/>
-  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc" 
+  <schema-item binary="False" friendly_name="Domain Component" ldap_name="dc"
      multivalued="True" public_name=""/>
  </ldap-schema>
 </object>

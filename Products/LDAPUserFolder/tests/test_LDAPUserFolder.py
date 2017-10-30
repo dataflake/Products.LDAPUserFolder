@@ -32,6 +32,7 @@ from Products.LDAPUserFolder.tests.config import user
 from Products.LDAPUserFolder.tests.config import user2
 from Products.LDAPUserFolder.tests.config import manager_user
 
+
 dg = defaults.get
 ag = alternates.get
 ug = user.get
@@ -58,7 +59,8 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_binduid_usage'), dg('binduid_usage'))
         ae(acl.getProperty('_rdnattr'), dg('rdn_attr'))
         ae(acl.getProperty('_local_groups'), not not dg('local_groups'))
-        ae(acl.getProperty('_implicit_mapping'), not not dg('implicit_mapping'))
+        ae(acl.getProperty('_implicit_mapping'),
+           not not dg('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), dg('encryption'))
         ae(acl.getProperty('_extra_user_filter'), dg('extra_user_filter'))
         ae(acl.getProperty('read_only'), not not dg('read_only'))
@@ -80,31 +82,27 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         host, port = ag('server').split(':')
         acl.manage_addServer(host, port=port)
-        acl.manage_edit( title = ag('title')
-                       , login_attr = ag('login_attr')
-                       , uid_attr = ag('uid_attr')
-                       , users_base = ag('users_base')
-                       , users_scope = ag('users_scope')
-                       , roles= ag('roles')
-                       , groups_base = ag('groups_base')
-                       , groups_scope = ag('groups_scope')
-                       , binduid = ag('binduid')
-                       , bindpwd = ag('bindpwd')
-                       , binduid_usage = ag('binduid_usage')
-                       , rdn_attr = ag('rdn_attr')
-                       , local_groups = ag('local_groups')
-                       , implicit_mapping = ag('implicit_mapping')
-                       , encryption = ag('encryption')
-                       , read_only = ag('read_only')
-                       , extra_user_filter = ag('extra_user_filter')
-                       )
+        acl.manage_edit(title=ag('title'), login_attr=ag('login_attr'),
+                        uid_attr=ag('uid_attr'), users_base=ag('users_base'),
+                        users_scope=ag('users_scope'), roles=ag('roles'),
+                        groups_base=ag('groups_base'),
+                        groups_scope=ag('groups_scope'),
+                        binduid=ag('binduid'), bindpwd=ag('bindpwd'),
+                        binduid_usage=ag('binduid_usage'),
+                        rdn_attr=ag('rdn_attr'),
+                        local_groups=ag('local_groups'),
+                        implicit_mapping=ag('implicit_mapping'),
+                        encryption=ag('encryption'),
+                        read_only=ag('read_only'),
+                        extra_user_filter=ag('extra_user_filter'))
         acl = self.folder.acl_users
         ae(acl.getProperty('title'), ag('title'))
         ae(acl.getProperty('_login_attr'), ag('login_attr'))
         ae(acl.getProperty('_uid_attr'), ag('uid_attr'))
         ae(acl.getProperty('users_base'), ag('users_base'))
         ae(acl.getProperty('users_scope'), ag('users_scope'))
-        ae(acl.getProperty('_roles'), [x.strip() for x in ag('roles').split(',')])
+        ae(acl.getProperty('_roles'),
+           [x.strip() for x in ag('roles').split(',')])
         ae(acl.getProperty('groups_base'), ag('groups_base'))
         ae(acl.getProperty('groups_scope'), ag('groups_scope'))
         ae(acl.getProperty('_binduid'), ag('binduid'))
@@ -112,11 +110,11 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_binduid_usage'), ag('binduid_usage'))
         ae(acl.getProperty('_rdnattr'), ag('rdn_attr'))
         ae(acl.getProperty('_local_groups'), not not ag('local_groups'))
-        ae(acl.getProperty('_implicit_mapping'), not not ag('implicit_mapping'))
+        ae(acl.getProperty('_implicit_mapping'),
+           not not ag('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), ag('encryption'))
         ae(acl.getProperty('_extra_user_filter'), ag('extra_user_filter'))
         ae(acl.getProperty('read_only'), not not ag('read_only'))
-
 
     def testLDAPDelegateInstantiation(self):
         ld = self.folder.acl_users._delegate
@@ -134,24 +132,17 @@ class TestLDAPUserFolder(LDAPTest):
     def testLUFEdit(self):
         acl = self.folder.acl_users
         ae = self.assertEqual
-        acl.manage_edit( title = ag('title')
-                       , login_attr = ag('login_attr')
-                       , uid_attr = ag('uid_attr')
-                       , users_base = ag('users_base')
-                       , users_scope = ag('users_scope')
-                       , roles = ag('roles')
-                       , groups_base = ag('groups_base')
-                       , groups_scope = ag('groups_scope')
-                       , binduid = ag('binduid')
-                       , bindpwd = ag('bindpwd')
-                       , binduid_usage = ag('binduid_usage')
-                       , rdn_attr = ag('rdn_attr')
-                       , obj_classes = ag('obj_classes')
-                       , local_groups = ag('local_groups')
-                       , implicit_mapping = ag('implicit_mapping')
-                       , encryption = ag('encryption')
-                       , read_only = ag('read_only')
-                       )
+        acl.manage_edit(title=ag('title'), login_attr=ag('login_attr'),
+                        uid_attr=ag('uid_attr'), users_base=ag('users_base'),
+                        users_scope=ag('users_scope'), roles=ag('roles'),
+                        groups_base=ag('groups_base'),
+                        groups_scope=ag('groups_scope'),
+                        binduid=ag('binduid'), bindpwd=ag('bindpwd'),
+                        binduid_usage=ag('binduid_usage'),
+                        rdn_attr=ag('rdn_attr'), obj_classes=ag('obj_classes'),
+                        local_groups=ag('local_groups'),
+                        implicit_mapping=ag('implicit_mapping'),
+                        encryption=ag('encryption'), read_only=ag('read_only'))
         ae(acl.getProperty('title'), ag('title'))
         ae(acl.getProperty('_login_attr'), ag('login_attr'))
         ae(acl.getProperty('_uid_attr'), ag('uid_attr'))
@@ -166,13 +157,14 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_rdnattr'), ag('rdn_attr'))
         ae(', '.join(acl.getProperty('_user_objclasses')), ag('obj_classes'))
         ae(acl.getProperty('_local_groups'), not not ag('local_groups'))
-        ae(acl.getProperty('_implicit_mapping'), not not ag('implicit_mapping'))
+        ae(acl.getProperty('_implicit_mapping'),
+           not not ag('implicit_mapping'))
         ae(acl.getProperty('_pwd_encryption'), ag('encryption'))
         ae(acl.getProperty('read_only'), not not ag('read_only'))
 
     def testAddUser(self):
         acl = self.folder.acl_users
-        ae=self.assertEqual
+        ae = self.assertEqual
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
             acl.manage_addGroupMapping(role, role)
@@ -195,7 +187,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         acl.read_only = 1
         acl._delegate.read_only = 1
-        ae=self.assertEqual
+        ae = self.assertEqual
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assert_(msg)
         user_ob = acl.getUser(ug('cn'))
@@ -227,15 +219,11 @@ class TestLDAPUserFolder(LDAPTest):
         # Adding a new user will always add it with the object classes set
         # on the Configure tab. Need to do some more or less nasty munging
         # to put the undesirable object classes on this user!
-        acl.manage_addLDAPSchemaItem( 'objectClass'
-                                    , multivalued='1'
-                                    )
+        acl.manage_addLDAPSchemaItem('objectClass', multivalued='1')
         user_ob = acl.getUser(u2g(acl.getProperty('_login_attr')))
         ob_class_string = ';'.join(u2g('objectClasses'))
-        acl.manage_editUser( user_ob.getUserDN()
-                           , REQUEST=None
-                           , kwargs={ 'objectClass' : ob_class_string }
-                           )
+        acl.manage_editUser(user_ob.getUserDN(), REQUEST=None,
+                            kwargs={'objectClass': ob_class_string})
 
         user_ob = acl.getUser(u2g(acl.getProperty('_login_attr')))
         self.assertEqual(user_ob, None)
@@ -355,10 +343,8 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEquals(len(result), 1)
         self.assertEquals(result[0].get(key), user_cn)
 
-        result = acl.searchUsers( cn=crippled_cn
-                                , sn=crippled_sn
-                                , exact_match=True
-                                )
+        result = acl.searchUsers(cn=crippled_cn, sn=crippled_sn,
+                                 exact_match=True)
         self.assertEquals(len(result), 0)
 
         # Weird edge case: Someone put "dn" into the LDAP Schema tab and
@@ -373,7 +359,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [`x` for x in range(100)]
+        expected = [repr(x) for x in range(100)]
         expected.sort()
         for name in expected:
             u = user.copy()
@@ -394,7 +380,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [`x` for x in range(100)]
+        expected = [repr(x) for x in range(100)]
         expected.sort()
         for name in expected:
             u = user.copy()
@@ -409,7 +395,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [(`x`, `x`) for x in range(100)]
+        expected = [(repr(x), repr(x)) for x in range(100)]
         expected.sort()
         for name in expected:
             u = user.copy()
@@ -461,7 +447,7 @@ class TestLDAPUserFolder(LDAPTest):
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        msg = acl.manage_editUser(user_dn, kwargs={'sn' : 'New'})
+        msg = acl.manage_editUser(user_dn, kwargs={'sn': 'New'})
         self.assert_(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertEqual(user_ob.getProperty('sn'), 'New')
@@ -473,7 +459,7 @@ class TestLDAPUserFolder(LDAPTest):
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        msg = acl.manage_editUser(user_dn, kwargs={'sn' : 'New; Lastname'})
+        msg = acl.manage_editUser(user_dn, kwargs={'sn': 'New; Lastname'})
         self.assert_(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertEqual(user_ob.getProperty('sn'), 'New; Lastname')
@@ -487,7 +473,7 @@ class TestLDAPUserFolder(LDAPTest):
         user_dn = user_ob.getUserDN()
         acl.read_only = 1
         acl._delegate.read_only = 1
-        msg = acl.manage_editUser(user_dn, kwargs={'sn' : 'New'})
+        msg = acl.manage_editUser(user_dn, kwargs={'sn': 'New'})
         self.assert_(msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertEqual(user_ob.getProperty('sn'), ug('sn'))
@@ -582,7 +568,7 @@ class TestLDAPUserFolder(LDAPTest):
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         user_dn = user_ob.getUserDN()
-        msg = acl.manage_editUser(user_dn, kwargs={'cn' : 'new'})
+        msg = acl.manage_editUser(user_dn, kwargs={'cn': 'new'})
         user_ob = acl.getUser('new')
         ae(user_ob.getProperty('cn'), 'new')
         ae(user_ob.getId(), 'new')
@@ -600,17 +586,10 @@ class TestLDAPUserFolder(LDAPTest):
         self.assert_(not msg)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertNotEqual(mgr_ob, None)
-        self.assertEqual( mgr_ob.getProperty('sn')
-                        , manager_user.get('sn')
-                        )
-        acl.manage_setUserProperty( mgr_ob.getUserDN()
-                                  , 'sn'
-                                  , 'NewLastName'
-                                  )
+        self.assertEqual(mgr_ob.getProperty('sn'), manager_user.get('sn'))
+        acl.manage_setUserProperty(mgr_ob.getUserDN(), 'sn', 'NewLastName')
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
-        self.assertEqual( mgr_ob.getProperty('sn')
-                        , 'NewLastName'
-                        )
+        self.assertEqual(mgr_ob.getProperty('sn'), 'NewLastName')
 
     def testSetUserPropertyMultivalueHandling(self):
         acl = self.folder.acl_users
@@ -618,17 +597,12 @@ class TestLDAPUserFolder(LDAPTest):
         self.assert_(not msg)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertNotEqual(mgr_ob, None)
-        self.assertEqual( mgr_ob.getProperty('sn')
-                        , manager_user.get('sn')
-                        )
-        acl.manage_setUserProperty( mgr_ob.getUserDN()
-                                  , 'sn'
-                                  , 'NewLastName; Secondlastname'
-                                  )
+        self.assertEqual(mgr_ob.getProperty('sn'), manager_user.get('sn'))
+        acl.manage_setUserProperty(mgr_ob.getUserDN(),
+                                   'sn', 'NewLastName; Secondlastname')
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
-        self.assertEqual( mgr_ob.getProperty('sn')
-                       , 'NewLastName; Secondlastname'
-                       )
+        self.assertEqual(mgr_ob.getProperty('sn'),
+                         'NewLastName; Secondlastname')
 
     def testSetUserPropertyBinaryHandling(self):
         # Make sure binary attributes are never converted
@@ -642,10 +616,8 @@ class TestLDAPUserFolder(LDAPTest):
         acl.manage_addUser(REQUEST=None, kwargs=manager_user)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertEqual(mgr_ob.getProperty('jpegPhoto'), '')
-        acl.manage_setUserProperty( mgr_ob.getUserDN()
-                                  , 'jpegPhoto'
-                                  , image_contents
-                                  )
+        acl.manage_setUserProperty(mgr_ob.getUserDN(),
+                                   'jpegPhoto', image_contents)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertEqual(mgr_ob.getProperty('jpegPhoto'), image_contents)
 
@@ -661,9 +633,8 @@ class TestLDAPUserFolder(LDAPTest):
         acl.manage_addUser(REQUEST=None, kwargs=manager_user)
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertEqual(mgr_ob.getProperty('jpegPhoto'), '')
-        acl.manage_editUser( mgr_ob.getUserDN()
-                           , kwargs={'jpegPhoto':image_contents}
-                           )
+        acl.manage_editUser(mgr_ob.getUserDN(),
+                            kwargs={'jpegPhoto': image_contents})
         mgr_ob = acl.getUser(manager_user.get(acl.getProperty('_login_attr')))
         self.assertEqual(mgr_ob.getProperty('jpegPhoto'), image_contents)
 
@@ -694,14 +665,12 @@ class TestLDAPUserFolder(LDAPTest):
 
         search_string = '(objectClass=*)'
         attributes = ['foobar', 'baz']
-        res = acl.getAttributesOfAllObjects( acl.getProperty('users_base')
-                                           , acl.getProperty('users_scope')
-                                           , search_string
-                                           , attributes
-                                           )
+        res = acl.getAttributesOfAllObjects(acl.getProperty('users_base'),
+                                            acl.getProperty('users_scope'),
+                                            search_string, attributes)
 
         for attr in attributes:
-            self.failUnless(res.has_key(attr))
+            self.failUnless(attr in res)
 
     def testNegativeCaching(self):
         ae = self.assertEqual
@@ -712,7 +681,6 @@ class TestLDAPUserFolder(LDAPTest):
         ae(len(acl._cache('negative').getCache()), 1)
         acl.manage_addUser(REQUEST=None, kwargs=user)
         ae(len(acl._cache('negative').getCache()), 0)
-
 
     def testNegativeCachePoisoning(self):
         # Test against cache poisoning
@@ -754,72 +722,63 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         filt_string = acl._getUserFilterString()
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.failUnless('(objectclass=%s)' % ob_class.lower() 
-                                 in filt_string.lower())
+            self.failUnless('(objectclass=%s)' % ob_class.lower()
+                            in filt_string.lower())
         self.failUnless('(%s=*)' % dg('uid_attr') in filt_string.lower())
 
         filters = ['(uid=test)', '(cn=test)']
         filt_string = acl._getUserFilterString(filters=filters)
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.failUnless('(objectclass=%s)' % ob_class.lower() 
-                                 in filt_string.lower())
+            self.failUnless('(objectclass=%s)' % ob_class.lower()
+                            in filt_string.lower())
         for filt in filters:
             self.failUnless(filt in filt_string)
         self.failIf('(%s=*)' % dg('uid_attr') in filt_string.lower())
 
         # Set up some different values
-        acl.manage_edit( title = ag('title')
-                       , login_attr = ag('login_attr')
-                       , uid_attr = ag('uid_attr')
-                       , users_base = ag('users_base')
-                       , users_scope = ag('users_scope')
-                       , roles= ag('roles')
-                       , groups_base = ag('groups_base')
-                       , groups_scope = ag('groups_scope')
-                       , binduid = ag('binduid')
-                       , bindpwd = ag('bindpwd')
-                       , binduid_usage = ag('binduid_usage')
-                       , rdn_attr = ag('rdn_attr')
-                       , local_groups = ag('local_groups')
-                       , implicit_mapping = ag('implicit_mapping')
-                       , encryption = ag('encryption')
-                       , read_only = ag('read_only')
-                       , obj_classes = ag('obj_classes')
-                       , extra_user_filter = ag('extra_user_filter')
-                       )
+        acl.manage_edit(title=ag('title'), login_attr=ag('login_attr'),
+                        uid_attr=ag('uid_attr'), users_base=ag('users_base'),
+                        users_scope=ag('users_scope'), roles=ag('roles'),
+                        groups_base=ag('groups_base'),
+                        groups_scope=ag('groups_scope'), binduid=ag('binduid'),
+                        bindpwd=ag('bindpwd'),
+                        binduid_usage=ag('binduid_usage'),
+                        rdn_attr=ag('rdn_attr'),
+                        local_groups=ag('local_groups'),
+                        implicit_mapping=ag('implicit_mapping'),
+                        encryption=ag('encryption'), read_only=ag('read_only'),
+                        obj_classes=ag('obj_classes'),
+                        extra_user_filter=ag('extra_user_filter'))
 
         filt_string = acl._getUserFilterString()
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.failUnless('(objectclass=%s)' % ob_class.lower() 
-                                 in filt_string.lower())
+            self.failUnless('(objectclass=%s)' % ob_class.lower()
+                            in filt_string.lower())
         self.failUnless(ag('extra_user_filter') in filt_string)
         self.failUnless('(%s=*)' % ag('uid_attr') in filt_string)
 
         filters = ['(uid=test)', '(cn=test)']
         filt_string = acl._getUserFilterString(filters=filters)
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.failUnless('(objectclass=%s)' % ob_class.lower() 
-                                 in filt_string.lower())
+            self.failUnless('(objectclass=%s)' % ob_class.lower()
+                            in filt_string.lower())
         for filt in filters:
             self.failUnless(filt in filt_string)
         self.failIf('(%s=*)' % ag('uid_attr') in filt_string)
 
-
     def test_expireUser(self):
         # http://www.dataflake.org/tracker/issue_00617 etc.
         acl = self.folder.acl_users
-    
+
         # Retrieving an invalid user should return None
         nonexisting = acl.getUserById('invalid')
         self.failUnless(nonexisting is None)
-    
+
         # The retrieval above will add the invalid user to the negative cache
-        negative_cache_key = '%s:%s:%s' % ( acl._uid_attr
-                                          , 'invalid'
-                                          , sha1('').hexdigest()
-                                          )
+        negative_cache_key = '%s:%s:%s' % (acl._uid_attr, 'invalid',
+                                           sha1('').hexdigest())
         self.failIf(acl._cache('negative').get(negative_cache_key) is None)
-    
+
         # Expiring the user must remove it from the negative cache
         acl._expireUser('invalid')
         self.failUnless(acl._cache('negative').get(negative_cache_key) is None)
@@ -850,4 +809,3 @@ class TestLDAPUserFolder(LDAPTest):
         self.failIf(acl._cache('anonymous').get('user1'))
         self.failIf(acl._cache('negative').get('user1'))
         self.failIf(acl._hash == old_hash)
-

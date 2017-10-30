@@ -40,4 +40,3 @@ class TestSimple(unittest.TestCase):
 
         self.assertEquals(delegate._clean_dn(''), '')
         self.assertEquals(delegate._clean_dn(None), '')
-

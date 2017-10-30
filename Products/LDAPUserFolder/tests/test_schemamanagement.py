@@ -23,20 +23,12 @@ class TestSchema(LDAPTest):
         acl = self.folder.acl_users
         self.assertEquals(len(acl.getLDAPSchema()), 2)
         self.assertEquals(len(acl.getSchemaDict()), 2)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'public'
-                                    )
+        acl.manage_addLDAPSchemaItem('mail', 'Email', '', 'public')
         self.assertEquals(len(acl.getLDAPSchema()), 3)
         self.assertEquals(len(acl.getSchemaDict()), 3)
         cur_schema = acl.getSchemaConfig()
         self.failUnless('mail' in cur_schema.keys())
-        acl.manage_addLDAPSchemaItem( 'cn'
-                                    , 'exists'
-                                    , ''
-                                    , 'exists'
-                                    )
+        acl.manage_addLDAPSchemaItem('cn', 'exists', '', 'exists')
         self.assertEquals(len(acl.getLDAPSchema()), 3)
         self.assertEquals(len(acl.getSchemaDict()), 3)
         acl.manage_deleteLDAPSchemaItems(['cn', 'unknown', 'mail'])
@@ -49,11 +41,7 @@ class TestSchema(LDAPTest):
     def test_mapped_attributes(self):
         acl = self.folder.acl_users
         self.assertEquals(len(acl.getMappedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'public'
-                                    )
+        acl.manage_addLDAPSchemaItem('mail', 'Email', '', 'public')
         self.assertEquals(len(acl.getMappedUserAttrs()), 1)
         self.assertEquals(acl.getMappedUserAttrs(), (('mail', 'public'),))
         acl.manage_deleteLDAPSchemaItems(['mail'])
@@ -62,26 +50,17 @@ class TestSchema(LDAPTest):
     def test_multivalued_attributes(self):
         acl = self.folder.acl_users
         self.assertEquals(len(acl.getMultivaluedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , 'yes'
-                                    , 'public'
-                                    )
+        acl.manage_addLDAPSchemaItem('mail', 'Email', 'yes', 'public')
         self.assertEquals(len(acl.getMultivaluedUserAttrs()), 1)
         self.assertEquals(acl.getMultivaluedUserAttrs(), ('mail',))
 
     def test_user_mapped_attributes(self):
         acl = self.folder.acl_users
         self.assertEquals(len(acl.getMappedUserAttrs()), 0)
-        acl.manage_addLDAPSchemaItem( 'mail'
-                                    , 'Email'
-                                    , ''
-                                    , 'email'
-                                    )
+        acl.manage_addLDAPSchemaItem('mail', 'Email', '', 'email')
         for role in user.get('user_roles'):
             acl.manage_addGroup(role)
         acl.manage_addUser(REQUEST=None, kwargs=user)
         user_ob = acl.getUser(user.get(acl.getProperty('_login_attr')))
         self.assertEqual(user.get('mail'), user_ob.getProperty('mail'))
         self.assertEqual(user.get('mail'), user_ob.getProperty('email'))
-

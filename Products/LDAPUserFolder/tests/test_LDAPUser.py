@@ -28,22 +28,15 @@ dg = defaults.get
 class TestLDAPUser(unittest.TestCase):
 
     def setUp(self):
-        self.u_ob = LDAPUser( ug('cn')
-                            , ug('mail')
-                            , ug('user_pw')
-                            , ug('user_roles')
-                            , []
-                            , 'cn=%s,%s' % (ug('cn'), dg('users_base'))
-                            , { 'cn' : [ug('cn')]
-                              , 'sn' : [ug('sn')]
-                              , 'mail' : [ug('mail')]
-                              , 'givenName' : [ug('givenName')]
-                              , 'objectClasses' : ug('objectClasses')
-                              }
-                            , ug('mapped_attrs').items()
-                            , ug('multivalued_attrs')
-                            , ldap_groups=ug('ldap_groups')
-                            )
+        u_attrs = {'cn': [ug('cn')], 'sn': [ug('sn')], 'mail': [ug('mail')],
+                   'givenName': [ug('givenName')],
+                   'objectClasses': ug('objectClasses')}
+        self.u_ob = LDAPUser(ug('cn'), ug('mail'), ug('user_pw'),
+                             ug('user_roles'), [], 'cn=%s,%s' % (ug('cn'),
+                             dg('users_base')), u_attrs,
+                             ug('mapped_attrs').items(),
+                             ug('multivalued_attrs'),
+                             ldap_groups=ug('ldap_groups'))
 
     def testLDAPUserInstantiation(self):
         ae = self.assertEqual
@@ -68,7 +61,8 @@ class TestLDAPUser(unittest.TestCase):
         # Test some to make sure.
         self.failUnless(isinstance(self.u_ob.id, unicode))
         self.failUnless(isinstance(self.u_ob.name, unicode))
-        self.failUnless(isinstance(self.u_ob._properties['givenName'], unicode))
+        self.failUnless(isinstance(self.u_ob._properties['givenName'],
+                        unicode))
 
     def testMappedAttrs(self):
         ae = self.assertEqual
@@ -90,4 +84,3 @@ class TestLDAPUser(unittest.TestCase):
         u = self.u_ob
         self.failIf(isinstance(u.getUserName(), unicode))
         self.failIf(isinstance(u.getId(), unicode))
-

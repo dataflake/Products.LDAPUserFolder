@@ -24,12 +24,10 @@ class SimpleCache:
         self.cache = {}
         self.timeout = 600
 
-
     def set(self, id, object):
         """ Cache an object under the given id """
         id = id.lower()
         self.cache[id] = object
-
 
     def get(self, id, password=None):
         """ Retrieve a cached object if it is valid """
@@ -40,17 +38,16 @@ class SimpleCache:
 
         user = self.cache.get(id, None)
 
-        if ( password is not None and 
-             user is not None and 
-             password != user._getPassword() ):
+        if password is not None and \
+           user is not None and \
+           password != user._getPassword():
             user = None
 
-        if ( user and 
-             (time.time() < user.getCreationTime().timeTime() + self.timeout) ):
+        if user and \
+           (time.time() < user.getCreationTime().timeTime() + self.timeout):
             return user
         else:
             return None
-
 
     def getCache(self):
         """ Get valid cache records """
@@ -65,19 +62,16 @@ class SimpleCache:
 
         return valid
 
-
     def remove(self, id):
         """ Purge a record out of the cache """
         id = id.lower()
 
-        if self.cache.has_key(id):
+        if id in self.cache:
             del self.cache[id]
-
 
     def clear(self):
         """ Clear the internal caches """
         self.cache = {}
-
 
     def setTimeout(self, timeout):
         """ Set the timeout (in seconds) for cached entries """
@@ -104,5 +98,3 @@ class SharedObject:
                 pass
         else:
             self.values = {}
-
-

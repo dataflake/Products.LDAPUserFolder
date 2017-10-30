@@ -39,7 +39,8 @@ setup(name='Products.%s' % NAME,
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
         "Topic :: Software Development",
-        "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+        "Topic :: System :: Systems Administration ::"
+        " Authentication/Directory :: LDAP",
         ],
       keywords='web application server zope zope2 ldap',
       author="Jens Vagelpohl and contributors",
@@ -65,4 +66,3 @@ setup(name='Products.%s' % NAME,
       Products.%s = Products.%s:initialize
       """ % (NAME, NAME),
       )
-

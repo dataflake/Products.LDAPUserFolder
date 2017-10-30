@@ -23,7 +23,6 @@ from AccessControl import AuthEncoding
 #################################################
 # "Safe" imports for use in the other modules
 #################################################
-
 try:
     import crypt
 except ImportError:
@@ -32,28 +31,19 @@ except ImportError:
 #################################################
 # Constants used in other modules
 #################################################
-
 BINARY_ATTRIBUTES = ('objectguid', 'jpegphoto')
 
 HTTP_METHODS = ('GET', 'PUT', 'POST')
 
-GROUP_MEMBER_MAP = { 'groupOfUniqueNames' : 'uniqueMember'
-                   , 'groupOfNames' : 'member'
-                   , 'accessGroup' : 'member'
-                   , 'group' : 'member'
-                   , 'univentionGroup' : 'uniqueMember'
-                   }
+GROUP_MEMBER_MAP = {'groupOfUniqueNames': 'uniqueMember',
+                    'groupOfNames': 'member',
+                    'accessGroup': 'member',
+                    'group': 'member',
+                    'univentionGroup': 'uniqueMember'}
 
 VALID_GROUP_ATTRIBUTES = Set(list(GROUP_MEMBER_MAP.values()) +
-                             [ 'name'
-                             , 'displayName'
-                             , 'cn'
-                             , 'dn'
-                             , 'objectGUID'
-                             , 'description'
-                             , 'mail'
-                             ]
-                            )
+                             ['name', 'displayName', 'cn', 'dn',
+                              'objectGUID', 'description', 'mail'])
 
 encoding = 'latin1'
 
@@ -95,7 +85,7 @@ try:
     encodeLocal, decodeLocal, reader = codecs.lookup(encoding)[:3]
     encodeUTF8, decodeUTF8 = codecs.lookup('UTF-8')[:2]
 
-    if getattr(reader, '__module__', '')  == 'encodings.utf_8':
+    if getattr(reader, '__module__', '') == 'encodings.utf_8':
         # Everything stays UTF-8, so we can make this cheaper
         to_utf8 = from_utf8 = str
 
@@ -110,7 +100,7 @@ try:
             return encodeUTF8(s)[0]
 
 except LookupError:
-    raise LookupError, 'Unknown encoding "%s"' % encoding
+    raise LookupError('Unknown encoding "%s"' % encoding)
 
 
 def guid2string(val):
@@ -126,6 +116,7 @@ def guid2string(val):
 
 delegate_registry = {}
 
+
 def registerDelegate(name, klass, description=''):
     """ Register delegates that handle the LDAP-related work
 
@@ -133,14 +124,14 @@ def registerDelegate(name, klass, description=''):
     klass is a reference to the delegate class itself
     description is a more verbose delegate description
     """
-    delegate_registry[name] = { 'name'        : name
-                              , 'klass'       : klass
-                              , 'description' : description
-                              }
+    delegate_registry[name] = {'name': name, 'klass': klass,
+                               'description': description}
+
 
 def registeredDelegates():
     """ Return the currently-registered delegates """
     return delegate_registry
+
 
 def _createDelegate(name='LDAP delegate'):
     """ Create a delegate based on the name passed in """

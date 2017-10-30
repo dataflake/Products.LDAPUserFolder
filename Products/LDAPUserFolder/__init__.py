@@ -18,12 +18,10 @@ from AccessControl.Permissions import add_user_folders
 from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
 from Products.LDAPUserFolder.LDAPUserFolder import manage_addLDAPUserFolder
 
+
 def initialize(context):
-    context.registerClass( LDAPUserFolder
-                         , permission=add_user_folders
-                         , constructors=(manage_addLDAPUserFolder,)
-                         , icon='www/ldapuserfolder.gif'
-                         )
+    context.registerClass(LDAPUserFolder, permission=add_user_folders,
+                          constructors=(manage_addLDAPUserFolder,),
+                          icon='www/ldapuserfolder.gif')
 
     context.registerHelp()
-

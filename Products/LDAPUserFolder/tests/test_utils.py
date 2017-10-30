@@ -22,12 +22,12 @@ from Products.LDAPUserFolder import utils
 
 class PasswordCreationTests(unittest.TestCase):
 
-    # The encoded passwords used for reference have been created 
+    # The encoded passwords used for reference have been created
     # using the `slappasswd` utility.
 
     def setUp(self):
         self.pwd = 'b1g#5ecret'
-    
+
     def test_createLDAPPassword_ssha(self):
         encoded = utils._createLDAPPassword(self.pwd, 'ssha')
         self.failUnless(encoded.startswith('{SSHA}'))
@@ -56,4 +56,3 @@ class PasswordCreationTests(unittest.TestCase):
         reference = 'b1g#5ecret'
         encoded = utils._createLDAPPassword(self.pwd, 'clear')
         self.assertEquals(reference, encoded)
-
