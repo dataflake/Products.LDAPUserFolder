@@ -359,8 +359,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [repr(x) for x in range(100)]
-        expected.sort()
+        expected = sorted([repr(x) for x in range(100)])
         for name in expected:
             u = user.copy()
             u['cn'] = name
@@ -380,8 +379,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [repr(x) for x in range(100)]
-        expected.sort()
+        expected = sorted([repr(x) for x in range(100)])
         for name in expected:
             u = user.copy()
             u['cn'] = name
@@ -395,8 +393,7 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         for role in ug('user_roles'):
             acl.manage_addGroup(role)
-        expected = [(repr(x), repr(x)) for x in range(100)]
-        expected.sort()
+        expected = sorted([(repr(x), repr(x)) for x in range(100)])
         for name in expected:
             u = user.copy()
             u['cn'] = name[0]

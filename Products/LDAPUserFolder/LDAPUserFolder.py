@@ -539,11 +539,9 @@ class LDAPUserFolder(BasicUserFolder):
 
         user_filter = self._getUserFilterString()
 
-        useridlist = self.getAttributesOfAllObjects(
+        useridlist = sorted(self.getAttributesOfAllObjects(
             self.users_base, self._delegate.getScopes()[self.users_scope],
-            user_filter, (self._uid_attr,)).get(self._uid_attr)
-
-        useridlist.sort()
+            user_filter, (self._uid_attr,)).get(self._uid_attr))
 
         self._misc_cache().set('useridlist', useridlist[:])
         # Expire after 600 secs
@@ -575,8 +573,7 @@ class LDAPUserFolder(BasicUserFolder):
             # to receive a OverflowError exception.
             raise OverflowError
 
-        loginlist = loginlistinfo[self._login_attr]
-        loginlist.sort()
+        loginlist = sorted(loginlistinfo[self._login_attr])
 
         self._misc_cache().set('loginlist', loginlist[:])
         # Expire after 600 secs
@@ -598,9 +595,9 @@ class LDAPUserFolder(BasicUserFolder):
             self.users_base, self._delegate.getScopes()[self.users_scope],
             user_filter, (self._uid_attr, self._login_attr))
 
-        login_id_list = zip(d.get(self._uid_attr), d.get(self._login_attr))
+        login_id_list = sorted(zip(d.get(self._uid_attr),
+                                   d.get(self._login_attr)))
 
-        login_id_list.sort()
         self._misc_cache().set('useridnamelist', login_id_list)
         # Expire after 600 secs
         self._misc_cache().set('useridnamelistexpires', time.time() + 600)
@@ -623,9 +620,10 @@ class LDAPUserFolder(BasicUserFolder):
         o if the Additional user search filter has been configured in the
           ZMI it will also be ANDed into the final search filter.
         """
+        user_obclasses = [x for x in self._user_objclasses if x]
         user_filter_list = [self._delegate.filter_format('(%s=%s)',
                                                          ('objectClass', o))
-                            for o in filter(None, self._user_objclasses)]
+                            for o in user_obclasses]
         if filters:
             user_filter_list.extend(filters)
         else:
@@ -1273,8 +1271,8 @@ class LDAPUserFolder(BasicUserFolder):
     def getLDAPSchema(self):
         """ Retrieve the LDAP schema this product knows about """
         raw_schema = self.getSchemaDict()
-        schema = [(x['ldap_name'], x['friendly_name']) for x in raw_schema]
-        schema.sort()
+        schema = sorted([(x['ldap_name'], x['friendly_name'])
+                         for x in raw_schema])
 
         return tuple(schema)
 
