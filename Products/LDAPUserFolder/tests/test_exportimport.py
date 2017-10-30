@@ -137,50 +137,50 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         context._files['ldapuserfolder.xml'] = _CHANGED_EXPORT
         importLDAPUserFolder(context)
 
-        self.assertEquals(acl.title, 'changed title')
-        self.assertEquals(acl._login_attr, 'uid')
-        self.assertEquals(acl._uid_attr, 'cn')
-        self.assertEquals(acl.users_base, 'ou=users,dc=localhost')
-        self.assertEquals(acl.users_scope, 1)
-        self.assertEquals(acl._roles, ['Anonymous', 'Member'])
-        self.assertEquals(acl.groups_base, 'ou=groups,dc=localhost')
-        self.assertEquals(acl.groups_scope, 1)
-        self.assertEquals(acl._binduid, 'cn=Manager,dc=localhost')
-        self.assertEquals(acl._bindpwd, 'secret')
-        self.assertEquals(acl._binduid_usage, 2)
-        self.assertEquals(acl._rdnattr, 'uid')
-        self.assertEquals(acl._user_objclasses, ['top', 'inetOrgPerson'])
-        self.failUnless(acl._local_groups)
-        self.failUnless(acl._implicit_mapping)
-        self.assertEquals(acl._pwd_encryption, 'SSHA')
-        self.failUnless(acl.read_only)
-        self.assertEquals(acl._extra_user_filter, '(usertype=privileged)')
+        self.assertEqual(acl.title, 'changed title')
+        self.assertEqual(acl._login_attr, 'uid')
+        self.assertEqual(acl._uid_attr, 'cn')
+        self.assertEqual(acl.users_base, 'ou=users,dc=localhost')
+        self.assertEqual(acl.users_scope, 1)
+        self.assertEqual(acl._roles, ['Anonymous', 'Member'])
+        self.assertEqual(acl.groups_base, 'ou=groups,dc=localhost')
+        self.assertEqual(acl.groups_scope, 1)
+        self.assertEqual(acl._binduid, 'cn=Manager,dc=localhost')
+        self.assertEqual(acl._bindpwd, 'secret')
+        self.assertEqual(acl._binduid_usage, 2)
+        self.assertEqual(acl._rdnattr, 'uid')
+        self.assertEqual(acl._user_objclasses, ['top', 'inetOrgPerson'])
+        self.assertTrue(acl._local_groups)
+        self.assertTrue(acl._implicit_mapping)
+        self.assertEqual(acl._pwd_encryption, 'SSHA')
+        self.assertTrue(acl.read_only)
+        self.assertEqual(acl._extra_user_filter, '(usertype=privileged)')
 
         group_mappings = acl.getGroupMappings()
-        self.assertEquals(len(group_mappings), 1)
-        self.assertEquals(group_mappings[0], ('posixAdmin', 'Manager'))
+        self.assertEqual(len(group_mappings), 1)
+        self.assertEqual(group_mappings[0], ('posixAdmin', 'Manager'))
 
         schema = acl.getSchemaConfig()
-        self.assertEquals(len(schema.keys()), 4)
-        self.assertEquals(schema.get('mail'),
+        self.assertEqual(len(schema.keys()), 4)
+        self.assertEqual(schema.get('mail'),
                           {'ldap_name': 'mail',
                            'friendly_name': 'Email Address',
                            'public_name': 'publicmail', 'multivalued': True,
                            'binary': True})
 
         servers = acl.getServers()
-        self.assertEquals(len(servers), 2)
+        self.assertEqual(len(servers), 2)
         svr1 = {'host': 'localhost', 'port': 636, 'protocol': 'ldaps',
                 'conn_timeout': 10, 'op_timeout': 10}
         svr2 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 2, 'op_timeout': 2}
-        self.failUnless(svr1 in servers)
-        self.failUnless(svr2 in servers)
+        self.assertTrue(svr1 in servers)
+        self.assertTrue(svr2 in servers)
 
         local_groups = list(acl._groups_store.items())
-        self.assertEquals(len(local_groups), 2)
-        self.failUnless(('user1', ['posixAdmin', 'foobar']) in local_groups)
-        self.failUnless(('user2', ['baz']) in local_groups)
+        self.assertEqual(len(local_groups), 2)
+        self.assertTrue(('user1', ['posixAdmin', 'foobar']) in local_groups)
+        self.assertTrue(('user2', ['baz']) in local_groups)
 
     def test_servers_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -195,13 +195,13 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         servers = acl.getServers()
-        self.assertEquals(len(servers), 2)
+        self.assertEqual(len(servers), 2)
         svr1 = {'host': 'otherhost', 'port': 1389, 'protocol': 'ldap',
                 'conn_timeout': 1, 'op_timeout': 1}
         svr2 = {'host': '/tmp/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 20, 'op_timeout': 20}
-        self.failUnless(svr1 in servers)
-        self.failUnless(svr2 in servers)
+        self.assertTrue(svr1 in servers)
+        self.assertTrue(svr2 in servers)
 
     def test_servers_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -216,7 +216,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         servers = acl.getServers()
-        self.assertEquals(len(servers), 4)
+        self.assertEqual(len(servers), 4)
         svr1 = {'host': 'otherhost', 'port': 1389, 'protocol': 'ldap',
                 'conn_timeout': 1, 'op_timeout': 1}
         svr2 = {'host': '/tmp/ldapi', 'port': 0, 'protocol': 'ldapi',
@@ -225,10 +225,10 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
                 'conn_timeout': 10, 'op_timeout': 10}
         svr4 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 2, 'op_timeout': 2}
-        self.failUnless(svr1 in servers)
-        self.failUnless(svr2 in servers)
-        self.failUnless(svr3 in servers)
-        self.failUnless(svr4 in servers)
+        self.assertTrue(svr1 in servers)
+        self.assertTrue(svr2 in servers)
+        self.assertTrue(svr3 in servers)
+        self.assertTrue(svr4 in servers)
 
     def test_schema_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -243,8 +243,8 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         schema = acl.getSchemaConfig()
-        self.assertEquals(len(schema.keys()), 2)
-        self.assertEquals(set(schema.keys()), set(['o', 'dc']))
+        self.assertEqual(len(schema.keys()), 2)
+        self.assertEqual(set(schema.keys()), set(['o', 'dc']))
 
     def test_schema_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -259,8 +259,8 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         importLDAPUserFolder(context)
 
         schema = acl.getSchemaConfig()
-        self.assertEquals(len(schema.keys()), 6)
-        self.assertEquals(set(schema.keys()),
+        self.assertEqual(len(schema.keys()), 6)
+        self.assertEqual(set(schema.keys()),
                           set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
 
 

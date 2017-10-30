@@ -34,10 +34,10 @@ class TestServerManagement(LDAPTest):
 
         acl.manage_addServer('ldap.some.com', port=636, use_ssl=1)
         svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
-        self.assertEquals(svr['conn_timeout'], 5)
-        self.assertEquals(svr['op_timeout'], -1)
+        self.assertEqual(svr['conn_timeout'], 5)
+        self.assertEqual(svr['op_timeout'], -1)
         acl.manage_addServer('ldap.some.com', port=636, use_ssl=1,
                              op_timeout=10, conn_timeout=15)
         svr = [x for x in acl.getServers() if x['host'] == 'ldap.some.com'][0]
-        self.assertEquals(svr['conn_timeout'], 15)
-        self.assertEquals(svr['op_timeout'], 10)
+        self.assertEqual(svr['conn_timeout'], 15)
+        self.assertEqual(svr['op_timeout'], 10)

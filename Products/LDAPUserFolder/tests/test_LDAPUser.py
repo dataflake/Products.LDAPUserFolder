@@ -49,19 +49,19 @@ class TestLDAPUser(unittest.TestCase):
         ae(u.getId(), ug('cn'))
         ae(u.getUserName(), ug('mail'))
         for role in ug('user_roles'):
-            self.assert_(role in u.getRoles())
-        self.assert_('Authenticated' in u.getRoles())
+            self.assertTrue(role in u.getRoles())
+        self.assertTrue('Authenticated' in u.getRoles())
         ae(u.getProperty('dn'), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
         ae(u.getUserDN(), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
         ae(u._getLDAPGroups(), tuple(ug('ldap_groups')))
-        self.assert_(DateTime() >= u.getCreationTime())
+        self.assertTrue(DateTime() >= u.getCreationTime())
 
     def testUnicodeAttributes(self):
         # Internally, most attributes are stored as unicode.
         # Test some to make sure.
-        self.failUnless(isinstance(self.u_ob.id, unicode))
-        self.failUnless(isinstance(self.u_ob.name, unicode))
-        self.failUnless(isinstance(self.u_ob._properties['givenName'],
+        self.assertTrue(isinstance(self.u_ob.id, unicode))
+        self.assertTrue(isinstance(self.u_ob.name, unicode))
+        self.assertTrue(isinstance(self.u_ob._properties['givenName'],
                         unicode))
 
     def testMappedAttrs(self):
@@ -77,10 +77,10 @@ class TestLDAPUser(unittest.TestCase):
         multivals = ug('multivalued_attrs')
 
         for mv in multivals:
-            self.failUnless(isinstance(u.getProperty(mv), (list, tuple)))
+            self.assertTrue(isinstance(u.getProperty(mv), (list, tuple)))
 
     def testNameIdNotUnicode(self):
         # Make sure name and ID are never unicode
         u = self.u_ob
-        self.failIf(isinstance(u.getUserName(), unicode))
-        self.failIf(isinstance(u.getId(), unicode))
+        self.assertFalse(isinstance(u.getUserName(), unicode))
+        self.assertFalse(isinstance(u.getId(), unicode))
