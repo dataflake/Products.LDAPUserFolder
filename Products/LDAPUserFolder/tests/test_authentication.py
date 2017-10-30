@@ -29,13 +29,13 @@ class TestAuthentication(LDAPTest):
         acl.manage_addUser(REQUEST=None, kwargs=user)
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    user.get('user_pw'), {})
-        self.assertFalse(user_ob is None)
+        self.assertIsNotNone(user_ob)
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    '', {})
-        self.assertTrue(user_ob is None)
+        self.assertIsNone(user_ob)
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    'falsepassword', {})
-        self.assertTrue(user_ob is None)
+        self.assertIsNone(user_ob)
 
     def testAuthenticateUserWithCache(self):
         acl = self.folder.acl_users
@@ -47,11 +47,11 @@ class TestAuthentication(LDAPTest):
                                    'falsepassword', {})
 
         # make sure the user could not connect
-        self.assertTrue(user_ob is None)
+        self.assertIsNone(user_ob)
 
         # now let's try again with the right password
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    user.get('user_pw'), {})
 
         # now we should be OK
-        self.assertFalse(user_ob is None)
+        self.assertIsNotNone(user_ob)

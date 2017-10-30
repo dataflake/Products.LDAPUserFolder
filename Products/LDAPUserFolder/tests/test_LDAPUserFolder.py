@@ -769,16 +769,16 @@ class TestLDAPUserFolder(LDAPTest):
 
         # Retrieving an invalid user should return None
         nonexisting = acl.getUserById('invalid')
-        self.assertTrue(nonexisting is None)
+        self.assertIsNone(nonexisting)
 
         # The retrieval above will add the invalid user to the negative cache
         negative_cache_key = '%s:%s:%s' % (acl._uid_attr, 'invalid',
                                            sha1('').hexdigest())
-        self.assertFalse(acl._cache('negative').get(negative_cache_key) is None)
+        self.assertIsNotNone(acl._cache('negative').get(negative_cache_key))
 
         # Expiring the user must remove it from the negative cache
         acl._expireUser('invalid')
-        self.assertTrue(acl._cache('negative').get(negative_cache_key) is None)
+        self.assertIsNone(acl._cache('negative').get(negative_cache_key))
 
         # User IDs that come in as unicode should not break anything.
         # https://bugs.launchpad.net/bugs/700071
