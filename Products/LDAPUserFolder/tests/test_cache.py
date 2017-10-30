@@ -64,11 +64,11 @@ class TestUserCache(unittest.TestCase):
     def testRemove(self):
         nonauth_ob = CacheObject('nonauth')
         self.cache.set('TestId', nonauth_ob)
-        self.cache.remove('testid')
+        self.cache.invalidate('testid')
         self.assertEqual(len(self.cache.getCache()), 0)
         auth_ob = CacheObject('auth')
         self.cache.set('NewId', auth_ob)
-        self.cache.remove('newid')
+        self.cache.invalidate('newid')
         self.assertEqual(len(self.cache.getCache()), 0)
 
     def testClear(self):
@@ -76,6 +76,6 @@ class TestUserCache(unittest.TestCase):
         self.cache.set('TestId', nonauth_ob)
         auth_ob = CacheObject('auth')
         self.cache.set('NewId', auth_ob)
-        self.cache.clear()
+        self.cache.invalidate()
         self.assertEqual(len(self.cache.getCache()), 0)
         self.assertEqual(len(self.cache.getCache()), 0)

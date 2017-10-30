@@ -3,6 +3,9 @@ Change log
 
 3.0 (unreleased)
 ----------------
+- replace Products.LDAPUserFolder.SimpleCache.SimpleCache with
+  Products.LDAPUserFolder.cache.UserCache, based on
+  dataflake.cache.timeout.TimeoutCache
 - replace Products.LDAPUserFolder.SimpleCache.SharedObject with
   dataflake.cache.simple.SimpleCache
 - flake8 whitespace cleanup

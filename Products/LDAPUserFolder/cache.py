@@ -15,28 +15,15 @@
 
 import time
 
+from dataflake.cache.timeout import TimeoutCache
 
-class UserCache:
+
+class UserCache(TimeoutCache):
     """ A simple non-persistent cache for user objects """
-
-    def __init__(self):
-        """ Initialize a new instance """
-        self.cache = {}
-        self.timeout = 600
-
-    def set(self, id, object):
-        """ Cache an object under the given id """
-        id = id.lower()
-        self.cache[id] = object
 
     def get(self, id, password=None):
         """ Retrieve a cached object if it is valid """
-        try:
-            id = id.lower()
-        except AttributeError:
-            return None
-
-        user = self.cache.get(id, None)
+        user = super(UserCache, self).get(id)
 
         if password is not None and \
            user is not None and \
@@ -61,18 +48,3 @@ class UserCache:
                 valid.append(object)
 
         return valid
-
-    def remove(self, id):
-        """ Purge a record out of the cache """
-        id = id.lower()
-
-        if id in self.cache:
-            del self.cache[id]
-
-    def clear(self):
-        """ Clear the internal caches """
-        self.cache = {}
-
-    def setTimeout(self, timeout):
-        """ Set the timeout (in seconds) for cached entries """
-        self.timeout = timeout

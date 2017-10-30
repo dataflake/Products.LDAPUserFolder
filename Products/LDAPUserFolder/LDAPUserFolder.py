@@ -191,9 +191,9 @@ class LDAPUserFolder(BasicUserFolder):
 
     def _clearCaches(self):
         """ Clear all logs and caches for user-related information """
-        self._cache('anonymous').clear()
-        self._cache('authenticated').clear()
-        self._cache('negative').clear()
+        self._cache('anonymous').invalidate()
+        self._cache('authenticated').invalidate()
+        self._cache('negative').invalidate()
         self._misc_cache().invalidate()
 
     def _lookupuserbyattr(self, name, value, pwd=None):
@@ -1754,8 +1754,8 @@ class LDAPUserFolder(BasicUserFolder):
         if not isinstance(user, basestring):
             user = user.getUserName()
 
-        self._cache('anonymous').remove(user)
-        self._cache('authenticated').remove(user)
+        self._cache('anonymous').invalidate(user)
+        self._cache('authenticated').invalidate(user)
 
         # This only removes records from the negative cache which
         # were retrieved without a password, since down here we do not
@@ -1763,7 +1763,7 @@ class LDAPUserFolder(BasicUserFolder):
         for name in (self._login_attr, self._uid_attr):
             negative_cache_key = '%s:%s:%s' % (name, user,
                                                sha1('').hexdigest())
-            self._cache('negative').remove(negative_cache_key)
+            self._cache('negative').invalidate(negative_cache_key)
 
     security.declareProtected(manage_users, 'isUnique')
 
