@@ -1,0 +1,21 @@
+language: python
+sudo: false
+python:
+    - 2.7
+install:
+    - pip install -U setuptools==33.1.1
+    - pip install zc.buildout
+    - pip install -U coverage coveralls
+    - pip install -U six==$(curl $(awk '$1 ==  "extends" {print $3}' buildout.cfg) 2>/dev/null | awk '$1 == "six" {print $3}')
+    - buildout bootstrap
+    - buildout
+script:
+    - coverage run bin/test -v1
+after_success:
+    - coveralls
+notifications:
+    email: false
+cache:
+  pip: true
+  directories:
+    - eggs/
