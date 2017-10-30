@@ -163,10 +163,10 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         schema = acl.getSchemaConfig()
         self.assertEqual(len(schema), 4)
         self.assertEqual(schema.get('mail'),
-                          {'ldap_name': 'mail',
-                           'friendly_name': 'Email Address',
-                           'public_name': 'publicmail', 'multivalued': True,
-                           'binary': True})
+                         {'ldap_name': 'mail',
+                          'friendly_name': 'Email Address',
+                          'public_name': 'publicmail', 'multivalued': True,
+                          'binary': True})
 
         servers = acl.getServers()
         self.assertEqual(len(servers), 2)
@@ -261,7 +261,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         schema = acl.getSchemaConfig()
         self.assertEqual(len(schema), 6)
         self.assertEqual(set(schema.keys()),
-                          set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
+                         set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
 
 
 def test_suite():
