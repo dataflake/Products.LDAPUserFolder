@@ -76,25 +76,3 @@ class UserCache:
     def setTimeout(self, timeout):
         """ Set the timeout (in seconds) for cached entries """
         self.timeout = timeout
-
-
-class SharedObject:
-    """ An even simpler class meant to be used as a cache for non-user-type
-    objects """
-    def __init__(self):
-        self.values = {}
-
-    def set(self, name, value):
-        self.values[name] = value
-
-    def get(self, name):
-        return self.values.get(name)
-
-    def clear(self, name=None):
-        if name:
-            try:
-                del self.values[name]
-            except (KeyError, IndexError):
-                pass
-        else:
-            self.values = {}

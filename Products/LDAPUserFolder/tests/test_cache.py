@@ -79,29 +79,3 @@ class TestUserCache(unittest.TestCase):
         self.cache.clear()
         self.assertEqual(len(self.cache.getCache()), 0)
         self.assertEqual(len(self.cache.getCache()), 0)
-
-
-class TestSharedObject(unittest.TestCase):
-
-    def setUp(self):
-        from Products.LDAPUserFolder.cache import SharedObject
-        self.cache = SharedObject()
-
-    def tearDown(self):
-        del self.cache
-
-    def testSetGetClear(self):
-        self.cache.set('foo', 'bar')
-        self.assertEqual(self.cache.values['foo'], 'bar')
-        self.assertEqual(self.cache.get('foo'), 'bar')
-        self.cache.set('baz', 'fleeb')
-        items = sorted(self.cache.values.items())
-        self.assertEqual(items, [('baz', 'fleeb'), ('foo', 'bar')])
-        self.cache.clear('foo')
-        items = sorted(self.cache.values.items())
-        self.assertEqual(items, [('baz', 'fleeb')])
-        self.cache.set('foo', 'feez')
-        items = sorted(self.cache.values.items())
-        self.assertEqual(items, [('baz', 'fleeb'), ('foo', 'feez')])
-        self.cache.clear()
-        self.assertEqual(len(self.cache.values), 0)

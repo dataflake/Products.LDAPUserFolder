@@ -21,6 +21,8 @@ from sets import Set
 import time
 import urllib
 
+from dataflake.cache.simple import SimpleCache
+
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
@@ -44,7 +46,6 @@ from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPUser import NonexistingUser
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.SharedResource import getResource
-from Products.LDAPUserFolder.cache import SharedObject
 from Products.LDAPUserFolder.cache import UserCache
 from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
@@ -193,7 +194,7 @@ class LDAPUserFolder(BasicUserFolder):
         self._cache('anonymous').clear()
         self._cache('authenticated').clear()
         self._cache('negative').clear()
-        self._misc_cache().clear()
+        self._misc_cache().invalidate()
 
     def _lookupuserbyattr(self, name, value, pwd=None):
         """
@@ -1796,7 +1797,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     def _misc_cache(self):
         """ Return the miscellaneous cache """
-        return getResource('%s-misc_cache' % self._hash, SharedObject, ())
+        return getResource('%s-misc_cache' % self._hash, SimpleCache, ())
 
     security.declareProtected(manage_users, 'getCacheTimeout')
 
