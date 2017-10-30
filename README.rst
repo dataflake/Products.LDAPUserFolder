@@ -1,8 +1,8 @@
 .. image:: https://api.travis-ci.org/dataflake/Products.LDAPUserFolder.svg?branch=master
    :target: https://travis-ci.org/dataflake/Products.LDAPUserFolder
 
-.. image:: https://readthedocs.org/projects/dataflakefakeldap/badge/?version=latest
-   :target: https://dataflakefakeldap.readthedocs.io
+.. image:: https://readthedocs.org/projects/productsldapuserfolder/badge/?version=latest
+   :target: https://productsldapuserfolder.readthedocs.io
    :alt: Documentation Status
 
 .. image:: https://img.shields.io/pypi/v/Products.LDAPUserFolder.svg
