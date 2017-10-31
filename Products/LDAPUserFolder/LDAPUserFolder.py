@@ -357,6 +357,13 @@ class LDAPUserFolder(BasicUserFolder):
         if not binduid:
             binduid_usage = 0
 
+        # The ZMI password field uses a hashed password string to make
+        # sure no one can read the original password in the page source.
+        # If the password here matches the expected hashed version, no
+        # cahnge has occurred.
+        if bindpwd == self.getEncryptedBindPassword():
+            bindpwd = self._bindpwd
+
         self.title = title
         self.users_base = users_base
         self.users_scope = users_scope
@@ -374,8 +381,7 @@ class LDAPUserFolder(BasicUserFolder):
         self._roles = roles
 
         self._binduid = binduid
-        if bindpwd != self.getEncryptedBindPassword():
-            self._bindpwd = bindpwd
+        self._bindpwd = bindpwd
         self._binduid_usage = int(binduid_usage)
 
         self._local_groups = not not local_groups
