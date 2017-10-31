@@ -54,13 +54,13 @@ setup(name='Products.%s' % NAME,
       install_requires=[
         'setuptools',
         'six',
-        'Zope2 < 4',
+        'Zope2',
         'dataflake.cache',
         'dataflake.fakeldap < 2',
         'pyldap',
         ],
       extras_require={
-          'exportimport': ['Products.GenericSetup >= 1.4.0, < 1.9'],
+          'exportimport': ['Products.GenericSetup'],
           },
       entry_points="""
       [zope2.initialize]

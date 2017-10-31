@@ -3,6 +3,8 @@ Change log
 
 3.0 (unreleased)
 ----------------
+- remove version pins, LDAPUserFolder 3 is Zope 4-compatible
+- add instance scripts as a test/development convenience
 - unbreak saving of bind passwords on the Configure tab
 - remove old _SharedResource code and simplify caching
 - replace Products.LDAPUserFolder.SimpleCache.SimpleCache with
