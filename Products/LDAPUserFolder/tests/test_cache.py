@@ -13,10 +13,13 @@
 """ Tests for the UserCache class
 """
 
+import threading
 import time
 import unittest
 
 from DateTime.DateTime import DateTime
+
+from Products.LDAPUserFolder.cache import getResource
 
 
 TESTPWD = 'test'
@@ -79,3 +82,70 @@ class TestUserCache(unittest.TestCase):
         self.cache.invalidate()
         self.assertEqual(len(self.cache.getCache()), 0)
         self.assertEqual(len(self.cache.getCache()), 0)
+
+
+class TestGetSetRemoveResource(unittest.TestCase):
+
+    def setUp(self):
+        self.test_id = 'test_id'
+
+    def tearDown(self):
+        from Products.LDAPUserFolder.cache import removeResource
+        removeResource(self.test_id)
+
+    def test_getResource(self):
+        self.assertEqual(getResource(self.test_id, str, ('foobar',)), 'foobar')
+
+    def test_getResource_nofactory(self):
+        self.assertIsNone(getResource(self.test_id))
+        getResource(self.test_id, str, ('foobar',))
+        self.assertEqual(getResource(self.test_id), 'foobar')
+
+    def test_setResource(self):
+        from Products.LDAPUserFolder.cache import setResource
+        self.assertIsNone(getResource(self.test_id))
+        setResource(self.test_id, 'forced')
+        self.assertEqual(getResource(self.test_id), 'forced')
+
+    def test_removeResource(self):
+        from Products.LDAPUserFolder.cache import removeResource
+        from Products.LDAPUserFolder.cache import setResource
+        setResource(self.test_id, 'forced')
+        self.assertEqual(getResource(self.test_id), 'forced')
+
+        removeResource(self.test_id)
+        self.assertIsNone(getResource(self.test_id))
+
+class TestThreadSafety(unittest.TestCase):
+
+    def setUp(self):
+        from dataflake.cache.simple import SimpleCache
+        self.c_class = SimpleCache
+        self.c_name = 'cache_id'
+        self.c_key = 'testkey'
+
+    def test_getResource_threaded(self):
+        threads = [CacheThread(self.c_class, self.c_name, self.c_key)
+                   for x in range(100)]
+        [x.start() for x in threads]
+        while len(threading.enumerate()) > 1:
+            time.sleep(.1)
+        cache = getResource(self.c_name, self.c_class)
+        # We accept results that prove a correct cache rate of 99%,
+        # up to 100 less than the ideal count of 10000
+        self.assertAlmostEqual(cache.get(self.c_key), 10000, delta=100)
+
+
+class CacheThread(threading.Thread):
+
+    def __init__(self, cache_class, cache_name, cache_key):
+        super(CacheThread, self).__init__()
+        self.cache_class = cache_class
+        self.cache_name = cache_name
+        self.cache_key = cache_key
+
+    def run(self):
+        for i in range(100):
+            cache = getResource(self.cache_name, self.cache_class)
+            cache.set(self.cache_key, (cache.get(self.cache_key) or 0) + 1)
+

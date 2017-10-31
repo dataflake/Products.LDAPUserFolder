@@ -26,6 +26,7 @@ from AccessControl.SecurityManagement import getSecurityManager
 
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.cache import getResource
+from Products.LDAPUserFolder.cache import removeResource
 from Products.LDAPUserFolder.cache import setResource
 from Products.LDAPUserFolder.utils import BINARY_ATTRIBUTES
 from Products.LDAPUserFolder.utils import from_utf8
@@ -124,7 +125,7 @@ class LDAPDelegate(Persistent):
         # Delete the cached connection in case the new server was added
         # in response to the existing server failing in a way that leads
         # to nasty timeouts
-        setResource('%s-connection' % self._hash, '')
+        removeResource('%s-connection' % self._hash)
 
     def getServers(self):
         """ Return info about all my servers """
@@ -150,7 +151,7 @@ class LDAPDelegate(Persistent):
 
         # Delete the cached connection so that we don't accidentally
         # continue using a server we should not be using anymore
-        setResource('%s-connection' % self._hash, '')
+        removeResource('%s-connection' % self._hash)
 
     def edit(self, login_attr, users_base, rdn_attr, objectclasses,
              bind_dn, bind_pwd, binduid_usage, read_only):
@@ -186,15 +187,14 @@ class LDAPDelegate(Persistent):
             else:
                 user_dn = user_pwd = ''
 
-        conn = getResource('%s-connection' % self._hash, str, ())
-        if not isinstance(conn._type(), str):
-            try:
-                conn.simple_bind_s(user_dn, user_pwd)
-                conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
-                return conn
-            except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
-                    ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
-                pass
+        conn = getResource('%s-connection' % self._hash)
+        try:
+            conn.simple_bind_s(user_dn, user_pwd)
+            conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
+            return conn
+        except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
+                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
+            pass
 
         e = None
 
@@ -258,20 +258,18 @@ class LDAPDelegate(Persistent):
     def _connect(self, connection_string, user_dn, user_pwd,
                  conn_timeout=5, op_timeout=-1):
         """ Factored out to allow usage by other pieces """
-        # Connect to the server to get a raw connection object
-        connection = getResource('%s-connection' % self._hash,
-                                 c_factory, (connection_string,))
-        if connection._type is not c_factory:
-            connection = c_factory(connection_string)
-
         connection_strings = [self._createConnectionString(s)
                               for s in self._servers]
 
+        # Connect to the server to get a raw connection object
+        # Only cache it if the connection string matches our
+        # configured connection strings. This excludes connections
+        # resulting from a ldap.REFERRAL exception
         if connection_string in connection_strings:
-            # We only reuse a connection if it is in our own configuration
-            # in order to prevent getting "stuck" on a connection created
-            # while dealing with a ldap.REFERRAL exception
-            setResource('%s-connection' % self._hash, connection)
+            connection = getResource('%s-connection' % self._hash,
+                                     c_factory, (connection_string,))
+        else:
+            connection = c_factory(connection_string)
 
         # Set the protocol version - version 3 is preferred
         try:

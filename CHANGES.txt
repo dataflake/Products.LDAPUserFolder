@@ -3,6 +3,7 @@ Change log
 
 3.0 (unreleased)
 ----------------
+- remove old _SharedResource code and simplify caching
 - replace Products.LDAPUserFolder.SimpleCache.SimpleCache with
   Products.LDAPUserFolder.cache.UserCache, based on
   dataflake.cache.timeout.TimeoutCache
