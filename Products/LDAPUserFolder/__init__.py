@@ -24,4 +24,7 @@ def initialize(context):
                           constructors=(manage_addLDAPUserFolder,),
                           icon='www/ldapuserfolder.gif')
 
+    # make sure the default LDAPDelegate class is registered
+    from Products.LDAPUserFolder import LDAPDelegate
+
     context.registerHelp()
