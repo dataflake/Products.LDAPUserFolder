@@ -116,6 +116,7 @@ class TestGetSetRemoveResource(unittest.TestCase):
         removeResource(self.test_id)
         self.assertIsNone(getResource(self.test_id))
 
+
 class TestThreadSafety(unittest.TestCase):
 
     def setUp(self):
@@ -148,4 +149,3 @@ class CacheThread(threading.Thread):
         for i in range(100):
             cache = getResource(self.cache_name, self.cache_class)
             cache.set(self.cache_key, (cache.get(self.cache_key) or 0) + 1)
-

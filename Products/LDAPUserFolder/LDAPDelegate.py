@@ -27,7 +27,6 @@ from AccessControl.SecurityManagement import getSecurityManager
 from Products.LDAPUserFolder.LDAPUser import LDAPUser
 from Products.LDAPUserFolder.cache import getResource
 from Products.LDAPUserFolder.cache import removeResource
-from Products.LDAPUserFolder.cache import setResource
 from Products.LDAPUserFolder.utils import BINARY_ATTRIBUTES
 from Products.LDAPUserFolder.utils import from_utf8
 from Products.LDAPUserFolder.utils import registerDelegate

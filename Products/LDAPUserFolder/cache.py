@@ -13,7 +13,6 @@
 """ A simple non-persistent user object cache
 """
 
-from threading import _RLock
 from threading import Lock
 import time
 
@@ -100,4 +99,3 @@ def removeResource(id):
         pass
     finally:
         _cache_lock.release()
-
