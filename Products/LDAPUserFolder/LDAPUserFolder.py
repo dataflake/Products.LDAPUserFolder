@@ -126,23 +126,6 @@ class LDAPUserFolder(BasicUserFolder):
     #
     #################################################################
 
-    def __setstate__(self, v):
-        """ __setstate__ is called whenever the instance is loaded
-            from the ZODB, like when Zope is restarted.
-        """
-        # Call inherited __setstate__ methods if they exist
-        LDAPUserFolder.inheritedAttribute('__setstate__')(self, v)
-
-        # Reset user caches
-        anon_timeout = self.getCacheTimeout('anonymous')
-        self._cache('anonymous').setTimeout(anon_timeout)
-
-        auth_timeout = self.getCacheTimeout('authenticated')
-        self._cache('authenticated').setTimeout(auth_timeout)
-
-        negative_timeout = self.getCacheTimeout('negative')
-        self._cache('negative').setTimeout(negative_timeout)
-
     def __init__(self, delegate_type='LDAP delegate'):
         """ Create a new LDAPUserFolder instance """
         self._hash = '%s%s' % (self.meta_type, str(random.random()))
@@ -1798,8 +1781,10 @@ class LDAPUserFolder(BasicUserFolder):
 
     def _cache(self, cache_type='anonymous'):
         """ Get the specified user cache """
-        return getResource('%s-%scache' % (self._hash, cache_type),
-                           UserCache, ())
+        cache = getResource('%s-%scache' % (self._hash, cache_type),
+                            UserCache, ())
+        cache.setTimeout(self.getCacheTimeout(cache_type))
+        return cache
 
     def _misc_cache(self):
         """ Return the miscellaneous cache """
