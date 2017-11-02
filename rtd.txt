@@ -1,2 +1,3 @@
 AccessControl
+Products.LDAPUserFolder
 repoze.sphinx.autointerface
