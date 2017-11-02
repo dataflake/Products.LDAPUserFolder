@@ -163,6 +163,8 @@ class LDAPUser(BasicUser):
 
         return self._dn
 
+    security.declareProtected(access_contents_information, 'getCreationTime')
+
     def getCreationTime(self):
         """ When was this user object created? """
         return DateTime(self._created)
