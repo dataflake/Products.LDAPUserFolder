@@ -3,6 +3,7 @@ Change log
 
 3.0 (unreleased)
 ----------------
+- merge and fix old HelpSys API docs into interfaces and add Sphinx doc
 - remove version pins, LDAPUserFolder 3 is Zope 4-compatible
 - add instance scripts as a test/development convenience
 - unbreak saving of bind passwords on the Configure tab

@@ -60,8 +60,9 @@ setup(name='Products.%s' % NAME,
         'pyldap',
         ],
       extras_require={
-          'exportimport': ['Products.GenericSetup'],
-          },
+        'exportimport': ['Products.GenericSetup'],
+        'docs': ['Sphinx', 'repoze.sphinx.autointerface'],
+        },
       entry_points="""
       [zope2.initialize]
       Products.%s = Products.%s:initialize

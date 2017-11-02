@@ -7,6 +7,17 @@ Documentation
 web application server that uses LDAP to store and retrieve login data.
 
 
+API documentation
+-----------------
+These interfaces describe the official programming API for
+:mod:`Products.LDAPUserFolder`.
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
+
 Narrative documentation
 -----------------------
 Narrative documentation explaining how to use :mod:`Products.LDAPUserFolder`.
