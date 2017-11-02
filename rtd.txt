@@ -1,3 +1,1 @@
-AccessControl
-Products.LDAPUserFolder
-repoze.sphinx.autointerface
+Repoze.sphinx.autointerface

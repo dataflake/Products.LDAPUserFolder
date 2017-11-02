@@ -1,3 +1,7 @@
+.. note:: On
+  `ReadTheDocs <https://productsldapuserfolder.readthedocs.io>`_
+  this page will not work correctly.
+
 :mod:`Products.LDAPUserFolder.interfaces.ILDAPUser`
 ===================================================
 .. autointerface:: Products.LDAPUserFolder.interfaces.ILDAPUser
