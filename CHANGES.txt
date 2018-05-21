@@ -29,6 +29,11 @@ Change log
   to gain the same functionality.
 - Removed the CMF tools, please use the package ``Products.CMFLDAP``
   (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
+- LDAPDelegate: When using a user from the Zope security machinery 
+  for the purpose of finding a suitable bind DN and password for 
+  connecting to a LDAP server, discard it when it's not been created
+  as the result of a real login and thus has an invalid password
+  (https://bugs.launchpad.net/bugs/1060112)
 
 
 2.23 (2012-04-23)
