@@ -5,7 +5,6 @@ Change log
 ----------------
 - Zope 4 compatibility
 - merge and fix old HelpSys API docs into interfaces and add Sphinx doc
-- remove version pins, LDAPUserFolder 3 is Zope 4-compatible
 - add instance scripts as a test/development convenience
 - unbreak saving of bind passwords on the Configure tab
 - remove old _SharedResource code and simplify caching
@@ -18,11 +17,10 @@ Change log
 - moved the code to GitHub
 - officially dropped Python 2.6 support, only Python 2.7 is supported.
 - moved documentation to Sphinx
-- pin several packages to avoid pulling in Zope version 4
 - sanitized buildout test script generation to always use the 
   ``exportimport`` extra and always test the `GenericSetup` 
   export/import support
-- Add a simple ``tox`` configuration file to support automated testing
+- Add ``tox`` configuration to support automated testing
   on all supported Python versions
 - Removed the LDAPUserSatellite code due to severe bit-rot. Please use
   the PluggableAuthService package in conjunction with LDAPMultiPlugins
