@@ -24,6 +24,7 @@ import urllib
 from dataflake.cache.simple import SimpleCache
 
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
 from AccessControl.SecurityManagement import getSecurityManager
@@ -35,7 +36,6 @@ except ImportError:
     from AccessControl.User import domainSpecMatch
     from AccessControl.User import BasicUserFolder
 from Acquisition import aq_base
-from App.class_init import default__class_init__ as InitializeClass
 from App.Common import package_home
 from App.special_dtml import DTMLFile
 from BTrees.OOBTree import OOBTree

@@ -20,6 +20,7 @@ from ldapurl import isLDAPUrl
 from ldap.dn import escape_dn_chars
 import logging
 import random
+import six
 
 from Persistence import Persistent
 from AccessControl.SecurityManagement import getSecurityManager
@@ -552,6 +553,9 @@ class LDAPDelegate(Persistent):
 
     def _clean_rdn(self, rdn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
+        if isinstance(rdn, six.text_type):
+            rdn = rdn.encode('UTF-8')
+
         if rdn.find('\\') != -1:
             # already escaped, disregard
             return rdn
@@ -571,7 +575,13 @@ class LDAPDelegate(Persistent):
 
     def explode_dn(self, dn, notypes=0):
         """ Indirection to avoid need for importing ldap elsewhere """
-        return ldap.explode_dn(dn, notypes)
+        exploded = []
+        for dn_part in ldap.explode_dn(dn, notypes):
+            if isinstance(dn_part, six.text_type):
+                exploded.append(dn_part.encode('UTF-8'))
+            else:
+                exploded.append(dn_part)
+        return exploded
 
     def filter_format(self, filter_template, assertion_values):
         """ Indirection to avoid need for importing ldap elsewhere """

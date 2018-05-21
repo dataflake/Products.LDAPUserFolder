@@ -15,10 +15,10 @@
 
 import time
 
+from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from AccessControl.User import BasicUser
 from AccessControl.Permissions import access_contents_information
-from AccessControl import ClassSecurityInfo
-from App.class_init import default__class_init__ as InitializeClass
 from DateTime import DateTime
 
 from Products.LDAPUserFolder.utils import encoding
