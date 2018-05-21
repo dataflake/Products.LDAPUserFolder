@@ -1,7 +1,7 @@
 Change log
 ==========
 
-3.0 (unreleased)
+3.0 (2018-05-21)
 ----------------
 - Zope 4 compatibility
 - merge and fix old HelpSys API docs into interfaces and add Sphinx doc
