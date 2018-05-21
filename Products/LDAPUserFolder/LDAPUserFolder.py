@@ -17,7 +17,6 @@ from hashlib import sha1
 import logging
 import os
 import random
-from sets import Set
 import time
 import urllib
 
@@ -50,6 +49,7 @@ from Products.LDAPUserFolder.cache import UserCache
 from Products.LDAPUserFolder.utils import _createDelegate
 from Products.LDAPUserFolder.utils import _createLDAPPassword
 from Products.LDAPUserFolder.utils import crypt
+from Products.LDAPUserFolder.utils import GROUP_MEMBER_ATTRIBUTES
 from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
 from Products.LDAPUserFolder.utils import guid2string
 from Products.LDAPUserFolder.utils import to_utf8
@@ -809,11 +809,11 @@ class LDAPUserFolder(BasicUserFolder):
         cn = urllib.unquote(encoded_cn)
 
         if not self._local_groups:
-            member_attrs = list(Set(GROUP_MEMBER_MAP.values()))
             fltr = self._delegate.filter_format('(cn=%s)', (cn,))
             res = self._delegate.search(base=self.groups_base,
                                         scope=self.groups_scope,
-                                        filter=fltr, attrs=member_attrs)
+                                        filter=fltr,
+                                        attrs=GROUP_MEMBER_ATTRIBUTES)
 
             if res['exception']:
                 exc = res['exception']
@@ -851,7 +851,6 @@ class LDAPUserFolder(BasicUserFolder):
         """ Return all those users that are in a group """
         all_dns = {}
         users = []
-        member_attrs = list(Set(GROUP_MEMBER_MAP.values()))
 
         if groups is None:
             groups = self.getGroups()
@@ -859,7 +858,7 @@ class LDAPUserFolder(BasicUserFolder):
         for group_id, group_dn in groups:
             group_details = self.getGroupDetails(group_id)
             for key, vals in group_details:
-                if key in member_attrs or key == '':
+                if key in GROUP_MEMBER_ATTRIBUTES or key == '':
                     # If the key is an empty string then the groups are
                     # stored inside the user folder itself.
                     for dn in vals:

@@ -29,6 +29,8 @@ Change log
   to gain the same functionality.
 - Removed the CMF tools, please use the package ``Products.CMFLDAP``
   (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
+- Refactor some definitions in the utils module to make them easier 
+  to override (Patch by Godefroid Chapelle)
 - When comparing a login value to login values found on the LDAP 
   server strip the login value first. This follows OpenLDAP behavior
   which considers values as matches even with trailing or leading 

@@ -51,12 +51,12 @@ class TestAuthentication(LDAPTest):
         # extra space before login attr - should not fail
         login = ' %s' % user.get(acl.getProperty('_login_attr'))
         user_ob = acl.authenticate(login, user.get('user_pw'), {})
-        self.failIf(user_ob is None)
+        self.assertIsNotNone(user_ob)
 
         # Extra spaces around login attr - should not fail
         login = ' %s ' % user.get(acl.getProperty('_login_attr'))
         user_ob = acl.authenticate(login, user.get('user_pw'), {})
-        self.failIf(user_ob is None)
+        self.assertIsNotNone(user_ob)
 
     def testAuthenticateUserWithCache(self):
         acl = self.folder.acl_users
