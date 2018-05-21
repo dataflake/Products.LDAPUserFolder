@@ -29,6 +29,8 @@ Change log
   to gain the same functionality.
 - Removed the CMF tools, please use the package ``Products.CMFLDAP``
   (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
+- ensure bind passwords used for the LDAP delegate and the user
+  folder do not get out of sync
 - Refactor some definitions in the utils module to make them easier 
   to override (Patch by Godefroid Chapelle)
 - Fixed a missing string conversion in getGroupedUsers (Patch by

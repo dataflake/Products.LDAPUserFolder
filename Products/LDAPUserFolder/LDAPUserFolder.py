@@ -354,21 +354,21 @@ class LDAPUserFolder(BasicUserFolder):
         self.groups_scope = groups_scope
         self.read_only = not not read_only
 
+        self._binduid = binduid
+        if bindpwd != self.getEncryptedBindPassword():
+            self._bindpwd = bindpwd
+
         self._delegate.edit(login_attr=login_attr, users_base=users_base,
                             rdn_attr=rdn_attr, objectclasses=obj_classes,
-                            bind_dn=binduid, bind_pwd=bindpwd,
+                            bind_dn=self._binduid, bind_pwd=self._bindpwd,
                             binduid_usage=binduid_usage, read_only=read_only)
 
         if isinstance(roles, basestring):
             roles = [x.strip() for x in roles.split(',')]
         self._roles = roles
 
-        self._binduid = binduid
-        self._bindpwd = bindpwd
         self._binduid_usage = int(binduid_usage)
-
         self._local_groups = not not local_groups
-
         self._implicit_mapping = implicit_mapping
 
         if encryption == 'crypt' and crypt is None:
