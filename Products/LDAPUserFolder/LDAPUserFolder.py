@@ -673,7 +673,8 @@ class LDAPUserFolder(BasicUserFolder):
 
         if self._login_attr != 'dn' and len(login_name) > 0:
             if name == self._login_attr:
-                logins = [x for x in login_name if value.lower() == x.lower()]
+                logins = [x for x in login_name
+                          if value.strip().lower() == x.lower()]
                 login_name = logins[0]
             else:
                 login_name = login_name[0]

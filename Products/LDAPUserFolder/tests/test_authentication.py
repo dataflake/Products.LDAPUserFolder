@@ -27,15 +27,36 @@ class TestAuthentication(LDAPTest):
         for role in user.get('user_roles'):
             acl.manage_addGroup(role)
         acl.manage_addUser(REQUEST=None, kwargs=user)
+
+        # Correct login
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    user.get('user_pw'), {})
         self.assertIsNotNone(user_ob)
+
+        # Login with empty password
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    '', {})
         self.assertIsNone(user_ob)
+
+        # Login with wrong password
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    'falsepassword', {})
         self.assertIsNone(user_ob)
+
+        # Extra space after login attr - should not fail
+        login = '%s ' % user.get(acl.getProperty('_login_attr'))
+        user_ob = acl.authenticate(login, user.get('user_pw'), {})
+        self.assertIsNotNone(user_ob)
+
+        # extra space before login attr - should not fail
+        login = ' %s' % user.get(acl.getProperty('_login_attr'))
+        user_ob = acl.authenticate(login, user.get('user_pw'), {})
+        self.failIf(user_ob is None)
+
+        # Extra spaces around login attr - should not fail
+        login = ' %s ' % user.get(acl.getProperty('_login_attr'))
+        user_ob = acl.authenticate(login, user.get('user_pw'), {})
+        self.failIf(user_ob is None)
 
     def testAuthenticateUserWithCache(self):
         acl = self.folder.acl_users
