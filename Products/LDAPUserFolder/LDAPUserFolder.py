@@ -866,7 +866,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         for dn in all_dns.keys():
             try:
-                user = self.getUserByDN(dn)
+                user = self.getUserByDN(to_utf8(dn))
             except Exception:
                 user = None
 
