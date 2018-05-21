@@ -276,7 +276,7 @@ def test_suite():
 
 
 _LDAPUSERFOLDER_BODY = """\
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <property name="title"></property>
  <property name="_login_attr">cn</property>
@@ -313,7 +313,7 @@ _LDAPUSERFOLDER_BODY = """\
 """
 
 _CHANGED_EXPORT = """\
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <property name="title">changed title</property>
  <property name="_login_attr">uid</property>
@@ -376,7 +376,7 @@ _CHANGED_EXPORT = """\
 """
 
 _SERVERS_SCHEMA_PURGE = """\
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <ldap-servers purge="True">
   <ldap-server host="otherhost" port="1389" protocol="ldap" conn_timeout="1"
@@ -394,7 +394,7 @@ _SERVERS_SCHEMA_PURGE = """\
 """
 
 _SERVERS_SCHEMA_NOPURGE = """\
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <ldap-servers purge="False">
   <ldap-server host="otherhost" port="1389" protocol="ldap" conn_timeout="1"
