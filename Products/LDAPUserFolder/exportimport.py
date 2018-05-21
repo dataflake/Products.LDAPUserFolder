@@ -187,7 +187,8 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         fragment = self._doc.createDocumentFragment()
         node = self._doc.createElement('ldap-schema')
         schema_config = self.context.getSchemaConfig()
-        for schema_info in schema_config.values():
+        for schema_info in sorted(schema_config.values(),
+                                  key=lambda x: x['ldap_name']):
             child = self._doc.createElement('schema-item')
             for key, value in schema_info.items():
                 if isinstance(value, (int, bool)):

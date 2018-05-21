@@ -363,13 +363,13 @@ _CHANGED_EXPORT = """\
      conn_timeout="2" op_timeout="2"/>
  </ldap-servers>
  <ldap-schema>
-  <schema-item binary="False" friendly_name="uid" ldap_name="uid"
+  <schema-item binary="False" friendly_name="Canonical Name" ldap_name="cn"
      multivalued="False" public_name=""/>
   <schema-item binary="True" friendly_name="Email Address" ldap_name="mail"
      multivalued="True" public_name="publicmail"/>
-  <schema-item binary="False" friendly_name="Canonical Name" ldap_name="cn"
-     multivalued="False" public_name=""/>
   <schema-item binary="False" friendly_name="Last Name" ldap_name="sn"
+     multivalued="False" public_name=""/>
+  <schema-item binary="False" friendly_name="uid" ldap_name="uid"
      multivalued="False" public_name=""/>
  </ldap-schema>
 </object>
