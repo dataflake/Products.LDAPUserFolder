@@ -33,6 +33,8 @@ Change log
   to override (Patch by Godefroid Chapelle)
 - Fixed a missing string conversion in getGroupedUsers (Patch by
   Godefroid Chapelle)
+- Fix python-ldap error when receiving sets instead of lists for
+  attributes to search on (Patch by Godefroid Chapelle)
 - When comparing a login value to login values found on the LDAP 
   server strip the login value first. This follows OpenLDAP behavior
   which considers values as matches even with trailing or leading 

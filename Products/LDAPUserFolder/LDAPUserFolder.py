@@ -813,7 +813,7 @@ class LDAPUserFolder(BasicUserFolder):
             res = self._delegate.search(base=self.groups_base,
                                         scope=self.groups_scope,
                                         filter=fltr,
-                                        attrs=GROUP_MEMBER_ATTRIBUTES)
+                                        attrs=list(VALID_GROUP_ATTRIBUTES))
 
             if res['exception']:
                 exc = res['exception']
