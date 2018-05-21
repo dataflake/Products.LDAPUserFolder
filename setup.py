@@ -54,13 +54,13 @@ setup(name=NAME,
       install_requires=[
         'setuptools',
         'six',
-        'Zope2',
+        'Zope >= 4.0b5',
         'dataflake.cache',
-        'dataflake.fakeldap < 2',
-        'pyldap',
+        'dataflake.fakeldap',
+        'python-ldap',
         ],
       extras_require={
-        'exportimport': ['Products.GenericSetup'],
+        'exportimport': ['Products.GenericSetup >= 2.0b1'],
         'docs': ['Sphinx', 'repoze.sphinx.autointerface'],
         },
       entry_points="""
