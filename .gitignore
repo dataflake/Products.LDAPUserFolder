@@ -12,3 +12,6 @@ parts/
 coverage.xml
 nosetests.xml
 *.egg
+*.pyc
+*.swp
+*.egg-info
