@@ -37,8 +37,10 @@ alternates = {'title': 'LDAPUserFolder', 'server': 'localhost:1389',
 user = {'cn': 'test', 'sn': 'User', 'mail': 'joe@blow.com',
         'givenName': 'G\xc3\xbcnther', 'objectClasses': ['top', 'person'],
         'user_pw': 'mypass', 'confirm_pw': 'mypass', 'user_roles': ['Manager'],
+        'jpegPhoto': 'dont-\xc3\xbcncode-me',
         'mapped_attrs': {'objectClasses': 'Objektklassen'},
         'multivalued_attrs': ['objectClasses'],
+        'binary_attrs': ['jpegPhoto'],
         'ldap_groups': ['Group1', 'Group2']}
 
 manager_user = {'cn': 'mgr', 'sn': 'Manager', 'givenName': 'Test',

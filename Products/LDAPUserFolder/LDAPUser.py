@@ -27,6 +27,7 @@ from Products.LDAPUserFolder.utils import _verifyUnicode
 
 class NonexistingUser:
     """Fake user we can use in our negative cache."""
+
     def __init__(self):
         self.birth = DateTime()
 
@@ -44,7 +45,7 @@ class LDAPUser(BasicUser):
 
     def __init__(self, uid, name, password, roles, domains, user_dn,
                  user_attrs, mapped_attrs, multivalued_attrs=(),
-                 ldap_groups=()):
+                 binary_attrs=(), ldap_groups=()):
         """ Instantiate a new LDAPUser object """
         self._properties = {}
         self.id = _verifyUnicode(uid)
@@ -65,7 +66,8 @@ class LDAPUser(BasicUser):
             else:
                 prop = user_attrs.get(key, [None])[0]
 
-            if isinstance(prop, str) and key != 'objectGUID':
+            if isinstance(prop, str) and key != 'objectGUID' and \
+               key not in binary_attrs:
                 prop = _verifyUnicode(prop)
 
             self._properties[key] = prop

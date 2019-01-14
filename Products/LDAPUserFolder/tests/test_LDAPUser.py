@@ -12,8 +12,10 @@
 ##############################################################################
 """ Tests for the LDAPUser class
 """
-
+import os
 import unittest
+
+from App.Common import package_home
 
 from DateTime.DateTime import DateTime
 
@@ -28,14 +30,23 @@ dg = defaults.get
 class TestLDAPUser(unittest.TestCase):
 
     def setUp(self):
+        test_home = package_home(globals())
+        image_path = os.path.join(test_home, 'test.jpg')
+        image_file = open(image_path, 'rb')
+        self.image_contents = image_file.read()
+        image_file.close()
+
         u_attrs = {'cn': [ug('cn')], 'sn': [ug('sn')], 'mail': [ug('mail')],
                    'givenName': [ug('givenName')],
+                   'jpegPhoto': [self.image_contents],
                    'objectClasses': ug('objectClasses')}
         self.u_ob = LDAPUser(ug('cn'), ug('mail'), ug('user_pw'),
-                             ug('user_roles'), [], 'cn=%s,%s' % (ug('cn'),
-                             dg('users_base')), u_attrs,
+                             ug('user_roles'), [],
+                             'cn=%s,%s' % (ug('cn'),
+                                           dg('users_base')), u_attrs,
                              list(ug('mapped_attrs').items()),
                              ug('multivalued_attrs'),
+                             ug('binary_attrs'),
                              ldap_groups=ug('ldap_groups'))
 
     def testLDAPUserInstantiation(self):
@@ -62,7 +73,13 @@ class TestLDAPUser(unittest.TestCase):
         self.assertTrue(isinstance(self.u_ob.id, unicode))
         self.assertTrue(isinstance(self.u_ob.name, unicode))
         self.assertTrue(isinstance(self.u_ob._properties['givenName'],
-                        unicode))
+                                   unicode))
+
+    def testBinaryAttributes(self):
+        # Some attributes are marked binary
+        # These must not get encoded by _verifyUnicode
+        self.assertTrue(
+            self.u_ob._properties['jpegPhoto'] == self.image_contents)
 
     def testMappedAttrs(self):
         ae = self.assertEqual
