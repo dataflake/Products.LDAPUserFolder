@@ -1,10 +1,10 @@
 Change log
 ==========
 
-3.1 (unreleased)
+3.1 (2019-01-20)
 ----------------
-
 - don't encode attributes when wrapping an LDAPUser if they are flagged binary
+
 
 3.0 (2018-05-21)
 ----------------
