@@ -87,9 +87,9 @@ class LDAPUserFolder(BasicUserFolder):
     #################################################################
 
     manage_options = (
-        ({'label': 'Configure',	'action': 'manage_main',
+        ({'label': 'Configure', 'action': 'manage_main',
           'help': ('LDAPUserFolder', 'Configure.stx')},
-         {'label': 'LDAP Servers',	'action': 'manage_servers',
+         {'label': 'LDAP Servers',  'action': 'manage_servers',
           'help': ('LDAPUserFolder', 'Servers.stx')},
          {'label': 'LDAP Schema', 'action': 'manage_ldapschema',
           'help': ('LDAPUserFolder', 'Schema.stx')},
@@ -680,7 +680,7 @@ class LDAPUserFolder(BasicUserFolder):
                 login_name = login_name[0]
         elif len(login_name) == 0:
             msg = 'getUserByAttr: "%s" has no "%s" (Login) value!' % (
-                    user_dn, self._login_attr)
+                user_dn, self._login_attr)
             logger.debug(msg)
             self._cache('negative').set(negative_cache_key, NonexistingUser())
             return None
@@ -689,7 +689,7 @@ class LDAPUserFolder(BasicUserFolder):
             uid = uid[0]
         elif len(uid) == 0:
             msg = 'getUserByAttr: "%s" has no "%s" (UID Attribute) value!' % (
-                    user_dn, self._uid_attr)
+                user_dn, self._uid_attr)
             logger.debug(msg)
             self._cache('negative').set(negative_cache_key, NonexistingUser())
             return None
@@ -697,6 +697,7 @@ class LDAPUserFolder(BasicUserFolder):
         user_obj = LDAPUser(uid, login_name, pwd or 'undef', user_roles or [],
                             [], user_dn, user_attrs, self.getMappedUserAttrs(),
                             self.getMultivaluedUserAttrs(),
+                            self.getBinaryUserAttrs(),
                             ldap_groups=ldap_groups)
 
         if cache:
@@ -1214,7 +1215,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if REQUEST:
             msg = 'Added LDAP group to Zope role mapping: %s -> %s' % (
-                    group_name, role_name)
+                group_name, role_name)
             return self.manage_grouprecords(manage_tabs_message=msg)
 
     security.declareProtected(manage_users, 'manage_deleteGroupMappings')
@@ -1232,7 +1233,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if REQUEST:
             msg = 'Deleted LDAP group to Zope role mapping for: %s' % (
-                    ', '.join(group_names))
+                ', '.join(group_names))
             return self.manage_grouprecords(manage_tabs_message=msg)
 
     def _mapRoles(self, groups):
