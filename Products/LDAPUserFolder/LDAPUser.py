@@ -17,12 +17,12 @@ import time
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
-from AccessControl.User import BasicUser
 from AccessControl.Permissions import access_contents_information
+from AccessControl.User import BasicUser
 from DateTime import DateTime
 
-from Products.LDAPUserFolder.utils import encoding
-from Products.LDAPUserFolder.utils import _verifyUnicode
+from .utils import _verifyUnicode
+from .utils import encoding
 
 
 class NonexistingUser:
@@ -81,8 +81,7 @@ class LDAPUser(BasicUser):
     # Distinguish between user id and name
     #######################################################
 
-    security.declarePublic('getId')
-
+    @security.public
     def getId(self):
         if isinstance(self.id, unicode):
             return self.id.encode(encoding)
@@ -93,14 +92,12 @@ class LDAPUser(BasicUser):
     # User interface not implemented in class BasicUser
     #######################################################
 
-    security.declarePrivate('_getPassword')
-
+    @security.private
     def _getPassword(self):
         """ Retrieve the password """
         return self.__
 
-    security.declarePublic('getUserName')
-
+    @security.public
     def getUserName(self):
         """ Get the name associated with this user """
         if isinstance(self.name, unicode):
@@ -108,8 +105,7 @@ class LDAPUser(BasicUser):
 
         return self.name
 
-    security.declarePublic('getRoles')
-
+    @security.public
     def getRoles(self):
         """ Return the user's roles """
         if self.name == 'Anonymous User':
@@ -117,8 +113,7 @@ class LDAPUser(BasicUser):
         else:
             return tuple(self.roles) + ('Authenticated',)
 
-    security.declarePublic('getDomains')
-
+    @security.public
     def getDomains(self):
         """ The user's domains """
         return self.domains
@@ -127,8 +122,7 @@ class LDAPUser(BasicUser):
     # Interface unique to the LDAPUser class of user objects
     #######################################################
 
-    security.declareProtected(access_contents_information, '__getattr__')
-
+    @security.protected(access_contents_information)
     def __getattr__(self, name):
         """ Look into the _properties as well... """
         my_props = self._properties
@@ -144,8 +138,7 @@ class LDAPUser(BasicUser):
         else:
             raise AttributeError(name)
 
-    security.declareProtected(access_contents_information, 'getProperty')
-
+    @security.protected(access_contents_information)
     def getProperty(self, prop_name, default=''):
         """ Return the user property referred to by prop_name,
             if the attribute is indeed public.
@@ -156,8 +149,7 @@ class LDAPUser(BasicUser):
 
         return prop
 
-    security.declareProtected(access_contents_information, 'getUserDN')
-
+    @security.protected(access_contents_information)
     def getUserDN(self):
         """ Return the user's full Distinguished Name """
         if isinstance(self._dn, unicode):
@@ -165,8 +157,7 @@ class LDAPUser(BasicUser):
 
         return self._dn
 
-    security.declareProtected(access_contents_information, 'getCreationTime')
-
+    @security.protected(access_contents_information)
     def getCreationTime(self):
         """ When was this user object created? """
         return DateTime(self._created)

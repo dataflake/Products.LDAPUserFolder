@@ -13,8 +13,8 @@
 """ A simple non-persistent user object cache
 """
 
-from threading import Lock
 import time
+from threading import Lock
 
 from dataflake.cache.timeout import TimeoutCache
 

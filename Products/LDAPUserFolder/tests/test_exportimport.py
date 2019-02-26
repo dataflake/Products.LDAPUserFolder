@@ -16,13 +16,10 @@
 import unittest
 
 from OFS.Folder import Folder
-try:
-    from Zope2.App import zcml
-except ImportError:
-    # BBB Zope < 2.12.11
-    from Products.Five import zcml
+from Zope2.App import zcml
 
-from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
+from ..LDAPUserFolder import LDAPUserFolder
+
 
 try:
     import Products.GenericSetup as GenericSetup

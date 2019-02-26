@@ -15,15 +15,14 @@
 
 from Acquisition import aq_base
 from BTrees.OOBTree import OOBTree
-from ZPublisher.HTTPRequest import default_encoding
-from zope.component import adapts
-
 from Products.GenericSetup.interfaces import ISetupEnviron
+from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-from Products.GenericSetup.utils import XMLAdapterBase
+from zope.component import adapts
+from ZPublisher.HTTPRequest import default_encoding
 
-from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
+from .interfaces import ILDAPUserFolder
 
 
 PROPERTIES = ('title', '_login_attr', '_uid_attr', 'users_base',

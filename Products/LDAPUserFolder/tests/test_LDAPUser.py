@@ -16,12 +16,12 @@ import os
 import unittest
 
 from App.Common import package_home
-
 from DateTime.DateTime import DateTime
 
-from Products.LDAPUserFolder.LDAPUser import LDAPUser
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import defaults
+from .config import defaults
+from .config import user
+from ..LDAPUser import LDAPUser
+
 
 ug = user.get
 dg = defaults.get

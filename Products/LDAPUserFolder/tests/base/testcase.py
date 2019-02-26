@@ -15,18 +15,19 @@
 
 import unittest
 
+from dataflake.fakeldap import FakeLDAPConnection
+
+import transaction
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
-import transaction
-
-from dataflake.fakeldap import FakeLDAPConnection
 
 from Products.LDAPUserFolder import LDAPDelegate
 from Products.LDAPUserFolder import manage_addLDAPUserFolder
-from Products.LDAPUserFolder.tests.config import defaults
-from Products.LDAPUserFolder.tests.config import alternates
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import user2
+
+from ..config import alternates
+from ..config import defaults
+from ..config import user
+from ..config import user2
 
 
 LDAPDelegate.c_factory = FakeLDAPConnection

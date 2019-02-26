@@ -12,8 +12,9 @@
 ##############################################################################
 
 import os
-from setuptools import setup
+
 from setuptools import find_packages
+from setuptools import setup
 
 
 NAME = 'Products.LDAPUserFolder'
@@ -53,7 +54,7 @@ setup(name=NAME,
       namespace_packages=['Products'],
       zip_safe=False,
       install_requires=[
-        'setuptools',
+        'setuptools >36',
         'six',
         'Zope >= 4.0b5',
         'dataflake.cache',
