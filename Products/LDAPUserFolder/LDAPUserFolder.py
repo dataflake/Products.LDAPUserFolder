@@ -34,7 +34,7 @@ from App.special_dtml import DTMLFile
 from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem as SI
 from OFS.userfolder import BasicUserFolder
-from zope.interface import implements
+from zope.interface import implementer
 
 from .cache import UserCache
 from .cache import getResource
@@ -57,6 +57,7 @@ _dtmldir = os.path.join(package_home(globals()), 'dtml')
 EDIT_PERMISSION = 'Change user folder'
 
 
+@implementer(ILDAPUserFolder)
 class LDAPUserFolder(BasicUserFolder):
     """ LDAPUserFolder
 
@@ -65,8 +66,6 @@ class LDAPUserFolder(BasicUserFolder):
         database.  Its important public method is validate() which
         returns a Zope user object of type LDAPUser
     """
-
-    implements(ILDAPUserFolder)
 
     security = ClassSecurityInfo()
 
