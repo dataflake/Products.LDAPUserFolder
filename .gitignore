@@ -6,11 +6,15 @@ dist/
 docs/_build/
 htmlcov/
 instance/
+lib/
+lib64
 parts/
 .tox/
 .coverage
 coverage.xml
+default.profraw
 nosetests.xml
+pyvenv.cfg
 *.egg
 *.pyc
 *.swp
