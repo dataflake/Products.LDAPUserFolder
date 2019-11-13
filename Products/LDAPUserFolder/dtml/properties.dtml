@@ -230,7 +230,7 @@
       <td align="left" valign="top">
         <dtml-let oc="getProperty( '_user_objclasses' )">
           <input type="text" name="obj_classes" size="40"
-                 value="<dtml-var expr="_.string.join( oc, ',' )">" />
+                 value="<dtml-var expr="','.join( oc )">" />
         </dtml-let>
       </td>
     </tr>
@@ -272,7 +272,7 @@
       <td align="left" valign="top" colspan="3">
         <dtml-let rls="getProperty( '_roles' )">
           <input type="text" name="roles" size="40" 
-                 value="<dtml-var expr="_.string.join( rls, ',' )">" />
+                 value="<dtml-var expr="','.join( rls )">" />
         </dtml-let>
       </td>
     </tr>

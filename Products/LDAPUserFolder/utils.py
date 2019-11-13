@@ -97,7 +97,7 @@ try:
 
         def to_utf8(s):
             if isinstance(s, str):
-                s = decodeLocal(s)[0]
+                s = decodeLocal(s.encode('utf-8'))[0]
             return encodeUTF8(s)[0]
 
 except LookupError:

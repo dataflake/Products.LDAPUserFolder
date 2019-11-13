@@ -615,7 +615,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         cache_type = pwd and 'authenticated' or 'anonymous'
         negative_cache_key = '%s:%s:%s' % (name, value,
-                                           sha1(pwd or '').hexdigest())
+                                           sha1(str(pwd or '').encode('utf-8')).hexdigest())
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -1234,7 +1234,7 @@ class LDAPUserFolder(BasicUserFolder):
     @security.protected(manage_users)
     def getSchemaDict(self):
         """ Retrieve schema as list of dictionaries """
-        all_items = sorted(self.getSchemaConfig().values())
+        all_items = self.getSchemaConfig().values()
 
         return tuple(all_items)
 
@@ -1702,7 +1702,7 @@ class LDAPUserFolder(BasicUserFolder):
         # know that password. Only login and uid records are removed.
         for name in (self._login_attr, self._uid_attr):
             negative_cache_key = '%s:%s:%s' % (name, user,
-                                               sha1('').hexdigest())
+                                               sha1(str('').encode('utf-8')).hexdigest())
             self._cache('negative').invalidate(negative_cache_key)
 
     @security.protected(manage_users)
@@ -1776,7 +1776,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getEncryptedBindPassword(self):
         """ Return a hashed bind password for safe use in forms etc.
         """
-        return sha1(self.getProperty('_bindpwd')).hexdigest()
+        return sha1(str(self.getProperty('_bindpwd')).encode('utf-8')).hexdigest()
 
 
 def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate',

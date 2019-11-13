@@ -166,7 +166,7 @@ class LDAPDelegate(Persistent):
         self.read_only = not not read_only
         self.u_base = users_base
 
-        if isinstance(objectclasses, basestring):
+        if isinstance(objectclasses, str):
             objectclasses = [x.strip() for x in objectclasses.split(',')]
         self.u_classes = objectclasses
 
@@ -561,14 +561,14 @@ class LDAPDelegate(Persistent):
         if isinstance(rdn, six.text_type):
             rdn = rdn.encode('UTF-8')
 
-        if rdn.find('\\') != -1:
+        if rdn.find(b'\\') != -1:
             # already escaped, disregard
             return rdn
 
         try:
-            key, val = rdn.split('=')
+            key, val = rdn.split(b'=')
             val = val.lstrip()
-            return '%s=%s' % (key, escape_dn_chars(val))
+            return '%s=%s' % (key, escape_dn_chars(str(val)))
         except ValueError:
             return rdn
 
