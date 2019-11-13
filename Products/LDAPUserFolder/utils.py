@@ -16,7 +16,6 @@
 import base64
 import codecs
 from hashlib import md5
-from sets import Set
 
 from AccessControl import AuthEncoding
 
@@ -42,9 +41,9 @@ GROUP_MEMBER_MAP = {'groupOfUniqueNames': 'uniqueMember',
                     'group': 'member',
                     'univentionGroup': 'uniqueMember'}
 
-GROUP_MEMBER_ATTRIBUTES = Set(list(GROUP_MEMBER_MAP.values()))
+GROUP_MEMBER_ATTRIBUTES = set(GROUP_MEMBER_MAP.values())
 
-VALID_GROUP_ATTRIBUTES = Set(['name', 'displayName', 'cn', 'dn',
+VALID_GROUP_ATTRIBUTES = set(['name', 'displayName', 'cn', 'dn',
                               'objectGUID', 'description',
                               'mail']).union(GROUP_MEMBER_ATTRIBUTES)
 encoding = 'latin1'
