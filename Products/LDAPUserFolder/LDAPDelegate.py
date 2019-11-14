@@ -18,7 +18,6 @@ import random
 
 import ldap
 import ldap.filter
-import six
 from ldap.dn import escape_dn_chars
 from ldapurl import LDAPUrl
 from ldapurl import isLDAPUrl
@@ -558,7 +557,7 @@ class LDAPDelegate(Persistent):
 
     def _clean_rdn(self, rdn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        if isinstance(rdn, six.text_type):
+        if isinstance(rdn, str):
             rdn = rdn.encode('UTF-8')
 
         if rdn.find(b'\\') != -1:
@@ -582,7 +581,7 @@ class LDAPDelegate(Persistent):
         """ Indirection to avoid need for importing ldap elsewhere """
         exploded = []
         for dn_part in ldap.explode_dn(dn, notypes):
-            if isinstance(dn_part, six.text_type):
+            if isinstance(dn_part, str):
                 exploded.append(dn_part.encode('UTF-8'))
             else:
                 exploded.append(dn_part)
