@@ -16,7 +16,7 @@ LDAPUserFolder - Caches: View Available Groups and Cached Users
 
     Elements
 
-        'Purge All caches' -- This will purge all caches inside the 
+        'Purge all caches' -- This will purge all caches inside the 
           LDAPUserFolder.  This includes the cache of currently authenticated 
           users, the log and any cached username lists. 
 

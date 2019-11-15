@@ -9,7 +9,6 @@
     Define which servers to connect to on this form.
   </p>
 
-
   <form action="manage_deleteServers" method="post">
     <p><b>LDAP Servers <span class="text-warning">Currently connected to: &dtml-getCurrentServer;</span></b></p>
     <dtml-if "len(getServers())==0">
@@ -20,11 +19,11 @@
           <dtml-in getServers mapping>
             <tr>
               <td class="zmi-object-check text-right"><input type="checkbox" name="position_list:list" value="&dtml-sequence-index;" /></td>
-              <td class="zmi-ldap-host">&dtml-host;</td>
-              <td class="zmi-ldap-port">&dtml-port;</td>
-              <td class="zmi-ldap-protocol"><dtml-var "(protocol == 'ldaps' and 'LDAP over SSL') or (protocol == 'ldapi' and 'LDAP over IPC') or 'LDAP'"></td>
-              <td class="zmi-ldap-timeout-conn">Connection Timeout: <dtml-var conn_timeout missing="-1"> seconds</td>
-              <td class="zmi-ldap-timeout-op">Operation Timeout: <dtml-var op_timeout missing="-1"> seconds</td>
+              <td class="zmi-luf-host">&dtml-host;</td>
+              <td class="zmi-luf-port">&dtml-port;</td>
+              <td class="zmi-luf-protocol"><dtml-var "(protocol == 'ldaps' and 'LDAP over SSL') or (protocol == 'ldapi' and 'LDAP over IPC') or 'LDAP'"></td>
+              <td class="zmi-luf-timeout-conn">Connection Timeout: <dtml-var conn_timeout missing="-1"> seconds</td>
+              <td class="zmi-luf-timeout-op">Operation Timeout: <dtml-var op_timeout missing="-1"> seconds</td>
             </tr>
           </dtml-in>
         </tbody>
