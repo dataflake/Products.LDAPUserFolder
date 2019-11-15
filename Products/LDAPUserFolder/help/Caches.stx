@@ -16,12 +16,12 @@ LDAPUserFolder - Caches: View Available Groups and Cached Users
 
     Elements
 
-        'Purge All caches' -- This will purge all caches inside the 
+        'Purge all caches' -- This will purge all caches inside the 
           LDAPUserFolder.  This includes the cache of currently authenticated 
           users, the log and any cached username lists. 
 
-        'Cache Timeouts' -- This form allows tweaking the cache timeout
-          values for the authenticated and anonymous caches.
+        'Cache Timeout Settings' -- This form allows tweaking the cache 
+          timeout values for the authenticated and anonymous caches.
 
         'Cached users' -- These are the users in the cache of currently
           cached users. Anonymous users or Emergency User accounts will

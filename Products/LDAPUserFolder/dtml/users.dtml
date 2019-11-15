@@ -508,16 +508,12 @@ function toggleSelect() {
           </dtml-in>
         </td>
       </tr>
-      
-      <tr> <td colspan="2">&nbsp;</td> </tr>
-      
-      <tr>
-        <td colspan="2">
-          <input type="submit" value=" Add User ">
-        </td>
-      </tr>
-      
     </table>
+
+    <div class="zmi-controls">
+      <input class="btn btn-primary" type="submit" value=" Add User " />
+    </div>
+
     </form>
   </dtml-if>
 </dtml-in>

@@ -73,6 +73,8 @@ class LDAPUserFolder(BasicUserFolder):
     id = 'acl_users'
     isAUserFolder = 1
     isPrincipiaFolderish = 1
+    zmi_icon = 'fas fa-user-cog'
+    zmi_show_add_dialog = False
 
     #################################################################
     #
