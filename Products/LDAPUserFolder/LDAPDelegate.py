@@ -582,8 +582,8 @@ class LDAPDelegate(Persistent):
         """ Indirection to avoid need for importing ldap elsewhere """
         exploded = []
         for dn_part in ldap.explode_dn(dn, notypes):
-            if isinstance(dn_part, six.text_type):
-                exploded.append(dn_part.encode('UTF-8'))
+            if isinstance(dn_part, str):
+                exploded.append(dn_part.encode('utf-8'))
             else:
                 exploded.append(dn_part)
         return exploded
