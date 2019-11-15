@@ -27,7 +27,7 @@
     </div>
   </form>
 
-  <h3 class="my-4">Cache Timeouts Settings (in seconds)</h3>
+  <h3 class="my-4">Cache Timeout Settings (in seconds)</h3>
 
   <form id="luf_timeout_auth" action="setCacheTimeout">
     <div class="form-group row">
