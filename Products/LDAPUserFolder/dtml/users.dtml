@@ -29,6 +29,10 @@ function toggleSelect() {
 //-->
 </script>
 
+<main class="container-fluid">
+
+
+<!-- ############# FH AT WORK ############### -->
 <dtml-if name="find_button_pressed">
 
   <br />
@@ -334,44 +338,31 @@ function toggleSelect() {
 
 <dtml-else>
 
+  <p><i class="fas fa-search"></i> <b>Find existing user</b></p>
+  <p class="form-help mb-3">
+    Use this form to find user records on the LDAP server and
+    view or edit their details.
+  </p>
+
   <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
-  <table cellpadding="2" cellspacing="0" width="98%">
-    <tr class="list-header">
-      <td colspan="4" align="left" valign="top" class="form-label">
-        Find existing user
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3" class="form-help">
-        Use this form to find user records on the LDAP server and
-        view or edit their details.
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <select name="search_param">
-          <dtml-in expr="getLDAPSchema()">
-            <dtml-let sk="_['sequence-key']"
-                      si="_['sequence-item']">
-              <option value="&dtml-sk;">
-                &dtml-si; (&dtml-sk;)
-              </option>
-            </dtml-let>
-          </dtml-in>
-        </select>
-      </td>
-      <td> <input type="text" name="search_term" size="30"> </td>
-      <td>
-        <select name="exact_match">
-          <option value=""> Wildcard match </option>
-          <option value="1"> Exact match </option>
-        </select>
-      </td>
-      <td>
-        <input type="submit" name="find_button_pressed" value=" Search! ">
-      </td>
-    </tr>
-  </table>
+    <div class="form-group form-inline">
+      <select class="form-control col-3" name="search_param">
+        <dtml-in expr="getLDAPSchema()">
+          <dtml-let sk="_['sequence-key']"
+                    si="_['sequence-item']">
+            <option value="&dtml-sk;">
+              &dtml-si; (&dtml-sk;)
+            </option>
+          </dtml-let>
+        </dtml-in>
+      </select>
+      <input class="form-control col-3" type="text" name="search_term" placeholder="Search Term"/>
+      <select class="form-control col-3" name="exact_match">
+        <option value=""> Wildcard match </option>
+        <option value="1"> Exact match </option>
+      </select>
+      <input class="form-control col-3" type="submit" name="find_button_pressed" value=" Search! " />
+    </div>
   </form>
 
   <dtml-let local_users=getLocalUsers>
@@ -441,83 +432,71 @@ function toggleSelect() {
 
   </dtml-let>
 
-  <p><br></p>
 
-<dtml-in expr="getLDAPSchema()">
-  <dtml-if name="sequence-start">
-    <form action="manage_addUser" method="post">
-    <table cellspacing="0" cellpadding="3" width="98%">
-      <tr class="list-header">
-        <td colspan="2" align="left" valign="top" class="form-label">
-          Add new user
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2" class="form-help">
-          The user record will be created on the branch you designated 
-          as the users search base on the configuration screen. 
-          The user attributes on this form depend on the list of 
-          attributes you specified under "LDAP user attributes" on the same 
-          configuration screen.<br /> 
-          <i>
-            To enter multiple values for attributes designated as multivalue in 
-            the LDAP Schema configuration separate the values with a 
-            semicolon (;).
-          </i>
-        </td>
-      </tr>
-  </dtml-if>
 
-  <tr>
-    <td align="left" valign="top" class="form-label">
-      &dtml-sequence-item; (&dtml-sequence-key;)
-    </td>
-    <td align="left" valign="top">
-      <input type="text" name="&dtml-sequence-key;" size="50">
-    </td>
-  </tr>
+    <form action="manage_addUser" method="post" class="card p-4 my-4 bg-light">
 
-  <dtml-if name="sequence-end">
-      <tr>
-        <td align="left" valign="top" class="form-label">
+      <p><i class="fas fa-plus"></i> <b>Add new user</b></p>
+      <p class="form-help">
+        The user record will be created on the branch you designated 
+        as the users search base on the configuration screen. 
+        The user attributes on this form depend on the list of 
+        attributes you specified under "LDAP user attributes" on the same 
+        configuration screen.
+        <i>
+          To enter multiple values for attributes designated as multivalue in 
+          the LDAP Schema configuration separate the values with a 
+          semicolon (;).
+        </i>
+      </p>
+
+      <dtml-in expr="getLDAPSchema()">
+        <div class="form-group row">
+          <label for="&dtml-sequence-key;" class="form-label col-sm-4 col-md-3">
+            &dtml-sequence-item; (&dtml-sequence-key;)
+          </label>
+          <div class="col-sm-8 col-md-9">
+            <input id="&dtml-sequence-key;" class="form-control" type="text" name="&dtml-sequence-key;" />
+          </div>
+        </div>
+      </dtml-in>
+
+      <div class="form-group row">
+        <label for="user_pw" class="form-label col-sm-4 col-md-3">
           Password
-        </td>
-        <td align="left" valign="top">
-          <input type="password" name="user_pw" size="50">
-        </td>
-      </tr>
-      
-      <tr>
-        <td align="left" valign="top" class="form-label">
+        </label>
+        <div class="col-sm-8 col-md-9">
+          <input id="user_pw" class="form-control" type="password" name="user_pw" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="confirm_pw" class="form-label col-sm-4 col-md-3">
           Confirm Password
-        </td>
-        <td align="left" valign="top">
-          <input type="password" name="confirm_pw" size="50">
-        </td>
-      </tr>
-      
-      <tr>
-        <td align="left" valign="top" class="form-label">
+        </label>
+        <div class="col-sm-8 col-md-9">
+          <input id="confirm_pw" class="form-control" type="password" name="confirm_pw" />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="user_roles" class="form-label col-sm-4 col-md-3">
           Roles
-        </td>
-        <td align="left" valign="top">
-          <dtml-in expr="getGroups()"><div class="form-text">
-            <input type="checkbox" name="user_roles:list" 
-                value="&dtml-sequence-item;" />
-              &dtml-sequence-key;</div>
+        </label>
+        <div id="user_roles" class="col-sm-8 col-md-9">
+          <dtml-in expr="getGroups()">
+            <input type="checkbox" name="user_roles:list" value="&dtml-sequence-item;" />&nbsp;&dtml-sequence-key;<br />
           </dtml-in>
-        </td>
-      </tr>
-    </table>
+        </div>
+      </div>
 
     <div class="zmi-controls">
       <input class="btn btn-primary" type="submit" value=" Add User " />
     </div>
 
     </form>
-  </dtml-if>
-</dtml-in>
 
 </dtml-if>
+
+</main>
 
 <dtml-var manage_page_footer>
