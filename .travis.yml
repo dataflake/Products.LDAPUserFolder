@@ -3,11 +3,9 @@ language: python
 matrix:
     include:
         - python: "3.6"
-          env: TOXENV=lint-py36
+          env: TOXENV=lint
         - python: "2.7"
           env: TOXENV=py27
-        - python: "2.7"
-          env: TOXENV=py27-zserver
         - python: "3.5"
           env: TOXENV=py35
         - python: "3.6"
@@ -15,11 +13,8 @@ matrix:
         - python: "3.7"
           env: TOXENV=py37
           dist: xenial
-        - python: "3.8-dev"
+        - python: "3.8"
           env: TOXENV=py38
-          dist: xenial
-    allow_failures:
-        - env: TOXENV=py27-zserver
 
 install:
     - travis_retry pip install -U pip setuptools
