@@ -34,6 +34,7 @@ class TestAuthentication(LDAPTest):
         self.assertIsNotNone(user_ob)
 
         # Login with empty password
+        import pdb; pdb.set_trace()
         user_ob = acl.authenticate(user.get(acl.getProperty('_login_attr')),
                                    '', {})
         self.assertIsNone(user_ob)

@@ -17,12 +17,10 @@ import logging
 import os
 import random
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
 from hashlib import sha1
 
 from dataflake.cache.simple import SimpleCache
+from six.moves.urllib.parse import unquote
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
@@ -753,7 +751,7 @@ class LDAPUserFolder(BasicUserFolder):
     @security.protected(manage_users)
     def getUserDetails(self, encoded_dn, format=None, attrs=()):
         """ Return all attributes for a given DN """
-        dn = to_utf8(urllib.parse.unquote(encoded_dn))
+        dn = to_utf8(unquote(encoded_dn))
 
         if not attrs:
             attrs = list(self.getSchemaConfig().keys())
@@ -785,7 +783,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getGroupDetails(self, encoded_cn):
         """ Return all group details """
         result = ()
-        cn = urllib.parse.unquote(encoded_cn)
+        cn = unquote(encoded_cn)
 
         if not self._local_groups:
             fltr = self._delegate.filter_format('(cn=%s)', (cn,))

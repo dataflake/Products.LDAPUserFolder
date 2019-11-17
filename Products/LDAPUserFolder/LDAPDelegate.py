@@ -18,6 +18,7 @@ import random
 
 import ldap
 import ldap.filter
+import six
 from ldap.dn import escape_dn_chars
 from ldapurl import LDAPUrl
 from ldapurl import isLDAPUrl
