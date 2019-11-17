@@ -17,7 +17,9 @@ import logging
 import os
 import random
 import time
-import urllib
+import urllib.error
+import urllib.parse
+import urllib.request
 from hashlib import sha1
 
 from dataflake.cache.simple import SimpleCache
@@ -751,7 +753,7 @@ class LDAPUserFolder(BasicUserFolder):
     @security.protected(manage_users)
     def getUserDetails(self, encoded_dn, format=None, attrs=()):
         """ Return all attributes for a given DN """
-        dn = to_utf8(urllib.unquote(encoded_dn))
+        dn = to_utf8(urllib.parse.unquote(encoded_dn))
 
         if not attrs:
             attrs = list(self.getSchemaConfig().keys())
@@ -783,7 +785,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getGroupDetails(self, encoded_cn):
         """ Return all group details """
         result = ()
-        cn = urllib.unquote(encoded_cn)
+        cn = urllib.parse.unquote(encoded_cn)
 
         if not self._local_groups:
             fltr = self._delegate.filter_format('(cn=%s)', (cn,))

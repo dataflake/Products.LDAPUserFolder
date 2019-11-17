@@ -18,9 +18,9 @@ import unittest
 from App.Common import package_home
 from DateTime.DateTime import DateTime
 
+from ..LDAPUser import LDAPUser
 from .config import defaults
 from .config import user
-from ..LDAPUser import LDAPUser
 
 
 ug = user.get
