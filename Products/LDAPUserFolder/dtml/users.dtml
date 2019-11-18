@@ -22,7 +22,7 @@ function toggleSelect() {
       document.objectItems.elements[i].checked = false ;
       isSelected = false;
       document.objectItems.selectButton.value = "Select All";
-      return isSelected;       
+      return isSelected;
   }
 }
 
@@ -43,307 +43,83 @@ function toggleSelect() {
            mapping sort="sn">
     <dtml-if name="sequence-start">
       <dtml-if expr="_['sequence-length'] > 15">
-        <table border="0" cellpadding="2" cellspacing="0" width="98%">
-          <tr class="section-bar">
-            <td class="form-label">
-              Search Again
-            </td>
-          </tr>
-        </table>
-        <form action="<dtml-var name="URL1">/manage_userrecords" method="post" >
-        <table cellpadding="2" cellspacing="0">
-          <tr>
-            <td>
-              <select name="search_param">
-                <dtml-in expr="getLDAPSchema()">
-                  <dtml-let sk="_['sequence-key']"
-                            si="_['sequence-item']">
-                    <option value="&dtml-sk;">
-                      &dtml-si; (&dtml-sk;)
-                    </option>
-                  </dtml-let>
-                </dtml-in>
-              </select>
-            </td>
-            <td>
-              <input type="text" name="search_term" size="30">
-            </td>
-            <td>
-              <select name="exact_match">
-                <option value=""> Wildcard match </option>
-                <option value="1"> Exact match </option>
-              </select>
-            </td>
-            <td>
-              <input type="submit" name="find_button_pressed" 
-                     value=" Search! ">
-            </td>
-          </tr>
-        </table>
+
+        <p><i class="fas fa-search"></i> <b>Search Again</b></p>
+        <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+          <div class="form-group form-inline mb-5">
+            <select class="form-control col-3" name="search_param">
+              <dtml-in expr="getLDAPSchema()">
+                <dtml-let sk="_['sequence-key']"
+                          si="_['sequence-item']">
+                  <option value="&dtml-sk;">
+                    &dtml-si; (&dtml-sk;)
+                  </option>
+                </dtml-let>
+              </dtml-in>
+            </select>
+            <input class="text-monospace text-primary form-control col-3" 
+              type="text" name="search_term" placeholder="Search Term" 
+              value="<dtml-var "REQUEST.get('search_term','')">" />
+            <select class="form-control col-3" name="exact_match">
+              <option value=""> Wildcard match </option>
+              <option value="1"> Exact match </option>
+            </select>
+            <input class="form-control col-3" type="submit" name="find_button_pressed" value=" Search! " />
+          </div>
         </form>
+
       </dtml-if>
 
       <form action="&dtml-URL1;" method="post" name="objectItems">
-      <table cellpadding="2" cellspacing="0" border="0" width="98%">
-        <tr class="list-header">
-          <td align="left" valign="top" width="16">&nbsp;</td>
-          <td class="form-label"> SN </td>
-          <td class="form-label"> CN </td>
-          <td class="form-label"> Distinguished Name </td>
-        </tr>
+        <table class="table table-striped table-hover" style="border-bottom: 1px solid #dee2e6;">
+          <thead>
+            <tr>
+              <th class="zmi-object-check text-right">&nbsp;</td>
+              <th class="zmi-luf-sn"> SN </td>
+              <th class="zmi-luf-cn"> CN </td>
+              <th class="zmi-luf-dn"> Distinguished Name </td>
+            </tr>
+          </thead>
     </dtml-if>
 
-    <dtml-if sequence-odd>
-      <tr class="row-normal">
-    <dtml-else>
-      <tr class="row-hilite">
-    </dtml-if>
-      <td align="left" valign="top" width="16">
-        <input type="checkbox" name="dns:list" value="&dtml-dn;" />
-      </td>
-      <td class="list-item"> &dtml-sn; </td>
-      <td class="list-item"> &dtml-cn; </td>
-      <td class="list-item">
-        <a href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-dn;">
+    <tr>
+      <td class="zmi-object-check text-right"><input type="checkbox" name="dns:list" value="&dtml-dn;" /></td>
+      <td class="zmi-luf-sn"> &dtml-sn; </td>
+      <td class="zmi-luf-cn"> &dtml-cn; </td>
+      <td class="zmi-luf-dn">
+        <a class="code" href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-dn;">
           &dtml-dn;
         </a>
       </td>
     </tr>
 
     <dtml-if name="sequence-end">
-        <tr>
-          <td align="left" valign="top" width="16">&nbsp;</td>
-          <td align="left" valign="top" colspan="3" class="form-element">
-            <input class="form-element" type="submit" 
-                   name="manage_deleteUsers:method"
-                   value="Delete" />
-            <script type="text/javascript">
-            <!-- 
-              if (document.forms[0]) {
-              document.write('<input class="form-element" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
-              }
-            //-->
-            </script>
-          </td>
-        </tr>
       </table>
+      <div class="zmi-controls">
+        <input class="btn btn-primary" type="submit"name="manage_deleteUsers:method" value="Delete" />
+        <script type="text/javascript">
+        <!-- 
+          if (document.forms[0]) {
+          document.write('<input class="btn btn-primary" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
+          }
+        //-->
+        </script>
+      </div>
       </form>
+
     </dtml-if>
 
   <dtml-else>
-    <p><b>No record match!</b></p>
 
-    <p class="form-help">
-      Have you set the user object classes correctly on the Configure tab?
-    </p>
-  </dtml-in>
-
-  <p><br></p>
-
-  <table border="0" cellpadding="2" cellspacing="0" width="98%">
-    <tr class="section-bar">
-      <td class="form-label">
-        Search Again
-      </td>
-    </tr>
-  </table>
-  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
-  <table cellpadding="2" cellspacing="0">
-    <tr>
-      <td>
-        <select name="search_param">
-          <dtml-in expr="getLDAPSchema()">
-            <dtml-let sk="_['sequence-key']"
-                      si="_['sequence-item']">
-              <option value="&dtml-sk;">
-                &dtml-si; (&dtml-sk;)
-              </option>
-            </dtml-let>
-          </dtml-in>
-        </select>
-      </td>
-      <td>
-        <input type="text" name="search_term" size="30">
-      </td>
-      <td>
-        <select name="exact_match">
-          <option value=""> Wildcard match </option>
-          <option value="1"> Exact match </option>
-        </select>
-      </td>
-      <td>
-        <input type="submit" name="find_button_pressed" 
-               value=" Search! ">
-      </td>
-    </tr>
-  </table>
-  </form>
-
-<dtml-elif name="user_dn">
-
-  <p class="form-help">
-    Edit the details for user &dtml-user_dn;:<br />
-    <i>
-      To enter multiple values for attributes designated as multivalue in the 
-      LDAP Schema configuration separate the values with a semicolon (;).
-    </i>
-  </p>
-
-  <dtml-let cur_vals="getUserDetails(encoded_dn=user_dn, format='dictionary')">
-  <dtml-in expr="getLDAPSchema()">
-    <dtml-if name="sequence-start">
-      <form action="manage_editUser" method="post">
-      <input type="hidden" name="user_dn" value="&dtml-user_dn;">
-      <table border="0" cellpadding="3" width="98%">
-        <tr class="list-header">
-          <td class="form-label"> Attribute </td>
-          <td class="form-label"> Value </td>
-        </tr>
-        <tr>
-          <td class="form-text"> Distinguished Name (DN) </td>
-          <td class="form-text"> 
-            <dtml-var "cur_vals.get('dn', '(n/a)')"> 
-          </td>
-        </tr>
-        <tr>
-          <td class="form-text"> Object Class (objectClass) </td>
-          <td class="form-text">
-            <dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))">
-          </td>
-        </tr>
-    </dtml-if>
-
-    <dtml-let sk="_['sequence-key']"
-              si="_['sequence-item']"
-              cur_val="cur_vals.get( sk, '' )"
-              binaries="getBinaryUserAttrs()">
-      <dtml-if expr="sk not in ('userPassword', 'dn')">
-        <tr>
-          <td class="form-text"> &dtml-si; (&dtml-sk;) </td>
-          <td>
-            <dtml-if expr="sk in binaries">
-              <span class="form-text"> n/a (binary value) </span>
-            <dtml-else>
-              <input type="text" size="50" name="&dtml-sk;" 
-                 value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
-            </dtml-if>
-          </td>
-        </tr>
-      </dtml-if>
-      <dtml-if expr="sk == 'dn'">
-        <tr>
-          <td class="form-text"> &dtml-si; (&dtml-sk;) </td>
-          <td class="form-text"> &dtml-cur_val; </td>
-        </tr>
-      </dtml-if>
-    </dtml-let>
-
-    <dtml-if name="sequence-end">
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr>
-          <td colspan="2" class="form-element">
-            <input type="submit" value=" Apply Changes ">
-          </td>
-        </tr>
-      </table>
-      </form>
-    </dtml-if>
-  </dtml-in>
-  </dtml-let>
-
-  <p>&nbsp;</p>
-
-  <table cellpadding"3" cellspacing="0" width="98%">
-    <tr class="section-bar">
-      <td align="left" valign="top" class="form-label">
-        LDAP Groups for &dtml-user_dn;
-      </td>
-    </tr>
-  </table>
-
-  <form action="manage_editUserRoles" method="post">
-  <input type="hidden" name="user_dn" value="&dtml-user_dn;">
-  <dtml-let cur_roles="getGroups(dn=user_dn, attr='dn')">
-  <dtml-in expr="getGroups()"><div class="form-text">
-    <input type="checkbox" name="role_dns:list" value="&dtml-sequence-item;" 
-      <dtml-if expr="_['sequence-item'] in cur_roles">checked</dtml-if>>
-    &dtml-sequence-key; (&dtml-sequence-item;)</div>
-  </dtml-in>
-  </dtml-let>
-  <br />
-  &nbsp;<input type="submit" value=" Change Groups ">
-  </form>
-
-  <p><br></p>
-
-  <table cellpadding"3" cellspacing="0" width="98%">
-    <tr class="section-bar">
-      <td align="left" valign="top" class="form-label">
-        Change Password
-      </td>
-    </tr>
-  </table>
-
-  <form action="manage_editUserPassword" method="post">
-
-    <input type="hidden" name="dn" value="&dtml-user_dn;">
-    <div class="form-text">
-      New password
-      <input type="password" name="new_pw" />
+    <div class="alert alert-info mb-0">
+      No record match! 
+      Hint: Have you set the user object classes correctly on the Configure tab?
     </div>
 
-  <br />
-  &nbsp;<input type="submit" value=" Change Password ">
-  </form>
+  </dtml-in>
 
-  <p><br></p>
 
-  <table border="0" cellpadding="2" cellspacing="0" width="98%">
-    <tr class="section-bar">
-      <td class="form-label"> 
-        Search Again 
-      </td>
-    </tr>
-  </table>
-  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
-  <table cellpadding="2" cellspacing="0">
-    <tr>
-      <td>
-        <select name="search_param">
-          <dtml-in expr="getLDAPSchema()">
-            <dtml-let sk="_['sequence-key']"
-                      si="_['sequence-item']">
-              <option value="&dtml-sk;">
-                &dtml-si; (&dtml-sk;)
-              </option>
-            </dtml-let>
-          </dtml-in>
-        </select>
-      </td>
-      <td>
-        <input type="text" name="search_term" size="30">
-      </td>
-      <td>
-        <select name="exact_match">
-          <option value=""> Wildcard match </option>
-          <option value="1"> Exact match </option>
-        </select>
-      </td>
-      <td>
-        <input type="submit" name="find_button_pressed" value=" Search! ">
-      </td>
-    </tr>
-  </table>
-  </form>
-
-<dtml-else>
-
-  <p><i class="fas fa-search"></i> <b>Find existing user</b></p>
-  <p class="form-help mb-3">
-    Use this form to find user records on the LDAP server and
-    view or edit their details.
-  </p>
-
+  <p class="mt-5"><i class="fas fa-search"></i> <b>Search Again</b></p>
   <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
     <div class="form-group form-inline">
       <select class="form-control col-3" name="search_param">
@@ -356,7 +132,9 @@ function toggleSelect() {
           </dtml-let>
         </dtml-in>
       </select>
-      <input class="form-control col-3" type="text" name="search_term" placeholder="Search Term"/>
+      <input class="text-monospace text-primary form-control col-3" 
+        type="text" name="search_term" placeholder="Search Term" 
+        value="&dtml-search_term;"/>
       <select class="form-control col-3" name="exact_match">
         <option value=""> Wildcard match </option>
         <option value="1"> Exact match </option>
@@ -365,72 +143,201 @@ function toggleSelect() {
     </div>
   </form>
 
-  <dtml-let local_users=getLocalUsers>
+<dtml-elif name="user_dn">
 
-    <dtml-if "local_users and getProperty('_local_groups')">
+  <p class="form-help">
+    Edit the details for user 
+    <code class="text-dark font-weight-bold">&dtml-user_dn;</code>:
+    To enter multiple values for attributes designated as multivalue in the 
+    LDAP Schema configuration separate the values with a semicolon (;).
+  </p>
 
-      <p>&nbsp;</p>
-  
-      <form action="&dtml-URL1;" method="post" name="objectItems">
-
-        <table cellspacing="0" cellpadding="3" width="98%">
-
-          <tr class="list-header">
-            <td colspan="3" align="left" valign="top" class="form-label">
-              Users with locally stored roles
-            </td>
-          </tr>
-
-          <dtml-in local_users>
-
-            <dtml-let sk=sequence-key
-                      si=sequence-item>
-
-              <dtml-if sequence-odd>
-                <tr class="row-normal">
-              <dtml-else>
-                <tr class="row-hilite">
-              </dtml-if>
-                <td align="left" valign="top" width="16">
-                  <input type="checkbox" name="dns:list" value="&dtml-sk;" />
-                </td>
-                <td class="list-item">
-                  <a href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-sk;">
-                    &dtml-sk;
-                  </a>
-                </td>
-                <td class="list-item">
-                  <dtml-var expr="_.string.join(si, ', ')">
-                </td>
-              </tr>
-
-            </dtml-let>
-
-          </dtml-in>
-
-          <tr>
-            <td align="left" valign="top" width="16">&nbsp;</td>
-            <td align="left" valign="top" colspan="2" class="form-element">
-              <input class="form-element" type="submit"
-                     name="manage_deleteUsers:method"
-                     value="Delete User" />
-              <script type="text/javascript">
-              <!--
-                if (document.forms[0]) {
-                document.write('<input class="form-element" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
-                }
-              //-->
-              </script>
-            </td>
-          </tr>
-
-        </table>
-  
-      </form>
-  
+  <dtml-let cur_vals="getUserDetails(encoded_dn=user_dn, format='dictionary')">
+  <dtml-in expr="getLDAPSchema()">
+    <dtml-if name="sequence-start">
+      <form action="manage_editUser" method="post">
+        <input type="hidden" name="user_dn" value="&dtml-user_dn;">
+        <div class="form-group row">
+          <div class="col-sm-4 col-md-3"><b>Attribute</b></div>
+          <div class="col-sm-8 col-md-9"><b>Value</b></div>
+        </div>
+        <div class="form-group row">
+          <label for="dn" class="form-label col-sm-4 col-md-3">Distinguished Name (DN)</label>
+          <div class="col-sm-8 col-md-9">
+            <code id="dn"><dtml-var "cur_vals.get('dn', '(n/a)')"></code>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="objectClass" class="form-label col-sm-4 col-md-3">Object Class (objectClass)</label>
+          <div class="col-sm-8 col-md-9">
+            <code id="objectClass"><dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))"></code>
+          </div>
+        </div>
     </dtml-if>
 
+    <dtml-let sk="_['sequence-key']"
+              si="_['sequence-item']"
+              cur_val="cur_vals.get( sk, '' )"
+              binaries="getBinaryUserAttrs()">
+      <dtml-if expr="sk not in ('userPassword', 'dn')">
+        <div class="form-group row">
+          <label for="&dtml-sk;" class="form-label col-sm-4 col-md-3">&dtml-si; (&dtml-sk;)</label>
+          <div class="col-sm-8 col-md-9">
+            <dtml-if expr="sk in binaries">
+              <code id="&dtml-sk;"><dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))"></code>
+            <dtml-else>
+              <input id="&dtml-sk;" class="form-control" type="text" name="&dtml-sk;" 
+                 value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
+            </dtml-if>
+          </div>
+        </div>
+      </dtml-if>
+      <dtml-if expr="sk == 'dn'">
+        <div class="form-group row">
+          <label for="&dtml-sk;" class="form-label col-sm-4 col-md-3">&dtml-si; (&dtml-sk;)</label>
+          <div class="col-sm-8 col-md-9">
+            <code id="&dtml-sk;">&dtml-cur_val;</code>
+          </div>
+        </div>
+      </dtml-if>
+
+    </dtml-let>
+
+    <dtml-if name="sequence-end">
+      <div class="zmi-controls">
+        <input class="btn btn-primary" type="submit" value=" Apply Changes " />
+      </div>
+      </form>
+    </dtml-if>
+
+  </dtml-in>
   </dtml-let>
+
+  <dtml-if expr="getGroups()">
+    <p><i class="fa fa-user-friends"></i> <b>LDAP Groups for</b> <code>&dtml-user_dn;</code></p>
+    <form action="manage_editUserRoles" method="post">
+      <input type="hidden" name="user_dn" value="&dtml-user_dn;" />
+      <dtml-let cur_roles="getGroups(dn=user_dn, attr='dn')">
+        <dtml-in expr="getGroups()">
+          <div class="form-group">
+            <input type="checkbox" name="role_dns:list" value="&dtml-sequence-item;" 
+              <dtml-if expr="_['sequence-item'] in cur_roles">checked</dtml-if> />
+            &dtml-sequence-key; (&dtml-sequence-item;)
+          </div>
+        </dtml-in>
+      </dtml-let>
+      <div class="zmi-controls">
+        <input class="btn btn-primary" type="submit" value=" Change Groups " />
+      </div>
+    </form>
+  </dtml-if>
+
+  <hr class="my-4" />
+
+  <form action="manage_editUserPassword" method="post">
+    <input type="hidden" name="dn" value="&dtml-user_dn;" />
+    <div class="form-group row">
+      <div class="form-label col-sm-4 col-md-3">
+        <input class="btn btn-primary" type="submit" value=" Change Password " />
+      </div>
+      <div class="col-sm-8 col-md-9">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text"><i class="fas fa-key"></i></div>
+          </div>
+          <input id="password" type="password" class="form-control" placeholder="Enter new password" name="new_pw">
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <hr class="my-4" />
+
+  <p class="mt-4"><i class="fas fa-search"></i> <b>Search Again</b></p>
+  <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+    <div class="form-group form-inline">
+      <select class="form-control col-3" name="search_param">
+        <dtml-in expr="getLDAPSchema()">
+          <dtml-let sk="_['sequence-key']"
+                    si="_['sequence-item']">
+            <option value="&dtml-sk;">
+              &dtml-si; (&dtml-sk;)
+            </option>
+          </dtml-let>
+        </dtml-in>
+      </select>
+      <input class="text-monospace text-primary form-control col-3" 
+        type="text" name="search_term" placeholder="Search Term" />
+      <select class="form-control col-3" name="exact_match">
+        <option value=""> Wildcard match </option>
+        <option value="1"> Exact match </option>
+      </select>
+      <input class="form-control col-3" type="submit" name="find_button_pressed" value=" Search! " />
+    </div>
+  </form>
+
+
+  <dtml-else>
+
+    <p><i class="fas fa-search"></i> <b>Find existing user</b></p>
+    <p class="form-help mb-3">
+      Use this form to find user records on the LDAP server and
+      view or edit their details.
+    </p>
+
+    <form action="<dtml-var name="URL1">/manage_userrecords" method="post">
+      <div class="form-group form-inline">
+        <select class="form-control col-3" name="search_param">
+          <dtml-in expr="getLDAPSchema()">
+            <dtml-let sk="_['sequence-key']"
+                      si="_['sequence-item']">
+              <option value="&dtml-sk;">
+                &dtml-si; (&dtml-sk;)
+              </option>
+            </dtml-let>
+          </dtml-in>
+        </select>
+        <input class="text-monospace text-primary form-control col-3" 
+          type="text" name="search_term" placeholder="Search Term" />
+        <select class="form-control col-3" name="exact_match">
+          <option value=""> Wildcard match </option>
+          <option value="1"> Exact match </option>
+        </select>
+        <input class="form-control col-3" type="submit" name="find_button_pressed" value=" Search! " />
+      </div>
+    </form>
+
+    <dtml-let local_users=getLocalUsers>
+      <dtml-if "local_users and getProperty('_local_groups')">
+      <p class="mt-4"><i class="fas fa-user-tag"></i> <b> Users with locally stored roles</b></p>
+        <form action="&dtml-URL1;" method="post" name="objectItems">
+          <table class="table table-striped table-hover" style="border-bottom: 1px solid #dee2e6;">
+            <tbody>
+              <dtml-in local_users>
+                <dtml-let sk=sequence-key
+                          si=sequence-item>
+                  <tr>
+                    <td class="zmi-object-check text-right"><input type="checkbox" name="dns:list" value="&dtml-sk;" /></td>
+                    <td class="zmi-user-dn"><a href="<dtml-var expr="'%s?user_dn=' % URL0">&dtml.url_quote-sk;">&dtml-sk;</a></td>
+                    <td class="zmi-user-si"><dtml-var expr="_.string.join(si, ', ')"></td>
+                  </tr>
+                </dtml-let>
+              </dtml-in>
+            </tbody>
+          </table>
+          <div class="zmi-controls">
+            <input class="btn btn-primary" type="submit" name="manage_deleteUsers:method" value=" Delete User " />
+            <script type="text/javascript">
+            <!--
+              if (document.forms[0]) {
+              document.write('<input class="btn btn-primary" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
+              }
+            //-->
+            </script>
+          </div>
+        </form>  
+      </dtml-if>
+    </dtml-let>
 
 
 
