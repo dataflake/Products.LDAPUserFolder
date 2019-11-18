@@ -557,17 +557,15 @@ class LDAPDelegate(Persistent):
 
     def _clean_rdn(self, rdn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        if isinstance(rdn, str):
-            rdn = rdn.encode('UTF-8')
 
-        if rdn.find(b'\\') != -1:
+        if rdn.find('\\') != -1:
             # already escaped, disregard
             return rdn
 
         try:
-            key, val = rdn.split(b'=')
+            key, val = rdn.split('=')
             val = val.lstrip()
-            return '%s=%s' % (key, escape_dn_chars(str(val)))
+            return '%s=%s' % (key, val)
         except ValueError:
             return rdn
 
@@ -581,10 +579,7 @@ class LDAPDelegate(Persistent):
         """ Indirection to avoid need for importing ldap elsewhere """
         exploded = []
         for dn_part in ldap.explode_dn(dn, notypes):
-            if isinstance(dn_part, str):
-                exploded.append(dn_part.encode('utf-8'))
-            else:
-                exploded.append(dn_part)
+            exploded.append(dn_part)
         return exploded
 
     def filter_format(self, filter_template, assertion_values):

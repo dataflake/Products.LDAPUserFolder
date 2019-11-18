@@ -83,9 +83,6 @@ class LDAPUser(BasicUser):
 
     @security.public
     def getId(self):
-        if isinstance(self.id, unicode):
-            return self.id.encode(encoding)
-
         return self.id
 
     ######################################################
@@ -100,9 +97,6 @@ class LDAPUser(BasicUser):
     @security.public
     def getUserName(self):
         """ Get the name associated with this user """
-        if isinstance(self.name, unicode):
-            return self.name.encode(encoding)
-
         return self.name
 
     @security.public
@@ -129,10 +123,6 @@ class LDAPUser(BasicUser):
 
         if name in my_props:
             prop = my_props.get(name)
-
-            if isinstance(prop, unicode):
-                prop = prop.encode(encoding)
-
             return prop
 
         else:
@@ -143,18 +133,11 @@ class LDAPUser(BasicUser):
         """ Return the user property referred to by prop_name,
             if the attribute is indeed public.
         """
-        prop = self._properties.get(prop_name, default)
-        if isinstance(prop, unicode):
-            prop = prop.encode(encoding)
-
-        return prop
+        return self._properties.get(prop_name, default)
 
     @security.protected(access_contents_information)
     def getUserDN(self):
         """ Return the user's full Distinguished Name """
-        if isinstance(self._dn, unicode):
-            return self._dn.encode(encoding)
-
         return self._dn
 
     @security.protected(access_contents_information)
