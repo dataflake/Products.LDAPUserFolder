@@ -1237,8 +1237,8 @@ class LDAPUserFolder(BasicUserFolder):
     @security.protected(manage_users)
     def getSchemaDict(self):
         """ Retrieve schema as list of dictionaries """
-        all_items = self.getSchemaConfig().values()
-
+        # ldap_names = [schema_item['ldap_name'] for schema_item in self.getSchemaConfig().values()]
+        all_items = sorted(self.getSchemaConfig().values(), key=lambda schema_item: schema_item['ldap_name'])
         return tuple(all_items)
 
     @security.protected(EDIT_PERMISSION)
