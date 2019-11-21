@@ -565,7 +565,7 @@ class LDAPDelegate(Persistent):
         try:
             key, val = rdn.split('=')
             val = val.lstrip()
-            return '%s=%s' % (key, val)
+            return '%s=%s' % (key, escape_dn_chars(val))
         except ValueError:
             return rdn
 
