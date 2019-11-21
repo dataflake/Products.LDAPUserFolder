@@ -14,7 +14,6 @@
 """
 
 import base64
-import codecs
 from hashlib import md5
 
 from AccessControl import AuthEncoding
@@ -55,13 +54,13 @@ encoding = 'latin1'
 
 def _verifyUnicode(st):
     """ Verify that the string is unicode """
-    if isinstance(st, unicode):
+    if isinstance(st, str):
         return st
     else:
         try:
-            return unicode(st)
+            return st.decode()
         except UnicodeError:
-            return unicode(st, encoding)
+            return st.decode(encoding)
 
 
 def _createLDAPPassword(password, encoding='SHA'):
@@ -82,26 +81,13 @@ def _createLDAPPassword(password, encoding='SHA'):
     return pwd_str.strip()
 
 
-try:
-    encodeLocal, decodeLocal, reader = codecs.lookup(encoding)[:3]
-    encodeUTF8, decodeUTF8 = codecs.lookup('UTF-8')[:2]
+def from_utf8(s):
+    if type(s) is not str:
+        s = s.decode()
+    return s
 
-    if getattr(reader, '__module__', '') == 'encodings.utf_8':
-        # Everything stays UTF-8, so we can make this cheaper
-        to_utf8 = from_utf8 = str
-
-    else:
-
-        def from_utf8(s):
-            return encodeLocal(decodeUTF8(s)[0])[0]
-
-        def to_utf8(s):
-            if isinstance(s, str):
-                s = decodeLocal(s)[0]
-            return encodeUTF8(s)[0]
-
-except LookupError:
-    raise LookupError('Unknown encoding "%s"' % encoding)
+def to_utf8(s):
+    return s
 
 
 def guid2string(val):
