@@ -21,9 +21,8 @@ import transaction
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
 
-from Products.LDAPUserFolder import LDAPDelegate
-from Products.LDAPUserFolder import manage_addLDAPUserFolder
-
+from ... import LDAPDelegate
+from ...LDAPUserFolder import manage_addLDAPUserFolder
 from ..config import alternates
 from ..config import defaults
 from ..config import user

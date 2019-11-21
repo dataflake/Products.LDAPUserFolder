@@ -211,7 +211,7 @@ class LDAPDelegate(Persistent):
                                         op_timeout=server['op_timeout'])
                 return newconn
             except (ldap.SERVER_DOWN, ldap.TIMEOUT,
-                    ldap.INVALID_CREDENTIALS) as e:
+                    ldap.INVALID_CREDENTIALS):
                 continue
 
         # If we get here it means either there are no servers defined or we
@@ -347,7 +347,7 @@ class LDAPDelegate(Persistent):
                         try:
                             for i in range(len(value)):
                                 value[i] = from_utf8(value[i])
-                        except Exception as e:
+                        except Exception:
                             pass
 
                 rec_dict['dn'] = from_utf8(rec_dn)

@@ -21,6 +21,7 @@ import urllib.parse
 from hashlib import sha1
 
 from dataflake.cache.simple import SimpleCache
+from six.moves.urllib.parse import unquote
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
