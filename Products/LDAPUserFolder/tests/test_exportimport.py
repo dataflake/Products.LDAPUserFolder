@@ -18,7 +18,7 @@ import unittest
 from OFS.Folder import Folder
 from Zope2.App import zcml
 
-from ..LDAPUserFolder import LDAPUserFolder
+from Products.LDAPUserFolder import LDAPUserFolder
 
 
 try:

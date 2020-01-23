@@ -18,9 +18,9 @@ import unittest
 from App.Common import package_home
 from DateTime.DateTime import DateTime
 
-from ..LDAPUser import LDAPUser
-from .config import defaults
-from .config import user
+from Products.LDAPUserFolder.LDAPUser import LDAPUser
+from Products.LDAPUserFolder.tests.config import defaults
+from Products.LDAPUserFolder.tests.config import user
 
 
 ug = user.get
@@ -30,7 +30,7 @@ dg = defaults.get
 class TestLDAPUser(unittest.TestCase):
 
     def setUp(self):
-        test_home = package_home(globals())
+        test_home = os.path.dirname(__package__)
         image_path = os.path.join(test_home, 'test.jpg')
         image_file = open(image_path, 'rb')
         self.image_contents = image_file.read()
@@ -70,10 +70,10 @@ class TestLDAPUser(unittest.TestCase):
     def testUnicodeAttributes(self):
         # Internally, most attributes are stored as unicode.
         # Test some to make sure.
-        self.assertTrue(isinstance(self.u_ob.id, unicode))
-        self.assertTrue(isinstance(self.u_ob.name, unicode))
+        self.assertTrue(isinstance(self.u_ob.id, str))
+        self.assertTrue(isinstance(self.u_ob.name, str))
         self.assertTrue(isinstance(self.u_ob._properties['givenName'],
-                                   unicode))
+                                   str))
 
     def testBinaryAttributes(self):
         # Some attributes are marked binary
@@ -99,5 +99,5 @@ class TestLDAPUser(unittest.TestCase):
     def testNameIdNotUnicode(self):
         # Make sure name and ID are never unicode
         u = self.u_ob
-        self.assertFalse(isinstance(u.getUserName(), unicode))
-        self.assertFalse(isinstance(u.getId(), unicode))
+        self.assertFalse(isinstance(u.getUserName(), bytes))
+        self.assertFalse(isinstance(u.getId(), bytes))

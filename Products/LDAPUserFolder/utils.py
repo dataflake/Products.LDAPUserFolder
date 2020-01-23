@@ -71,14 +71,14 @@ def _createLDAPPassword(password, encoding='SHA'):
     if encoding in ('SSHA', 'SHA', 'CRYPT'):
         pwd_str = AuthEncoding.pw_encrypt(password, encoding)
     elif encoding == 'MD5':
-        m = md5(password)
-        pwd_str = '{MD5}' + base64.encodestring(m.digest())
+        m = md5(to_utf8(password))
+        pwd_str = b'{MD5}' + base64.encodestring(m.digest())
     elif encoding == 'CLEAR':
         pwd_str = password
     else:
         pwd_str = AuthEncoding.pw_encrypt(password, 'SSHA')
 
-    return pwd_str.strip()
+    return from_utf8(pwd_str.strip())
 
 
 def from_utf8(s):
@@ -87,6 +87,8 @@ def from_utf8(s):
     return s
 
 def to_utf8(s):
+    if type(s) is str:
+        s = s.encode()
     return s
 
 

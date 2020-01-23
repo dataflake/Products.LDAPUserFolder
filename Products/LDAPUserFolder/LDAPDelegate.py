@@ -193,8 +193,8 @@ class LDAPDelegate(Persistent):
 
         conn = getResource('%s-connection' % self._hash)
         try:
-            conn.simple_bind_s(user_dn, user_pwd)
-            conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
+            conn.simple_bind_s(to_utf8(user_dn), to_utf8(user_pwd))
+            conn.search_s(to_utf8(self.u_base), to_utf8(self.BASE), to_utf8('(objectClass=*)'))
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
                 ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
@@ -296,7 +296,7 @@ class LDAPDelegate(Persistent):
             connection.timeout = op_timeout
 
         # Now bind with the credentials given. Let exceptions propagate out.
-        connection.simple_bind_s(user_dn, user_pwd)
+        connection.simple_bind_s(to_utf8(user_dn), to_utf8(user_pwd))
 
         return connection
 
@@ -400,7 +400,7 @@ class LDAPDelegate(Persistent):
             else:
                 is_binary = False
 
-            if isinstance(attr_val, (str, unicode)) and not is_binary:
+            if xxxisinstance(attr_val, (str, bytes)) and not is_binary:
                 attr_val = [x.strip() for x in attr_val.split(';')]
 
             if attr_val != ['']:

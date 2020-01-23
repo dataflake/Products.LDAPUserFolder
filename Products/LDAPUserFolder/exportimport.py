@@ -92,16 +92,10 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
 
             if isinstance(prop_value, (list, tuple)):
                 for value in prop_value:
-                    if isinstance(value, str):
-                        value = value.decode(self._encoding)
                     child = self._doc.createElement('element')
                     child.setAttribute('value', value)
                     node.appendChild(child)
             else:
-                if isinstance(prop_value, str):
-                    prop_value = prop_value.decode(self._encoding)
-                elif not isinstance(prop_value, basestring):
-                    prop_value = unicode(prop_value)
                 child = self._doc.createTextNode(prop_value)
                 node.appendChild(child)
             fragment.appendChild(node)
