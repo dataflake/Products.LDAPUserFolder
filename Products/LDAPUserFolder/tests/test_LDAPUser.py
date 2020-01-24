@@ -30,7 +30,7 @@ dg = defaults.get
 class TestLDAPUser(unittest.TestCase):
 
     def setUp(self):
-        test_home = os.path.dirname(__package__)
+        test_home = package_home(globals())
         image_path = os.path.join(test_home, 'test.jpg')
         image_file = open(image_path, 'rb')
         self.image_contents = image_file.read()
