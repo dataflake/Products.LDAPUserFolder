@@ -49,6 +49,8 @@ class PasswordCreationTests(unittest.TestCase):
             encoded = utils._createLDAPPassword(self.pwd, 'crypt')
             self.assertTrue(encoded.startswith('{CRYPT}'))
             self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
+        except ImportError:
+            pass
         except ValueError:
             pass
 

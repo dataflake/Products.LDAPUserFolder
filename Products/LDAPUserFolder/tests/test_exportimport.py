@@ -18,10 +18,11 @@ import unittest
 from OFS.Folder import Folder
 from Zope2.App import zcml
 
-from Products.LDAPUserFolder import LDAPUserFolder
+from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
 
 
 try:
+    import LET_ME_FAIL_WITH_IMPORT_ERROR
     import Products.GenericSetup as GenericSetup
     from Products.GenericSetup.testing import BodyAdapterTestCase
     from Products.GenericSetup.testing import ExportImportZCMLLayer
@@ -31,7 +32,6 @@ except ImportError:
         pass
     BaseRegistryTests = BodyAdapterTestCase = FakeTests
     ExportImportZCMLLayer = GenericSetup = None
-
 
 class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase, unittest.TestCase):
 

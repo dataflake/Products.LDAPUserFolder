@@ -193,8 +193,8 @@ class LDAPDelegate(Persistent):
 
         conn = getResource('%s-connection' % self._hash)
         try:
-            conn.simple_bind_s(to_utf8(user_dn), to_utf8(user_pwd))
-            conn.search_s(to_utf8(self.u_base), to_utf8(self.BASE), to_utf8('(objectClass=*)'))
+            conn.simple_bind_s(user_dn, user_pwd)
+            conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
                 ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
@@ -296,7 +296,7 @@ class LDAPDelegate(Persistent):
             connection.timeout = op_timeout
 
         # Now bind with the credentials given. Let exceptions propagate out.
-        connection.simple_bind_s(to_utf8(user_dn), to_utf8(user_pwd))
+        connection.simple_bind_s(user_dn, user_pwd)
 
         return connection
 
@@ -304,8 +304,6 @@ class LDAPDelegate(Persistent):
                bind_dn='', bind_pwd='', convert_filter=True):
         """ The main search engine """
         result = {'exception': '', 'size': 0, 'results': []}
-        if convert_filter:
-            filter = to_utf8(filter)
         base = self._clean_dn(base)
 
         try:
@@ -389,7 +387,7 @@ class LDAPDelegate(Persistent):
 
         msg = ''
 
-        dn = self._clean_dn(to_utf8('%s,%s' % (rdn, base)))
+        dn = self._clean_dn('%s,%s' % (rdn, base))
         attribute_list = []
         attrs = attrs and attrs or {}
 
@@ -400,7 +398,7 @@ class LDAPDelegate(Persistent):
             else:
                 is_binary = False
 
-            if xxxisinstance(attr_val, (str, bytes)) and not is_binary:
+            if isinstance(attr_val, (str, bytes)) and not is_binary:
                 attr_val = [x.strip() for x in attr_val.split(';')]
 
             if attr_val != ['']:

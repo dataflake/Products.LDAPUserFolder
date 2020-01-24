@@ -19,6 +19,8 @@ from Products.GenericSetup.interfaces import ISetupEnviron
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
+from Products.LDAPUserFolder.utils import from_utf8
+from Products.LDAPUserFolder.utils import to_utf8
 from zope.component import adapts
 from ZPublisher.HTTPRequest import default_encoding
 
@@ -96,7 +98,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                     child.setAttribute('value', value)
                     node.appendChild(child)
             else:
-                child = self._doc.createTextNode(prop_value)
+                child = self._doc.createTextNode(from_utf8(prop_value))
                 node.appendChild(child)
             fragment.appendChild(node)
 
@@ -181,11 +183,11 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         node = self._doc.createElement('ldap-schema')
         schema_config = self.context.getSchemaConfig()
         for schema_info in sorted(schema_config.values(),
-                                  key=lambda x: x['ldap_name']):
+                                  key=lambda x: to_utf8(x['ldap_name'])):
             child = self._doc.createElement('schema-item')
             for key, value in schema_info.items():
-                if isinstance(value, (int, bool)):
-                    value = unicode(value)
+                if not isinstance(value, str):
+                    value = str(value)
                 child.setAttribute(key, value)
             node.appendChild(child)
         fragment.appendChild(node)
