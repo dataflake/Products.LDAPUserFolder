@@ -18,7 +18,6 @@ import unittest
 
 class TestSimple(unittest.TestCase):
 
-    """
     def _getTargetClass(self):
         from Products.LDAPUserFolder.LDAPDelegate import LDAPDelegate
 
@@ -41,7 +40,3 @@ class TestSimple(unittest.TestCase):
 
         self.assertEqual(delegate._clean_dn(''), '')
         self.assertEqual(delegate._clean_dn(None), '')
-    """
-
-    def testPass(self):
-      pass

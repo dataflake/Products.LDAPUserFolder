@@ -21,7 +21,6 @@ from Products.LDAPUserFolder.tests.config import user2
 
 class TestGroups(LDAPTest):
 
-    """
     def test_implicitRoleMapping(self):
         acl = self.folder.acl_users
         self.assertEqual(len(acl.getGroupMappings()), 0)
@@ -179,7 +178,3 @@ class TestGroups(LDAPTest):
         group_dn = 'cn=%s,%s' % (groupid, acl.groups_base)
         acl.manage_deleteGroups(dns=[group_dn])
         self.assertTrue(len(acl.getGroups()) == 0)
-    """
-
-    def testPass(self):
-      pass

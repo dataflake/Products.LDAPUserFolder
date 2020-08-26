@@ -40,7 +40,6 @@ u2g = user2.get
 
 class TestLDAPUserFolder(LDAPTest):
 
-    """
     def testLUFInstantiation(self):
         acl = self.folder.acl_users
         ae = self.assertEqual
@@ -839,7 +838,3 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertFalse(acl._cache('anonymous').get('user1'))
         self.assertFalse(acl._cache('negative').get('user1'))
         self.assertFalse(acl._hash == old_hash)
-    """
-
-    def testPass(self):
-      pass
