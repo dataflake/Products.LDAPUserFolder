@@ -13,6 +13,7 @@
 """ LDAPUserFolder group and role functionality tests
 """
 
+# REFACT consider switchig to relative imports
 from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
 from Products.LDAPUserFolder.tests.config import defaults
 from Products.LDAPUserFolder.tests.config import user2

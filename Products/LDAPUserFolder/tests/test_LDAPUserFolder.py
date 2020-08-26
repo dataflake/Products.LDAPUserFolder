@@ -24,13 +24,12 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from App.Common import package_home
 
-from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
-from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
-from Products.LDAPUserFolder.tests.config import alternates
-from Products.LDAPUserFolder.tests.config import defaults
-from Products.LDAPUserFolder.tests.config import manager_user
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import user2
+from .base.testcase import LDAPTest
+from .config import alternates
+from .config import defaults
+from .config import manager_user
+from .config import user
+from .config import user2
 
 
 dg = defaults.get

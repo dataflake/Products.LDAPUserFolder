@@ -18,8 +18,7 @@ import unittest
 from OFS.Folder import Folder
 from Zope2.App import zcml
 
-from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
-
+from ..LDAPUserFolder import LDAPUserFolder
 
 try:
     import LET_ME_FAIL_WITH_IMPORT_ERROR

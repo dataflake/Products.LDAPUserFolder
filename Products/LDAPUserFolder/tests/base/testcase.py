@@ -21,12 +21,13 @@ import transaction
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
 
-from Products.LDAPUserFolder import LDAPDelegate
-from Products.LDAPUserFolder.LDAPUserFolder import manage_addLDAPUserFolder
-from Products.LDAPUserFolder.tests.config import alternates
-from Products.LDAPUserFolder.tests.config import defaults
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import user2
+from ... import LDAPDelegate
+from ...LDAPUserFolder import manage_addLDAPUserFolder
+from ..config import alternates
+from ..config import defaults
+from ..config import user
+from ..config import user2
+
 
 
 LDAPDelegate.c_factory = FakeLDAPConnection
@@ -47,7 +48,6 @@ class LDAPTest(unittest.TestCase):
         luf = self.folder.acl_users
         host, port = dg('server').split(':')
         luf.manage_addServer(host, port=port)
-        """
         luf.manage_edit(dg('title'), dg('login_attr'), dg('uid_attr'),
                         dg('users_base'), dg('users_scope'), dg('roles'),
                         dg('groups_base'), dg('groups_scope'), dg('binduid'),
@@ -61,7 +61,6 @@ class LDAPTest(unittest.TestCase):
         self.db.clear()
         self.db.addTreeItems(dg('users_base'))
         self.db.addTreeItems(dg('groups_base'))
-        """
 
     def tearDown(self):
         transaction.abort()
