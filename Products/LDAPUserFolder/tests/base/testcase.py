@@ -29,7 +29,6 @@ from ..config import user
 from ..config import user2
 
 
-
 LDAPDelegate.c_factory = FakeLDAPConnection
 dg = defaults.get
 ag = alternates.get

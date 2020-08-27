@@ -24,6 +24,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
 from App.Common import package_home
 
+from .base.dummy import LDAPDummyUser
 from .base.testcase import LDAPTest
 from .config import alternates
 from .config import defaults

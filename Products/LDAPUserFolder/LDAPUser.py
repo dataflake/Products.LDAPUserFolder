@@ -22,7 +22,6 @@ from AccessControl.User import BasicUser
 from DateTime import DateTime
 
 from .utils import _verifyUnicode
-from .utils import encoding
 
 
 class NonexistingUser:

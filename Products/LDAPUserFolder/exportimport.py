@@ -15,16 +15,17 @@
 
 from Acquisition import aq_base
 from BTrees.OOBTree import OOBTree
+from zope.component import adapts
+from ZPublisher.HTTPRequest import default_encoding
+
 from Products.GenericSetup.interfaces import ISetupEnviron
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-from Products.LDAPUserFolder.utils import from_utf8
-from Products.LDAPUserFolder.utils import to_utf8
-from zope.component import adapts
-from ZPublisher.HTTPRequest import default_encoding
 
 from .interfaces import ILDAPUserFolder
+from .utils import from_utf8
+from .utils import to_utf8
 
 
 PROPERTIES = ('title', '_login_attr', '_uid_attr', 'users_base',

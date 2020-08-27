@@ -88,6 +88,7 @@ def from_utf8(s):
         s = str(s)
     return s
 
+
 def to_utf8(s):
     if type(s) is str:
         s = s.encode()
