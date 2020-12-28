@@ -70,10 +70,10 @@ class TestLDAPUser(unittest.TestCase):
     def testUnicodeAttributes(self):
         # Internally, most attributes are stored as unicode.
         # Test some to make sure.
-        self.assertTrue(isinstance(self.u_ob.id, unicode))
-        self.assertTrue(isinstance(self.u_ob.name, unicode))
+        self.assertTrue(isinstance(self.u_ob.id, str))
+        self.assertTrue(isinstance(self.u_ob.name, str))
         self.assertTrue(isinstance(self.u_ob._properties['givenName'],
-                                   unicode))
+                                   str))
 
     def testBinaryAttributes(self):
         # Some attributes are marked binary
@@ -99,5 +99,5 @@ class TestLDAPUser(unittest.TestCase):
     def testNameIdNotUnicode(self):
         # Make sure name and ID are never unicode
         u = self.u_ob
-        self.assertFalse(isinstance(u.getUserName(), unicode))
-        self.assertFalse(isinstance(u.getId(), unicode))
+        self.assertFalse(isinstance(u.getUserName(), bytes))
+        self.assertFalse(isinstance(u.getId(), bytes))

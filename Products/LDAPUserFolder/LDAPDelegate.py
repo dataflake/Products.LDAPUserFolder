@@ -304,8 +304,6 @@ class LDAPDelegate(Persistent):
                bind_dn='', bind_pwd='', convert_filter=True):
         """ The main search engine """
         result = {'exception': '', 'size': 0, 'results': []}
-        if convert_filter:
-            filter = to_utf8(filter)
         base = self._clean_dn(base)
 
         try:
@@ -389,7 +387,7 @@ class LDAPDelegate(Persistent):
 
         msg = ''
 
-        dn = self._clean_dn(to_utf8('%s,%s' % (rdn, base)))
+        dn = self._clean_dn('%s,%s' % (rdn, base))
         attribute_list = []
         attrs = attrs and attrs or {}
 
@@ -400,7 +398,7 @@ class LDAPDelegate(Persistent):
             else:
                 is_binary = False
 
-            if isinstance(attr_val, (str, unicode)) and not is_binary:
+            if isinstance(attr_val, (str, bytes)) and not is_binary:
                 attr_val = [x.strip() for x in attr_val.split(';')]
 
             if attr_val != ['']:

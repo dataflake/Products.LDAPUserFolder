@@ -11,7 +11,7 @@
   at this moment.
   </p>
 
-  <form aid="luf_purge_all_caches" ction="manage_reinit" method="post">
+  <form aid="luf_purge_all_caches" action="manage_reinit" method="post">
     <div class="form-group row">
       <label for="purge" class="form-label col-sm-3 col-md-2">
         Purge all Caches

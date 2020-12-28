@@ -51,6 +51,8 @@ class PasswordCreationTests(unittest.TestCase):
             self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
         except ImportError:
             pass
+        except ValueError:
+            pass
 
     def test_createLDAPPassword_clear(self):
         reference = 'b1g#5ecret'

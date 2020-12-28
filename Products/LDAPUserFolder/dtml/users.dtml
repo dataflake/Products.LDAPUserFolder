@@ -186,8 +186,14 @@ function toggleSelect() {
             <dtml-if expr="sk in binaries">
               <code id="&dtml-sk;"><dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))"></code>
             <dtml-else>
-              <input id="&dtml-sk;" class="form-control" type="text" name="&dtml-sk;" 
-                 value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
+               <dtml-try>
+                 <input id="&dtml-sk;" class="form-control" type="text" name="&dtml-sk;"
+                   value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
+               <dtml-except>
+                 <code class="alert alert-danger py-2 m-0 d-block">
+                   TypeError: sequence item 0: expected str instance, bytes found
+                  </code>
+               </dtml-try>
             </dtml-if>
           </div>
         </div>
