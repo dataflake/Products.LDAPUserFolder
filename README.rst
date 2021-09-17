@@ -12,7 +12,7 @@ the LDAP database.
 Bug tracker
 ===========
 Please post questions, bug reports or feature requests to the bug tracker
-at https://bugs.launchpad.net/ldapuserfolder
+at https://github.com/dataflake/Products.LDAPUserFolder/issues
 
 
 Debugging problems
@@ -124,6 +124,6 @@ are governed by the properties you 'register' using the
 in turn is sourced from the 'LDAP Schema' tab in the LDAPUserFolder
 ZMI view. Attributes you would like to enable for portal members
 must be set up on the LDAPUserFolder 'LDAP Schema' tab first, and
-then registered using the 'Membeer properties' screen in the 
+then registered using the 'Member properties' screen in the 
 Member data tool ZMI view.
 

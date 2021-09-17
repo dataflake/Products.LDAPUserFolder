@@ -1,4 +1,4 @@
-README for configuring the LDAPUserFolder product for M$ Active Directory
+Configuring the LDAPUserFolder product for M$ Active Directory
 
   Micro$oft offers two products that purport to speak LDAP, namely
   "Active Directory" and, to a lesser extent, the Exchange server.

@@ -52,7 +52,7 @@ Installing the LDAPUserFolder Product
 
   Depending on your choice of Zope install (e.g. compiled from source
   or binary version) you need to make sure that the python-ldap 
-  module (see README.txt) can be found by Zope.
+  module (see README.rst) can be found by Zope.
 
   The first step after compiling the python-ldap module is to find 
   out if it works correctly by firing up your Python interpreter 
@@ -62,12 +62,3 @@ Installing the LDAPUserFolder Product
   Zope binary distributions come with their own Python binaries, you must
   install python-ldap using that specific Python binary that is used
   by Zope.
-
-  If you for some reason decide to run Zope on a certain OS from Redmond
-  you might have difficulties getting python-ldap in a precompiled 
-  version. The official python-ldap website lists some sources::
-
-    http://python-ldap.sourceforge.net/
-
-  See README.txt for any other dependencies and requirements.
-

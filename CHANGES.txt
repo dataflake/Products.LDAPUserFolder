@@ -1,6 +1,10 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
+2.28 (unreleased)
+-----------------
+
+
 2.27 (2014-04-23)
 -----------------
 - fix mismatch between method name and security declaration
