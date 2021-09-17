@@ -12,11 +12,9 @@ _boundary = '\n' + ('-' * 60) + '\n\n'
 setup(name='Products.%s' % NAME,
       version=read('VERSION.txt').strip(),
       description='A LDAP-enabled Zope 2 user folder',
-      long_description=( read('README.txt') 
+      long_description=( read('README.rst') 
                        + _boundary
                        + read('CHANGES.txt')
-                       + _boundary
-                       + "Download\n========"
                        ),
       classifiers=[
         "Development Status :: 5 - Production/Stable",

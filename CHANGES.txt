@@ -1,8 +1,9 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
-2.28 (unreleased)
+2.28 (2021-09-17)
 -----------------
+- update version pins and package information
 
 
 2.27 (2014-04-23)
