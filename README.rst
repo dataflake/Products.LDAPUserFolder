@@ -4,9 +4,9 @@
 
 .. contents::
 
-This product is a replacement for a Zope user folder. It does not store its 
-own user objects but builds them on the fly after authenticating a user against 
-the LDAP database.
+This product is a replacement for a Zope user folder for Zope 2. It does not
+store its own user objects but builds them on the fly after authenticating a
+user against the LDAP database.
 
 
 Bug tracker
