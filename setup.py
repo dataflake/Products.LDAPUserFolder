@@ -47,7 +47,6 @@ setup(name='Products.%s' % NAME,
       namespace_packages=['Products'],
       zip_safe=False,
       python_requires='>=2.6,<3',
-      setup_requires=['setuptools-git'],
       install_requires=[
         'setuptools',
         'Zope2 <4',

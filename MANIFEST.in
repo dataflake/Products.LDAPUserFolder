@@ -1,0 +1,13 @@
+include *.py
+include *.rst
+include *.txt
+include buildout.cfg
+
+recursive-include Products *.dtml
+recursive-include Products *.gif
+recursive-include Products *.jpg
+recursive-include Products *.pt
+recursive-include Products *.py
+recursive-include Products *.stx
+recursive-include Products *.xml
+recursive-include Products *.zcml
