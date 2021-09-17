@@ -44,13 +44,13 @@ setup(name='Products.%s' % NAME,
       setup_requires=['setuptools-git'],
       install_requires=[
         'setuptools',
-        'Zope2',
+        'Zope2 <4',
         'dataflake.fakeldap',
         'python-ldap',
         ],
       extras_require={
           'cmfldap': ['Products.CMFDefault >= 2.1.0'],
-          'exportimport': ['Products.GenericSetup >= 1.4.0'],
+          'exportimport': ['Products.GenericSetup >= 1.4.0, <1.9'],
           },
       entry_points="""
       [zope2.initialize]
