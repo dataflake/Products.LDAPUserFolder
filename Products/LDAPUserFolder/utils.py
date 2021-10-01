@@ -18,6 +18,7 @@ import codecs
 from hashlib import md5
 
 from AccessControl import AuthEncoding
+from ZPublisher.HTTPRequest import default_encoding
 
 
 #################################################
@@ -46,7 +47,6 @@ GROUP_MEMBER_ATTRIBUTES = set(list(GROUP_MEMBER_MAP.values()))
 VALID_GROUP_ATTRIBUTES = set(['name', 'displayName', 'cn', 'dn',
                               'objectGUID', 'description',
                               'mail']).union(GROUP_MEMBER_ATTRIBUTES)
-encoding = 'latin1'
 
 
 #################################################
@@ -61,7 +61,7 @@ def _verifyUnicode(st):
         try:
             return unicode(st)
         except UnicodeError:
-            return unicode(st, encoding)
+            return unicode(st, default_encoding)
 
 
 def _createLDAPPassword(password, encoding='SHA'):
@@ -82,26 +82,22 @@ def _createLDAPPassword(password, encoding='SHA'):
     return pwd_str.strip()
 
 
-try:
-    encodeLocal, decodeLocal, reader = codecs.lookup(encoding)[:3]
-    encodeUTF8, decodeUTF8 = codecs.lookup('UTF-8')[:2]
+encodeLocal, decodeLocal, reader = codecs.lookup(default_encoding)[:3]
+encodeUTF8, decodeUTF8 = codecs.lookup('UTF-8')[:2]
 
-    if getattr(reader, '__module__', '') == 'encodings.utf_8':
-        # Everything stays UTF-8, so we can make this cheaper
-        to_utf8 = from_utf8 = str
+if getattr(reader, '__module__', '') == 'encodings.utf_8':
+    # Everything stays UTF-8, so we can make this cheaper
+    to_utf8 = from_utf8 = str
 
-    else:
+else:
 
-        def from_utf8(s):
-            return encodeLocal(decodeUTF8(s)[0])[0]
+    def from_utf8(s):
+        return encodeLocal(decodeUTF8(s)[0])[0]
 
-        def to_utf8(s):
-            if isinstance(s, str):
-                s = decodeLocal(s)[0]
-            return encodeUTF8(s)[0]
-
-except LookupError:
-    raise LookupError('Unknown encoding "%s"' % encoding)
+    def to_utf8(s):
+        if isinstance(s, str):
+            s = decodeLocal(s)[0]
+        return encodeUTF8(s)[0]
 
 
 def guid2string(val):

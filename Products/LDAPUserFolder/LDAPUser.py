@@ -20,9 +20,9 @@ from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import access_contents_information
 from AccessControl.User import BasicUser
 from DateTime import DateTime
+from ZPublisher.HTTPRequest import default_encoding
 
 from .utils import _verifyUnicode
-from .utils import encoding
 
 
 class NonexistingUser:
@@ -84,7 +84,7 @@ class LDAPUser(BasicUser):
     @security.public
     def getId(self):
         if isinstance(self.id, unicode):
-            return self.id.encode(encoding)
+            return self.id.encode(default_encoding)
 
         return self.id
 
@@ -101,7 +101,7 @@ class LDAPUser(BasicUser):
     def getUserName(self):
         """ Get the name associated with this user """
         if isinstance(self.name, unicode):
-            return self.name.encode(encoding)
+            return self.name.encode(default_encoding)
 
         return self.name
 
@@ -131,7 +131,7 @@ class LDAPUser(BasicUser):
             prop = my_props.get(name)
 
             if isinstance(prop, unicode):
-                prop = prop.encode(encoding)
+                prop = prop.encode(default_encoding)
 
             return prop
 
@@ -145,7 +145,7 @@ class LDAPUser(BasicUser):
         """
         prop = self._properties.get(prop_name, default)
         if isinstance(prop, unicode):
-            prop = prop.encode(encoding)
+            prop = prop.encode(default_encoding)
 
         return prop
 
@@ -153,7 +153,7 @@ class LDAPUser(BasicUser):
     def getUserDN(self):
         """ Return the user's full Distinguished Name """
         if isinstance(self._dn, unicode):
-            return self._dn.encode(encoding)
+            return self._dn.encode(default_encoding)
 
         return self._dn
 

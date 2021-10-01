@@ -3,7 +3,10 @@ Change log
 
 3.2 (unreleased)
 ----------------
+- Use Zope's own string encoding instead of a hardcoded value in ``utils``
+
 - full flake8/isort compatibility
+
 - packaging cleanup
 
 

@@ -13,6 +13,12 @@
 """ Shared LDAPUserFolder test configuration data
 """
 
+from ZPublisher.HTTPRequest import default_encoding
+
+
+umlaut_name = u'G\xfcnther'
+umlaut_name_encoded = umlaut_name.encode(default_encoding)
+
 defaults = {'title': 'LDAP User Folder', 'server': 'localhost:389',
             'login_attr': 'cn', 'uid_attr': 'cn',
             'users_base': 'ou=people,dc=dataflake,dc=org', 'users_scope': 2,
@@ -35,7 +41,7 @@ alternates = {'title': 'LDAPUserFolder', 'server': 'localhost:1389',
               'extra_user_filter': '(special=true)'}
 
 user = {'cn': 'test', 'sn': 'User', 'mail': 'joe@blow.com',
-        'givenName': 'G\xc3\xbcnther', 'objectClasses': ['top', 'person'],
+        'givenName': umlaut_name_encoded, 'objectClasses': ['top', 'person'],
         'user_pw': 'mypass', 'confirm_pw': 'mypass', 'user_roles': ['Manager'],
         'jpegPhoto': 'dont-\xc3\xbcncode-me',
         'mapped_attrs': {'objectClasses': 'Objektklassen'},
