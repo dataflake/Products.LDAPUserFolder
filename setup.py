@@ -77,7 +77,11 @@ setup(name=NAME,
         ],
       extras_require={
         'exportimport': ['Products.GenericSetup >= 2.0b1'],
-        'docs': ['Sphinx', 'sphinx_rtd_theme', 'repoze.sphinx.autointerface'],
+        'docs': [
+          'Sphinx',
+          'sphinx_rtd_theme',
+          'repoze.sphinx.autointerface',
+          'pkginfo'],
         },
       entry_points="""
       [zope2.initialize]
