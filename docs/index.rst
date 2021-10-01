@@ -28,6 +28,7 @@ Narrative documentation explaining how to use :mod:`Products.LDAPUserFolder`.
    development
    faq
    changes
+   history
 
 
 Support

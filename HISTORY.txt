@@ -1,54 +1,41 @@
-Change log
-==========
+Historical change log
+=====================
 
-3.2 (unreleased)
-----------------
-- Use Zope's own string encoding instead of a hardcoded value in ``utils``
-
-- full flake8/isort compatibility
-
-- packaging cleanup
+This change log covers all releases before version 3. For the
+current change log, please see the file `CHANGES.rst` in this
+folder.
 
 
-3.1 (2019-01-20)
-----------------
-- don't encode attributes when wrapping an LDAPUser if they are flagged binary
+2.28 (2021-09-17)
+-----------------
+- update version pins and package information
 
 
-3.0 (2018-05-21)
-----------------
-- Zope 4 compatibility
-- merge and fix old HelpSys API docs into interfaces and add Sphinx doc
-- add instance scripts as a test/development convenience
-- unbreak saving of bind passwords on the Configure tab
-- remove old _SharedResource code and simplify caching
-- replace Products.LDAPUserFolder.SimpleCache.SimpleCache with
-  Products.LDAPUserFolder.cache.UserCache, based on
-  dataflake.cache.timeout.TimeoutCache
-- replace Products.LDAPUserFolder.SimpleCache.SharedObject with
-  dataflake.cache.simple.SimpleCache
-- flake8 whitespace cleanup
-- moved the code to GitHub
-- officially dropped Python 2.6 support, only Python 2.7 is supported.
-- moved documentation to Sphinx
-- sanitized buildout test script generation to always use the 
-  ``exportimport`` extra and always test the `GenericSetup` 
-  export/import support
-- Add ``tox`` configuration to support automated testing
-  on all supported Python versions
-- Removed the LDAPUserSatellite code due to severe bit-rot. Please use
-  the PluggableAuthService package in conjunction with LDAPMultiPlugins
-  to gain the same functionality.
-- Removed the CMF tools, please use the package ``Products.CMFLDAP``
-  (see http://pypi.python.org/pypi/Products.CMFLDAP/1.0) instead.
+2.27 (2014-04-23)
+-----------------
+- fix mismatch between method name and security declaration
+  (https://bugs.launchpad.net/bugs/1221624)
 - ensure bind passwords used for the LDAP delegate and the user
   folder do not get out of sync
+
+
+2.26 (2013-06-04)
+-----------------
+- Fix python-ldap error when receiving sets instead of lists for 
+  attributes to search on (Patch by Godefroid Chapelle)
+- Some cleanups found by pyflakes ((Patch by Godefroid Chapelle)
+
+
+2.25 (2013-06-03)
+-----------------
 - Refactor some definitions in the utils module to make them easier 
   to override (Patch by Godefroid Chapelle)
-- Fixed a missing string conversion in getGroupedUsers (Patch by
+- Fixed a missing string conversion in getGroupedUsers (Patch by 
   Godefroid Chapelle)
-- Fix python-ldap error when receiving sets instead of lists for
-  attributes to search on (Patch by Godefroid Chapelle)
+
+
+2.24 (2012-10-18)
+-----------------
 - When comparing a login value to login values found on the LDAP 
   server strip the login value first. This follows OpenLDAP behavior
   which considers values as matches even with trailing or leading 
@@ -59,6 +46,12 @@ Change log
   connecting to a LDAP server, discard it when it's not been created
   as the result of a real login and thus has an invalid password
   (https://bugs.launchpad.net/bugs/1060112)
+- use a known set of component versions (versions.txt from Zope 
+  2.3.18) to avoid having to micromanage dependency versions
+- moved change log entries for version 2.18 and older from CHANGES.txt
+  to HISTORY.txt
+- reformat HISTORY.txt and make it ReST-compliant
+- clean up formatting of CHANGES.txt
 
 
 2.23 (2012-04-23)
