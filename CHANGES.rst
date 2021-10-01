@@ -7,6 +7,8 @@ releases, see the file `HISTORY.txt` in this folder.
 
 3.2 (unreleased)
 ----------------
+- use coveralls.io for code coverage reporting
+
 - use GitHub Actions for automated tests and ditch Travis CI
 
 - complete historical change log and add it to the Sphinx documentation
