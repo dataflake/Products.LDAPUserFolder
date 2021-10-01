@@ -1,8 +1,8 @@
-.. image:: https://github.com/dataflake/Products.LDAPUserFolder/actions/workflows/tests.yml/badge.svg
+.. image:: https://github.com/dataflake/Products.LDAPUserFolder/actions/workflows/tests.yml/badge.svg?branch=3.x
    :target: https://github.com/dataflake/Products.LDAPUserFolder/actions/workflows/tests.yml
 
-.. image:: https://coveralls.io/repos/github/dataflake/Products.LDAPUserFolder/badge.svg?branch=master
-   :target: https://coveralls.io/github/dataflake/Products.LDAPUserFolder?branch=master
+.. image:: https://coveralls.io/repos/github/dataflake/Products.LDAPUserFolder/badge.svg?branch=3.x
+   :target: https://coveralls.io/github/dataflake/Products.LDAPUserFolder?branch=3.x
 
 .. image:: https://readthedocs.org/projects/productsldapuserfolder/badge/?version=latest
    :target: https://productsldapuserfolder.readthedocs.io
