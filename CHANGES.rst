@@ -7,6 +7,8 @@ releases, see the file `HISTORY.txt` in this folder.
 
 3.2 (unreleased)
 ----------------
+- merge the old help system contents into the Sphinx documentation
+
 - use coveralls.io for code coverage reporting
 
 - use GitHub Actions for automated tests and ditch Travis CI

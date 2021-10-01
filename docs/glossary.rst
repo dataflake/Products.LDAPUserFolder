@@ -26,3 +26,8 @@ Glossary
   Zope
     `The Z Object Publishing Framework <http://zope.org>`_.  The granddaddy
     of Python web frameworks.
+
+  ZMI
+    The Zope Management Interface where you can introspect the ZODB contents
+    with a web browser. Find it at the path ``/manage`` on the host and port of
+    your Zope instance.
