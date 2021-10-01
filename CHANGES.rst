@@ -4,6 +4,9 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
+3.3 (unreleased)
+----------------
+
 
 3.2 (2021-10-01)
 ----------------
