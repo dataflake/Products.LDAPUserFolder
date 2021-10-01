@@ -7,6 +7,8 @@ releases, see the file `HISTORY.txt` in this folder.
 
 3.2 (unreleased)
 ----------------
+- use GitHub Actions for automated tests and ditch Travis CI
+
 - complete historical change log and add it to the Sphinx documentation
 
 - Use Zope's own string encoding instead of a hardcoded value in ``utils``
