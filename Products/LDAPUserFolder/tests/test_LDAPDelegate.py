@@ -19,7 +19,7 @@ import unittest
 class TestSimple(unittest.TestCase):
 
     def _getTargetClass(self):
-        from Products.LDAPUserFolder.LDAPDelegate import LDAPDelegate
+        from ..LDAPDelegate import LDAPDelegate
 
         return LDAPDelegate
 

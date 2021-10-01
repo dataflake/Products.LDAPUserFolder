@@ -76,7 +76,7 @@ class TestLDAPUserFolder(LDAPTest):
         ae(len(acl.getServers()), 1)
 
     def testAlternateLUFInstantiation(self):
-        from Products.LDAPUserFolder import manage_addLDAPUserFolder
+        from ..LDAPUserFolder import manage_addLDAPUserFolder
         ae = self.assertEqual
         self.folder._delObject('acl_users')
         manage_addLDAPUserFolder(self.folder)

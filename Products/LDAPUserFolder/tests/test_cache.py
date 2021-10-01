@@ -41,7 +41,7 @@ class CacheObject:
 class TestUserCache(unittest.TestCase):
 
     def setUp(self):
-        from Products.LDAPUserFolder.cache import UserCache
+        from ..cache import UserCache
         self.cache = UserCache()
         self.cache.setTimeout(0.1)
 
@@ -90,7 +90,7 @@ class TestGetSetRemoveResource(unittest.TestCase):
         self.test_id = 'test_id'
 
     def tearDown(self):
-        from Products.LDAPUserFolder.cache import removeResource
+        from ..cache import removeResource
         removeResource(self.test_id)
 
     def test_getResource(self):
@@ -102,14 +102,14 @@ class TestGetSetRemoveResource(unittest.TestCase):
         self.assertEqual(getResource(self.test_id), 'foobar')
 
     def test_setResource(self):
-        from Products.LDAPUserFolder.cache import setResource
+        from ..cache import setResource
         self.assertIsNone(getResource(self.test_id))
         setResource(self.test_id, 'forced')
         self.assertEqual(getResource(self.test_id), 'forced')
 
     def test_removeResource(self):
-        from Products.LDAPUserFolder.cache import removeResource
-        from Products.LDAPUserFolder.cache import setResource
+        from ..cache import removeResource
+        from ..cache import setResource
         setResource(self.test_id, 'forced')
         self.assertEqual(getResource(self.test_id), 'forced')
 
