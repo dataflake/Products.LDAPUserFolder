@@ -43,14 +43,12 @@ class PasswordCreationTests(unittest.TestCase):
         encoded = utils._createLDAPPassword(self.pwd, 'md5')
         self.assertEqual(reference, encoded)
 
+    @unittest.skipIf(utils.crypt is None, 'crypt library unavailable.')
     def test_createLDAPPassword_crypt(self):
-        try:
-            # Crypt is not available on all platforms
-            encoded = utils._createLDAPPassword(self.pwd, 'crypt')
-            self.assertTrue(encoded.startswith('{CRYPT}'))
-            self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
-        except ImportError:
-            pass
+        # Crypt is not available on all platforms
+        encoded = utils._createLDAPPassword(self.pwd, 'crypt')
+        self.assertTrue(encoded.startswith('{CRYPT}'))
+        self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
 
     def test_createLDAPPassword_clear(self):
         reference = 'b1g#5ecret'

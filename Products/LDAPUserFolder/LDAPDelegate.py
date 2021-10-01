@@ -18,7 +18,6 @@ import random
 
 import ldap
 import ldap.filter
-import six
 from ldap.dn import escape_dn_chars
 from ldapurl import LDAPUrl
 from ldapurl import isLDAPUrl
@@ -166,7 +165,7 @@ class LDAPDelegate(Persistent):
         self.read_only = not not read_only
         self.u_base = users_base
 
-        if isinstance(objectclasses, basestring):
+        if isinstance(objectclasses, str):
             objectclasses = [x.strip() for x in objectclasses.split(',')]
         self.u_classes = objectclasses
 
@@ -198,7 +197,7 @@ class LDAPDelegate(Persistent):
             conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
-                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
+                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS) as e:
             pass
 
         e = None
@@ -348,7 +347,7 @@ class LDAPDelegate(Persistent):
                         try:
                             for i in range(len(value)):
                                 value[i] = from_utf8(value[i])
-                        except Exception as e:
+                        except Exception:
                             pass
 
                 rec_dict['dn'] = from_utf8(rec_dn)
@@ -558,7 +557,7 @@ class LDAPDelegate(Persistent):
 
     def _clean_rdn(self, rdn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        if isinstance(rdn, six.text_type):
+        if isinstance(rdn, unicode):
             rdn = rdn.encode('UTF-8')
 
         if rdn.find('\\') != -1:
@@ -582,7 +581,7 @@ class LDAPDelegate(Persistent):
         """ Indirection to avoid need for importing ldap elsewhere """
         exploded = []
         for dn_part in ldap.explode_dn(dn, notypes):
-            if isinstance(dn_part, six.text_type):
+            if isinstance(dn_part, unicode):
                 exploded.append(dn_part.encode('UTF-8'))
             else:
                 exploded.append(dn_part)

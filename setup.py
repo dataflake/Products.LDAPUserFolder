@@ -26,10 +26,12 @@ def read(*rnames):
 
 setup(name=NAME,
       version=read('version.txt').strip(),
-      description='A LDAP-enabled Zope 2 user folder',
+      description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
       classifiers=[
         "Development Status :: 6 - Mature",
+        "Environment :: Web Environment",
+        "Framework :: Zope",
         "Framework :: Zope :: 4",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
@@ -43,7 +45,7 @@ setup(name=NAME,
         "Topic :: System :: Systems Administration ::"
         " Authentication/Directory :: LDAP",
         ],
-      keywords='web application server zope zope2 ldap',
+      keywords='web application server zope authentication ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
       url="https://github.com/dataflake/%s" % NAME,

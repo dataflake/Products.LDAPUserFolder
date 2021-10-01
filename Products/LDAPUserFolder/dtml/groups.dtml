@@ -4,192 +4,112 @@
   <dtml-var manage_tabs>
 </dtml-with>
 
-<p class="form-help">
-  This view shows all LDAP group records found on the LDAP server
-  and allows deletion and addition. You can also map LDAP groups 
-  to Zope roles, thereby conferring a Zope role on members of a 
-  LDAP group.
-</p>
+<main class="container-fluid">
 
-<dtml-in expr="getGroups()">
+  <p class="form-help">
+    This view shows all LDAP group records found on the LDAP server
+    and allows deletion and addition. You can also map LDAP groups 
+    to Zope roles, thereby conferring a Zope role on members of a 
+    LDAP group.
+  </p>
 
-  <dtml-if name="sequence-start">
+  <p><i class="fas fa-user-tag"></i> <b>LDAP groups</b></p>
+  <dtml-if expr="getGroups()">
     <form action="&dtml-URL1;" method="post">
-    <table border="0" cellpadding="2" cellspacing="0" width="98%">
-      <tr class="list-header">
-        <td colspan="2" class="form-label"> LDAP groups </td>
-      </tr>
-  </dtml-if>
-
-  <dtml-if sequence-odd>
-    <tr class="row-normal">
-  <dtml-else>
-    <tr class="row-hilite">
-  </dtml-if>
-      <td align="left" valign="top" width="16">
-        <input type="checkbox" name="dns:list" value="&dtml-sequence-item;" />
-      </td>
-      <td class="form-text">
-        <dtml-var name="sequence-key">
-        <dtml-if expr="_['sequence-length'] < 50">
-          (<dtml-var expr="getGroupType( _['sequence-item'] )"> at
-        </dtml-if>
-        <dtml-var name="sequence-item" size="50" etc="...">)
-      </td>
-    </tr>
-
-  <dtml-if name="sequence-end">
-      <tr>
-        <td align="left" valign="top" colspan="3" class="form-element">
-          <input class="form-element" type="submit" 
-                 name="manage_deleteGroups:method" 
-                 value="Delete" />
-        </td>
-      </tr>
-    </table>
+      <table class="table table-striped table-hover" style="border-bottom: 1px solid #dee2e6;">
+        <tbody>
+          <dtml-in expr="getGroups()">
+            <tr>
+              <td class="zmi-object-check text-right"><input type="checkbox" name="dns:list" value="&dtml-sequence-item;" /></td>
+              <td class="zmi-luf-group"><dtml-var name="sequence-key">
+                <dtml-if expr="_['sequence-length'] < 50">
+                  (<dtml-var expr="getGroupType( _['sequence-item'] )"> at
+                </dtml-if>
+                <dtml-var name="sequence-item" size="50" etc="...">)
+              </td>
+            </tr>
+          </dtml-in>
+        </tbody>
+      </table>
+      <div class="zmi-controls">
+        <input class="btn btn-primary" type="submit" name="manage_deleteGroups:method"  value="Delete" />
+      </div>
     </form>
+  <dtml-else>
+    <div class="alert alert-info">
+      No groups found in LDAP. 
+      Please check the settings "Group base DN" and "Groups search scope" 
+      and make sure your LDAP tree contains suitable group records.
+    </div>
   </dtml-if>
 
-<dtml-else>
-  <br />
-  <div class="form-label">
-    No groups found in LDAP. 
-    Please check the settings "Group base DN" and "Groups search scope" 
-    and make sure your LDAP tree contains suitable group records.
-  </div>
-
-</dtml-in>
-
-<p><br></p>
-
-<form action="manage_addGroup" method="post">
-
-  <table cellspacing="0" cellpadding="2" width="98%">
-  
-    <tr class="section-bar">
-      <td colspan="5" align="left" valign="top" class="form-label">
-        Add LDAP group
-      </td>
-    </tr>
-    
-    <tr>
-      <td align="left" valign="absmiddle" class="form-label">
-        Name
-      </td>
-      <td align="left" valign="top">
-        <input type="text" name="newgroup_name" size="25" 
-               value="MyGroup" />&nbsp;
-      </td>
-      <td align="left" valign="absmiddle" class="form-label">
-        Object class
-      </td>
-      <td align="left" valign="top">
-        <select name="newgroup_type">
+  <form action="manage_addGroup" method="post" class="card p-4 my-4 bg-light">
+    <p><i class="fas fa-plus"></i> <b>LDAP groups</b></p>
+    <div class="form-group form-inline row">
+      <div class="input-group col-sm-5">
+        <div class="input-group-prepend"><div style="width:9em" class="input-group-text">Name</div></div>
+        <input id="newgroup_name" type="text" class="form-control" placeholder="Enter new group name" name="newgroup_name" />
+      </div>
+      <div class="input-group col-sm-5">
+        <div class="input-group-prepend"><div style="width:9em" class="input-group-text">Object class</div></div>
+        <select name="newgroup_type" class="form-control">
           <option value="groupOfUniqueNames"> groupOfUniqueNames </option>
           <option value="groupOfNames"> groupOfNames </option>
           <option value="accessGroup"> accessGroup </option>
           <option value="group"> group </option>
         </select>
-      </td>
-      <td align="right" valign="top">
-        <input class="form-element" type="submit" value=" Add " />
-      </td>
-    </tr>
-  
-  </table>
+      </div>
+      <div class="input-group col-sm-2">
+        <input class="col-12 btn btn-primary" type="submit" value=" Add " />
+      </div>
+    </div>
+  </form>
 
-</form>
-
-<p>&nbsp;</p>
-
-<table cellspacing="0" cellpadding="2" width="98%">
-
-  <tr class="section-bar">
-    <td class="form-label">
-      LDAP group to Zope role mappings
-    </td>
-  </tr>
-
-</table>
-
-<dtml-in getGroupMappings>
-
-  <dtml-if name="sequence-start">
+  <p class="mt-5"><i class="fas fa-layer-group"></i> <b>LDAP group to Zope role mappings</b></p>
+  <dtml-if getGroupMappings>
     <form action="&dtml-URL1;" method="post">
-    <table border="0" cellpadding="2" cellspacing="0" width="98%">
-  </dtml-if>
-
-  <dtml-if sequence-odd>
-    <tr class="row-normal">
+      <table class="table table-striped table-hover" style="border-bottom: 1px solid #dee2e6;">
+        <dtml-in getGroupMappings>
+          <tr>
+            <td class="zmi-object-check text-right"><input type="checkbox" name="group_names:list" value="&dtml-sequence-key;" /></td>
+            <td class="zmi-luf-ldapgroup">&dtml-sequence-key; (LDAP group)</td>
+            <td class="zmi-luf-zoperole">&dtml-sequence-item; (Zope role)</td>
+          </tr>
+        </dtml-in>
+      </table>
+      <div class="zmi-controls">
+        <input class="btn btn-primary" type="submit" name="manage_deleteGroupMappings:method" value="Delete" />
+      </div>
+    </form>
   <dtml-else>
-    <tr class="row-hilite">
-  </dtml-if>
-      <td align="left" valign="top" width="16">
-        <input type="checkbox" name="group_names:list" value="&dtml-sequence-key;" />
-      </td>
-      <td class="form-text"> &dtml-sequence-key; (LDAP group) </td>
-      <td class="form-text"> &dtml-sequence-item; (Zope role) </td>
-    </tr>
-
-  <dtml-if name="sequence-end">
-      <tr>
-        <td align="left" valign="top" colspan="3" class="form-element">
-          <input class="form-element" type="submit"
-                 name="manage_deleteGroupMappings:method"
-                 value="Delete" />
-        </td>
-      </tr>
-    </table>
+    <div class="alert alert-info">No group mappings specified at this time.</div>
   </dtml-if>
 
-<dtml-else>
-  <p>(No group mappings specified at this time.)</p>
-
-</dtml-in>
-
-<p>&nbsp;</p>
-
-<form action="&dtml-URL1;" method="post">
-
-  <table cellspacing="0" cellpadding="2" width="98%">
-  
-    <tr class="section-bar">
-      <td colspan="5" align="left" valign="top" class="form-label">
-        Add LDAP group to Zope role mapping
-      </td>
-    </tr>
-  
-    <tr>
-      <td align="left" valign="absmiddle" class="form-label">
-        Map LDAP Group... &nbsp; 
-      </td>
-      <td align="left" valign="top">
-        <select name="group_name">
-          <dtml-in getGroups sort>
-            <option>&dtml-sequence-key;</option>
-          </dtml-in>
+  <form action="&dtml-URL1;" method="post" class="card p-4 my-4 bg-light">
+    <p><i class="fas fa-plus"></i> <b>Add LDAP group to Zope role mapping</b></p>
+    <div class="form-group form-inline row">
+      <div class="input-group col-sm-5">
+        <div class="input-group-prepend"><div style="width:9em" class="input-group-text">Map LDAP Group</div></div>
+        <select name="group_name" class="form-control">
+          <dtml-in getGroups sort><option>&dtml-sequence-key;</option></dtml-in>
         </select>
-      </td>
-      <td align="left" valign="absmiddle" class="form-label">
-        ... to Zope Role &nbsp;
-      </td>
-      <td align="left" valign="top">
-        <select name="role_name">
-          <dtml-in expr="_.reorder( valid_roles()
-                                  , without=( 'Anonymous', 'Authenticated', 'Owner' )
-                                  )" sort>
-            <option>&dtml-sequence-item;</option>
-          </dtml-in>
-        </select>
-      </td>
-      <td align="right" valign="top">
-        <input class="form-element" type="submit" value=" Add "
-               name="manage_addGroupMapping:method">
-      </td>
-    </tr>
-  
-  </table>
+      </div>
+      <div class="input-group col-sm-5">
+        <div class="input-group-prepend"><div style="width:9em" class="input-group-text">to Zope role</div></div>
+          <select name="role_name" class="form-control">
+            <dtml-in expr="_.reorder( valid_roles()
+                                    , without=( 'Anonymous', 'Authenticated', 'Owner' )
+                                    )" sort>
+              <option>&dtml-sequence-item;</option>
+            </dtml-in>
+          </select>
+      </div>
+      <div class="input-group col-sm-2">
+        <input class="col-12 btn btn-primary" type="submit" name="manage_addGroupMapping:method" value=" Add " />
+      </div>
+    </div>
+  </form>
 
-</form>
+</main>
 
 <dtml-var manage_page_footer>
