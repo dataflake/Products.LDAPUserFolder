@@ -8,7 +8,6 @@ recursive-include docs *.py
 recursive-include docs *.rst
 
 recursive-include src *.dtml
-recursive-include src *.gif
 recursive-include src *.jpg
 recursive-include src *.py
 recursive-include src *.zcml

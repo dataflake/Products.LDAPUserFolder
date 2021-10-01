@@ -21,8 +21,7 @@ from .LDAPUserFolder import manage_addLDAPUserFolder
 
 def initialize(context):
     context.registerClass(LDAPUserFolder, permission=add_user_folders,
-                          constructors=(manage_addLDAPUserFolder,),
-                          icon='www/ldapuserfolder.gif')
+                          constructors=(manage_addLDAPUserFolder,))
 
     # make sure the default LDAPDelegate class is registered
     from . import LDAPDelegate  # noqa: F401
