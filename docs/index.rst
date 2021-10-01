@@ -25,9 +25,8 @@ Narrative documentation explaining how to use :mod:`Products.LDAPUserFolder`.
 .. toctree::
    :maxdepth: 2
 
-   install
-   faq
    development
+   faq
    changes
 
 
