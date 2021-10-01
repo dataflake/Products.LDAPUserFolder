@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -15,15 +15,15 @@
 
 from Acquisition import aq_base
 from BTrees.OOBTree import OOBTree
-from ZPublisher.HTTPRequest import default_encoding
 from zope.component import adapts
+from ZPublisher.HTTPRequest import default_encoding
 
 from Products.GenericSetup.interfaces import ISetupEnviron
+from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-from Products.GenericSetup.utils import XMLAdapterBase
 
-from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
+from .interfaces import ILDAPUserFolder
 
 
 PROPERTIES = ('title', '_login_attr', '_uid_attr', 'users_base',

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -14,9 +14,10 @@
 """
 
 import copy
+import os
 from hashlib import sha1
+
 import ldap
-import os.path
 
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import noSecurityManager
@@ -24,13 +25,13 @@ from App.Common import package_home
 
 from dataflake.fakeldap import FakeLDAPConnection
 
-from Products.LDAPUserFolder.tests.base.dummy import LDAPDummyUser
-from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
-from Products.LDAPUserFolder.tests.config import defaults
-from Products.LDAPUserFolder.tests.config import alternates
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import user2
-from Products.LDAPUserFolder.tests.config import manager_user
+from .base.dummy import LDAPDummyUser
+from .base.testcase import LDAPTest
+from .config import alternates
+from .config import defaults
+from .config import manager_user
+from .config import user
+from .config import user2
 
 
 dg = defaults.get

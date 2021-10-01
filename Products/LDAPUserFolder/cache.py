@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -13,8 +13,8 @@
 """ A simple non-persistent user object cache
 """
 
-from threading import Lock
 import time
+from threading import Lock
 
 from dataflake.cache.timeout import TimeoutCache
 

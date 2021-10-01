@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -16,13 +16,10 @@
 import unittest
 
 from OFS.Folder import Folder
-try:
-    from Zope2.App import zcml
-except ImportError:
-    # BBB Zope < 2.12.11
-    from Products.Five import zcml
+from Zope2.App import zcml
 
-from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
+from ..LDAPUserFolder import LDAPUserFolder
+
 
 try:
     import Products.GenericSetup as GenericSetup

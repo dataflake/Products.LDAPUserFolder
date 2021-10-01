@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -15,8 +15,8 @@
 
 from AccessControl.Permissions import add_user_folders
 
-from Products.LDAPUserFolder.LDAPUserFolder import LDAPUserFolder
-from Products.LDAPUserFolder.LDAPUserFolder import manage_addLDAPUserFolder
+from .LDAPUserFolder import LDAPUserFolder
+from .LDAPUserFolder import manage_addLDAPUserFolder
 
 
 def initialize(context):
@@ -26,5 +26,3 @@ def initialize(context):
 
     # make sure the default LDAPDelegate class is registered
     from Products.LDAPUserFolder import LDAPDelegate  # noqa: F401
-
-    context.registerHelp()

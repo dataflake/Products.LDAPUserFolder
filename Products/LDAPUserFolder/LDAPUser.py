@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -17,12 +17,12 @@ import time
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
-from AccessControl.User import BasicUser
 from AccessControl.Permissions import access_contents_information
+from AccessControl.User import BasicUser
 from DateTime import DateTime
 
-from Products.LDAPUserFolder.utils import encoding
-from Products.LDAPUserFolder.utils import _verifyUnicode
+from .utils import _verifyUnicode
+from .utils import encoding
 
 
 class NonexistingUser:

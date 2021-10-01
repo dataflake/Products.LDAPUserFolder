@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -15,18 +15,18 @@
 
 import unittest
 
+import transaction
 from OFS.Folder import Folder
 from Testing import ZopeTestCase
-import transaction
 
 from dataflake.fakeldap import FakeLDAPConnection
 
-from Products.LDAPUserFolder import LDAPDelegate
-from Products.LDAPUserFolder import manage_addLDAPUserFolder
-from Products.LDAPUserFolder.tests.config import defaults
-from Products.LDAPUserFolder.tests.config import alternates
-from Products.LDAPUserFolder.tests.config import user
-from Products.LDAPUserFolder.tests.config import user2
+from ... import LDAPDelegate
+from ... import manage_addLDAPUserFolder
+from ..config import alternates
+from ..config import defaults
+from ..config import user
+from ..config import user2
 
 
 LDAPDelegate.c_factory = FakeLDAPConnection

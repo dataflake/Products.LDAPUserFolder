@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -13,25 +13,27 @@
 """ LDAPDelegate: A delegate that performs LDAP operations
 """
 
-import ldap
-import ldap.filter
-from ldapurl import LDAPUrl
-from ldapurl import isLDAPUrl
-from ldap.dn import escape_dn_chars
 import logging
 import random
+
+import ldap
+import ldap.filter
 import six
+from ldap.dn import escape_dn_chars
+from ldapurl import LDAPUrl
+from ldapurl import isLDAPUrl
 
-from Persistence import Persistent
 from AccessControl.SecurityManagement import getSecurityManager
+from Persistence import Persistent
 
-from Products.LDAPUserFolder.LDAPUser import LDAPUser
-from Products.LDAPUserFolder.cache import getResource
-from Products.LDAPUserFolder.cache import removeResource
-from Products.LDAPUserFolder.utils import BINARY_ATTRIBUTES
-from Products.LDAPUserFolder.utils import from_utf8
-from Products.LDAPUserFolder.utils import registerDelegate
-from Products.LDAPUserFolder.utils import to_utf8
+from .cache import getResource
+from .cache import removeResource
+from .LDAPUser import LDAPUser
+from .utils import BINARY_ATTRIBUTES
+from .utils import from_utf8
+from .utils import registerDelegate
+from .utils import to_utf8
+
 
 try:
     c_factory = ldap.ldapobject.ReconnectLDAPObject

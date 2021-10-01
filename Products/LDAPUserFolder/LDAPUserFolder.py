@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -13,47 +13,42 @@
 """ The LDAPUserFolder class
 """
 
-from hashlib import sha1
 import logging
 import os
 import random
 import time
 import urllib
-
-from dataflake.cache.simple import SimpleCache
+from hashlib import sha1
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import manage_users
 from AccessControl.Permissions import view_management_screens
 from AccessControl.SecurityManagement import getSecurityManager
-try:
-    from AccessControl.users import domainSpecMatch
-    from OFS.userfolder import BasicUserFolder
-except ImportError:
-    # BBB Zope < 2.13
-    from AccessControl.User import domainSpecMatch
-    from AccessControl.User import BasicUserFolder
+from AccessControl.users import domainSpecMatch
 from Acquisition import aq_base
 from App.Common import package_home
 from App.special_dtml import DTMLFile
 from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem as SI
+from OFS.userfolder import BasicUserFolder
 from zope.interface import implements
 
-from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
-from Products.LDAPUserFolder.LDAPUser import NonexistingUser
-from Products.LDAPUserFolder.LDAPUser import LDAPUser
-from Products.LDAPUserFolder.cache import getResource
-from Products.LDAPUserFolder.cache import UserCache
-from Products.LDAPUserFolder.utils import _createDelegate
-from Products.LDAPUserFolder.utils import _createLDAPPassword
-from Products.LDAPUserFolder.utils import crypt
-from Products.LDAPUserFolder.utils import GROUP_MEMBER_ATTRIBUTES
-from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
-from Products.LDAPUserFolder.utils import guid2string
-from Products.LDAPUserFolder.utils import to_utf8
-from Products.LDAPUserFolder.utils import VALID_GROUP_ATTRIBUTES
+from dataflake.cache.simple import SimpleCache
+
+from .cache import UserCache
+from .cache import getResource
+from .interfaces import ILDAPUserFolder
+from .LDAPUser import LDAPUser
+from .LDAPUser import NonexistingUser
+from .utils import GROUP_MEMBER_ATTRIBUTES
+from .utils import GROUP_MEMBER_MAP
+from .utils import VALID_GROUP_ATTRIBUTES
+from .utils import _createDelegate
+from .utils import _createLDAPPassword
+from .utils import crypt
+from .utils import guid2string
+from .utils import to_utf8
 
 
 logger = logging.getLogger('event.LDAPUserFolder')

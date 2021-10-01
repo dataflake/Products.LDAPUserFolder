@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2000-2009 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -13,7 +13,7 @@
 """ LDAPUserFolder server management tests
 """
 
-from Products.LDAPUserFolder.tests.base.testcase import LDAPTest
+from .base.testcase import LDAPTest
 
 
 class TestServerManagement(LDAPTest):
