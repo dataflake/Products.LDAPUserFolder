@@ -26,6 +26,11 @@ jobs:
     name: ${{ matrix.config[1] }}
     steps:
     - uses: actions/checkout@v2
+    - name: Install apt dependencies
+      run: |
+        set -ex
+        sudo apt update
+        sudo apt install -y ldap-utils slapd libldap2-dev libsasl2-dev
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
