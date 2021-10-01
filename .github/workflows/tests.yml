@@ -53,6 +53,7 @@ jobs:
       if: matrix.config[1] == 'coverage'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
         pip install -U coveralls coverage-python-version
         coveralls --service=github
