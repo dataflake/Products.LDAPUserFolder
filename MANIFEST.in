@@ -7,8 +7,8 @@ recursive-include docs Makefile
 recursive-include docs *.py
 recursive-include docs *.rst
 
-recursive-include Products *.dtml
-recursive-include Products *.gif
-recursive-include Products *.jpg
-recursive-include Products *.py
-recursive-include Products *.zcml
+recursive-include src *.dtml
+recursive-include src *.gif
+recursive-include src *.jpg
+recursive-include src *.py
+recursive-include src *.zcml
