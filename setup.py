@@ -25,7 +25,7 @@ def read(*rnames):
 
 
 setup(name=NAME,
-      version='3.2.dev0',
+      version='3.2',
       description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
       classifiers=[
