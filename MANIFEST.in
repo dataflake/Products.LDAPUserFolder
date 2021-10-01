@@ -1,9 +1,13 @@
-include *.cfg
 include *.rst
 include *.txt
-exclude .*.cfg
+include buildout.cfg
+include tox.ini
 
-recursive-include Products *
+recursive-include docs Makefile
+recursive-include docs *.py
+recursive-include docs *.rst
 
-global-exclude *.pyc
-global-exclude *.pyo
+recursive-include src *.dtml
+recursive-include src *.jpg
+recursive-include src *.py
+recursive-include src *.zcml

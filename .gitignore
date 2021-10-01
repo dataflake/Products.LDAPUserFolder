@@ -5,10 +5,12 @@ develop-eggs/
 dist/
 docs/_build/
 htmlcov/
+include/
 instance/
 lib/
 lib64
 parts/
+.eggs/
 .tox/
 .coverage
 coverage.xml

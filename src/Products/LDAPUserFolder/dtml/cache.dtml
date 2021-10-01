@@ -1,0 +1,167 @@
+<dtml-var manage_page_header>
+
+<dtml-with "_(management_view='Caches')">
+  <dtml-var manage_tabs>
+</dtml-with>
+
+<main class="container-fluid">
+  <p class="form-help">
+  This view shows all available groups exposed by the LDAP server 
+  as well as all non-anonymous logged-in users in the cache 
+  at this moment.
+  </p>
+
+  <form aid="luf_purge_all_caches" action="manage_reinit" method="post">
+    <div class="form-group row">
+      <label for="purge" class="form-label col-sm-3 col-md-2">
+        Purge all Caches
+      </label>
+      <div class="col-sm-9 col-md-10">
+        <div class="form-inline">
+          <input type="submit" id="purge" class="form-control" value=" Execute " />
+        </div>
+        <small class="form-help d-block">
+          Empty all caches and force reloading of user records from LDAP
+        </small>
+      </div>
+    </div>
+  </form>
+
+  <h3 class="my-4">Cache Timeout Settings (in seconds)</h3>
+
+  <form id="luf_timeout_auth" action="setCacheTimeout">
+    <div class="form-group row">
+      <label for="timeout_auth" class="form-label col-sm-3 col-md-2">
+        Authenticated Cache
+      </label>
+      <div class="col-sm-9 col-md-10">
+        <div class="form-inline">
+          <input type="hidden" name="cache_type" value="authenticated" />
+          <input type="text" id="timeout_auth" class="form-control text-right code" size="5" 
+            name="timeout" value="<dtml-var "getCacheTimeout('authenticated')">" />
+          <input type="submit" class="form-control" value=" Change " />
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form id="luf_timeout_anonymous" action="setCacheTimeout">
+    <div class="form-group row">
+      <label for="timeout_anon" class="form-label col-sm-3 col-md-2">
+        Anonymous Cache
+      </label>
+      <div class="col-sm-9 col-md-10">
+        <div class="form-inline">
+          <input type="hidden" name="cache_type" value="anonymous" />
+          <input type="text" id="timeout_anon" class="form-control text-right code" size="5" 
+            name="timeout" value="<dtml-var "getCacheTimeout('anonymous')">" />
+          <input type="submit" class="form-control" value=" Change " />
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form id="luf_timeout_neg" action="setCacheTimeout">
+    <div class="form-group row">
+      <label for="timeout_neg" class="form-label col-sm-3 col-md-2">
+        Negative Cache
+      </label>
+      <div class="col-sm-9 col-md-10">
+        <div class="form-inline">
+          <input type="hidden" name="cache_type" value="negative" />
+          <input type="text" id="timeout_neg" class="form-control text-right code" size="5" 
+            name="timeout" value="<dtml-var "getCacheTimeout('negative')">" />
+          <input type="submit" class="form-control" value=" Change " />
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <h3 class="my-4">Cached users</h3>
+
+
+<dtml-let auth_cache="getUsers(authenticated=1)"
+          anon_cache="getUsers(authenticated=0)">
+
+  <dtml-if "auth_cache or anon_cache">
+
+    <table id="luf_cached_users" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="zmi-luf_uname">Login Name</th>
+          <th class="zmi-luf_uid">User ID</th>
+          <th class="zmi-luf_roles">Roles</th>
+          <th class="zmi-luf_created">Creation time</th>
+          <th class="zmi-luf_cachetype">Cache Type</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <dtml-in expr="auth_cache">
+          <tr>
+            <td class="zmi-luf_name">
+              <dtml-let u_dn="getUserDN()">
+                <a href="manage_userrecords?user_dn=<dtml-var u_dn url_quote>">
+                  <dtml-var expr="getUserName()">
+                </a>
+              </dtml-let>
+            </td>
+            <td class="zmi-luf_uid">
+              <dtml-var expr="getId()">
+            </td>
+            <td class="zmi-luf_roles">
+              <dtml-in expr="getRoles()">
+                <dtml-var name="sequence-item"><br/>
+              </dtml-in>
+            </td>
+            <td class="zmi-luf_created">
+              <dtml-var expr="getCreationTime()" fmt=Time>
+            </td>
+            <td class="zmi-luf_cachetype">
+              authenticated
+            </td>
+          </tr>
+        </dtml-in>
+
+        <dtml-in expr="anon_cache">
+          <tr>
+            <td class="zmi-luf_name">
+              <dtml-let u_dn="getUserDN()">
+                <a href="manage_userrecords?user_dn=<dtml-var u_dn url_quote>">
+                  <dtml-var expr="getUserName()">
+                </a>
+              </dtml-let>
+            </td>
+            <td class="zmi-luf_uid">
+              <dtml-var expr="getId()">
+            </td>
+            <td class="zmi-luf_roles">
+              <dtml-in expr="getRoles()">
+                <dtml-var name="sequence-item"><br/>
+              </dtml-in>
+            </td>
+            <td class="zmi-luf_created">
+              <dtml-var expr="getCreationTime()" fmt=Time>
+            </td>
+            <td class="zmi-luf_cachetype">
+              anonymous
+            </td>
+          </tr>
+        </dtml-in>
+
+      <tbody>
+
+    </table>
+
+  <dtml-else>
+      <div class="alert alert-info">
+        No users in cache (superuser is never cached)
+      </div>
+  </dtml-if>
+
+</dtml-let>
+
+</main>
+
+<dtml-var manage_page_footer>

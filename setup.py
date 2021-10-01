@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2009-2012 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2009-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -25,7 +25,7 @@ def read(*rnames):
 
 
 setup(name=NAME,
-      version=read('version.txt').strip(),
+      version='4.0.dev0',
       description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
       classifiers=[
@@ -33,16 +33,17 @@ setup(name=NAME,
         "Environment :: Web Environment",
         "Framework :: Zope",
         "Framework :: Zope :: 4",
+        "Framework :: Zope :: 5",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
         "Topic :: Software Development",
@@ -55,28 +56,28 @@ setup(name=NAME,
       url="https://github.com/dataflake/%s" % NAME,
       project_urls={
         'Documentation': 'https://productsldapuserfolder.readthedocs.io/',
-        'Issue Tracker': 'https://github.com/dataflake/%s/issues' % NAME,
-        'Sources': 'https://github.com/dataflake/%s' % NAME,
+        'Issue Tracker': ('https://github.com/dataflake/'
+                          'Products.LDAPUserFolder/issues'),
+        'Sources': 'https://github.com/dataflake/Products.LDAPUserFolder',
       },
-      python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
       license="ZPL 2.1",
-      packages=find_packages(),
+      packages=find_packages('src'),
       include_package_data=True,
       namespace_packages=['Products'],
+      package_dir={'': 'src'},
       zip_safe=False,
+      python_requires='>=3.5',
       install_requires=[
-        'setuptools >36',
+        'setuptools',
         'six',
-        'Zope >= 4',
+        'Zope >= 4.0b5',
         'dataflake.cache',
         'dataflake.fakeldap',
         'python-ldap',
         ],
       extras_require={
-        'exportimport': ['Products.GenericSetup > 2'],
-        'docs': ['Sphinx;python_version >= "3"',
-                 'Sphinx < 2;python_version < "3"',
-                 'repoze.sphinx.autointerface'],
+        'exportimport': ['Products.GenericSetup >= 2.0b1'],
+        'docs': ['Sphinx', 'sphinx_rtd_theme', 'repoze.sphinx.autointerface'],
         },
       entry_points="""
       [zope2.initialize]
