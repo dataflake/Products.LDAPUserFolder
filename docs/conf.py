@@ -27,6 +27,7 @@ import sys
 parent = os.path.dirname(os.path.dirname(__file__))
 parent_dir = os.path.abspath(parent)
 pkg_info = pkginfo.Develop(parent_dir)
+pkg_version = pkg_info.version or ''
 
 
 # -- General configuration ------------------------------------------------
