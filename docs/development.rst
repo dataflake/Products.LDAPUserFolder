@@ -30,7 +30,7 @@ virtual envuronment first using :mod:`virtualenv`:
 .. code-block:: console
 
   $ cd Products.LDAPUserFolder
-  $ python3.7 -m virtualenv .
+  $ python2.7 -m virtualenv .
   $ bin/pip install -U pip wheel
   $ bin/pip install "setuptools<52" zc.buildout tox twine
   $ bin/buildout
@@ -55,14 +55,10 @@ switch:
 
   $ bin/tox -l
   lint
-  py35
-  py36
-  py37
-  py38
-  py39
+  py27
   coverage
 
-``py37`` represents the unit tests, run under Python 3.7. You can run each
+``py27`` represents the unit tests, run under Python 2.7. You can run each
 of these by themselves with the ``-e`` switch:
 
 .. code-block:: console

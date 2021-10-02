@@ -197,7 +197,7 @@ class LDAPDelegate(Persistent):
             conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
-                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS) as e:
+                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
             pass
 
         e = None

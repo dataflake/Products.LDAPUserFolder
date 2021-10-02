@@ -123,6 +123,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
     def test_normal(self):
         from Products.GenericSetup.tests.common import DummyImportContext
+
         from ..exportimport import importLDAPUserFolder
 
         site = self._initSite()
@@ -179,6 +180,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
     def test_servers_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
+
         from ..exportimport import importLDAPUserFolder
 
         site = self._initSite(use_changed=True)
@@ -199,6 +201,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
     def test_servers_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
+
         from ..exportimport import importLDAPUserFolder
 
         site = self._initSite(use_changed=True)
@@ -225,6 +228,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
     def test_schema_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
+
         from ..exportimport import importLDAPUserFolder
 
         site = self._initSite(use_changed=True)
@@ -240,6 +244,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
     def test_schema_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
+
         from ..exportimport import importLDAPUserFolder
 
         site = self._initSite(use_changed=True)
