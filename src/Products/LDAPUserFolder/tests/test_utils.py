@@ -15,7 +15,7 @@
 
 import unittest
 
-from AccessControl import AuthEncoding
+from AuthEncoding import AuthEncoding
 
 from .. import utils
 
@@ -30,16 +30,16 @@ class PasswordCreationTests(unittest.TestCase):
 
     def test_createLDAPPassword_ssha(self):
         encoded = utils._createLDAPPassword(self.pwd, 'ssha')
-        self.assertTrue(encoded.startswith('{SSHA}'))
+        self.assertTrue(encoded.startswith(b'{SSHA}'))
         self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
 
     def test_createLDAPPassword_sha(self):
-        reference = '{SHA}pJwajxbTJu5Fvx2p4YRmsp/frQo='
+        reference = b'{SHA}pJwajxbTJu5Fvx2p4YRmsp/frQo='
         encoded = utils._createLDAPPassword(self.pwd, 'sha')
         self.assertEqual(reference, encoded)
 
     def test_createLDAPPassword_md5(self):
-        reference = '{MD5}FZcFLcTV3v/1Rgouir4dhA=='
+        reference = b'{MD5}FZcFLcTV3v/1Rgouir4dhA=='
         encoded = utils._createLDAPPassword(self.pwd, 'md5')
         self.assertEqual(reference, encoded)
 
@@ -47,7 +47,7 @@ class PasswordCreationTests(unittest.TestCase):
     def test_createLDAPPassword_crypt(self):
         # Crypt is not available on all platforms
         encoded = utils._createLDAPPassword(self.pwd, 'crypt')
-        self.assertTrue(encoded.startswith('{CRYPT}'))
+        self.assertTrue(encoded.startswith(b'{CRYPT}'))
         self.assertTrue(AuthEncoding.pw_validate(encoded, self.pwd))
 
     def test_createLDAPPassword_clear(self):

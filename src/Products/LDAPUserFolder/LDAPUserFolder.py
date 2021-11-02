@@ -33,6 +33,7 @@ from BTrees.OOBTree import OOBTree
 from OFS.SimpleItem import SimpleItem
 from OFS.userfolder import BasicUserFolder
 from zope.interface import implementer
+from ZPublisher.HTTPRequest import default_encoding
 
 from dataflake.cache.simple import SimpleCache
 
@@ -49,7 +50,6 @@ from .utils import _createDelegate
 from .utils import _createLDAPPassword
 from .utils import crypt
 from .utils import guid2string
-from .utils import to_utf8
 
 
 logger = logging.getLogger('event.LDAPUserFolder')
@@ -157,7 +157,7 @@ class LDAPUserFolder(BasicUserFolder):
         self.groups_base = 'ou=groups,dc=mycompany,dc=com'
         self.groups_scope = 2
         self._local_groups = False
-        self._roles = ['Anonymous']
+        self._roles = []
         self._implicit_mapping = False
         self._pwd_encryption = 'SHA'
         self.read_only = False
@@ -186,7 +186,7 @@ class LDAPUserFolder(BasicUserFolder):
                 logger.debug(msg)
                 return None, None, None, None
 
-            users_base = to_utf8(value)
+            users_base = value
             search_str = '(objectClass=*)'
         elif name == 'objectGUID':
             # we need to convert the GUID to a specially formatted string
@@ -229,7 +229,6 @@ class LDAPUserFolder(BasicUserFolder):
 
         user_attrs = res['results'][0]
         dn = user_attrs.get('dn')
-        utf8_dn = to_utf8(dn)
 
         if pwd is not None:
             # Step 2: Re-bind using the password passed in and the DN we
@@ -247,7 +246,7 @@ class LDAPUserFolder(BasicUserFolder):
                 # are one-way encoded I must ask the LDAP server to verify
                 # the password, I cannot do it myself.
                 try:
-                    self._delegate.connect(bind_dn=utf8_dn, bind_pwd=pwd)
+                    self._delegate.connect(bind_dn=dn, bind_pwd=pwd)
                 except Exception:
                     # Something went wrong, most likely bad credentials
                     msg = '_lookupuserbyattr: Binding as "%s" fails' % dn
@@ -256,7 +255,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             logger.debug('_lookupuserbyattr: Re-binding as "%s"' % user_dn)
 
-            auth_res = self._delegate.search(base=utf8_dn,
+            auth_res = self._delegate.search(base=dn,
                                              scope=self._delegate.BASE,
                                              filter='(objectClass=*)',
                                              attrs=known_attrs,
@@ -331,7 +330,7 @@ class LDAPUserFolder(BasicUserFolder):
         # The ZMI password field uses a hashed password string to make
         # sure no one can read the original password in the page source.
         # If the password here matches the expected hashed version, no
-        # cahnge has occurred.
+        # change has occurred.
         if bindpwd == self.getEncryptedBindPassword():
             bindpwd = self._bindpwd
 
@@ -351,9 +350,11 @@ class LDAPUserFolder(BasicUserFolder):
                             bind_dn=self._binduid, bind_pwd=self._bindpwd,
                             binduid_usage=binduid_usage, read_only=read_only)
 
-        if isinstance(roles, basestring):
+        if isinstance(roles, str):
             roles = [x.strip() for x in roles.split(',')]
-        self._roles = roles
+        elif roles is None:
+            roles = []
+        self._roles = [x for x in roles if x]
 
         self._binduid_usage = int(binduid_usage)
         self._local_groups = not not local_groups
@@ -364,7 +365,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         self._pwd_encryption = encryption
 
-        if isinstance(obj_classes, basestring):
+        if isinstance(obj_classes, str):
             obj_classes = [x.strip() for x in obj_classes.split(',')]
         self._user_objclasses = obj_classes
 
@@ -611,8 +612,8 @@ class LDAPUserFolder(BasicUserFolder):
             return None
 
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s:%s' % (name, value,
-                                           sha1(pwd or '').hexdigest())
+        negative_cache_key = '%s:%s:%s' % (
+            name, value, sha1((pwd or '').encode()).hexdigest())
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
                 return None
@@ -714,7 +715,7 @@ class LDAPUserFolder(BasicUserFolder):
         if uid_attr != 'dn':
             user_id = res['results'][0].get(uid_attr)[0]
         else:
-            user_id = to_utf8(res['results'][0].get(uid_attr))
+            user_id = res['results'][0].get(uid_attr)
 
         user = self.getUserByAttr(uid_attr, user_id, cache=1)
 
@@ -749,7 +750,7 @@ class LDAPUserFolder(BasicUserFolder):
     @security.protected(manage_users)
     def getUserDetails(self, encoded_dn, format=None, attrs=()):
         """ Return all attributes for a given DN """
-        dn = to_utf8(urllib.unquote(encoded_dn))
+        dn = urllib.parse.unquote(encoded_dn)
 
         if not attrs:
             attrs = list(self.getSchemaConfig().keys())
@@ -781,7 +782,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getGroupDetails(self, encoded_cn):
         """ Return all group details """
         result = ()
-        cn = urllib.unquote(encoded_cn)
+        cn = urllib.parse.unquote(encoded_cn)
 
         if not self._local_groups:
             fltr = self._delegate.filter_format('(cn=%s)', (cn,))
@@ -840,7 +841,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         for dn in all_dns.keys():
             try:
-                user = self.getUserByDN(to_utf8(dn))
+                user = self.getUserByDN(dn)
             except Exception:
                 user = None
 
@@ -1019,9 +1020,9 @@ class LDAPUserFolder(BasicUserFolder):
                                         filter=search_str, attrs=attrs)
 
         if res['exception']:
-            logger.warn('searchGroups Exception (%s)' % res['exception'])
+            logger.warning('searchGroups Exception (%s)' % res['exception'])
             msg = 'searchGroups searched "%s"' % search_str
-            logger.warn(msg)
+            logger.warning(msg)
             groups = [{'dn': res['exception'], 'cn': 'n/a'}]
 
         elif res['size'] > 0:
@@ -1143,7 +1144,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         else:
             group_type = 'n/a'
-            res = self._delegate.search(base=to_utf8(group_dn),
+            res = self._delegate.search(base=group_dn,
                                         scope=self._delegate.BASE,
                                         attrs=['objectClass'])
             if res['exception']:
@@ -1506,7 +1507,7 @@ class LDAPUserFolder(BasicUserFolder):
                                             attrs={'userPassword': [ldap_pw]})
             if not err_msg:
                 msg = 'Password changed for "%s"' % dn
-                user_obj = self.getUserByDN(to_utf8(dn))
+                user_obj = self.getUserByDN(dn)
                 self._expireUser(user_obj)
 
         if REQUEST:
@@ -1544,7 +1545,7 @@ class LDAPUserFolder(BasicUserFolder):
                                                 {member_attr: [user_dn]})
 
         msg = msg or 'Roles changed for %s' % (user_dn)
-        user_obj = self.getUserByDN(to_utf8(user_dn))
+        user_obj = self.getUserByDN(user_dn)
         if user_obj is not None:
             self._expireUser(user_obj)
 
@@ -1559,17 +1560,13 @@ class LDAPUserFolder(BasicUserFolder):
         prop_info = schema.get(prop_name, {})
         is_binary = prop_info.get('binary', None)
 
-        if isinstance(prop_value, basestring):
-            if is_binary:
-                prop_value = [prop_value]
-            elif not prop_info.get('multivalued', ''):
+        if is_binary:
+            prop_value = [prop_value]
+        elif isinstance(prop_value, str):
+            if not prop_info.get('multivalued', ''):
                 prop_value = [prop_value.strip()]
             else:
                 prop_value = [x.strip() for x in prop_value.split(';')]
-
-        if not is_binary:
-            for i in range(len(prop_value)):
-                prop_value[i] = to_utf8(prop_value[i])
 
         cur_rec = self._delegate.search(base=user_dn,
                                         scope=self._delegate.BASE)
@@ -1599,7 +1596,7 @@ class LDAPUserFolder(BasicUserFolder):
                                             attrs=attrs)
 
             if not err_msg:
-                user_obj = self.getUserByDN(to_utf8(user_dn))
+                user_obj = self.getUserByDN(user_dn)
                 self._expireUser(user_obj)
 
     @security.protected(manage_users)
@@ -1608,8 +1605,7 @@ class LDAPUserFolder(BasicUserFolder):
         schema = self.getSchemaConfig()
         msg = ''
         new_attrs = {}
-        utf8_dn = to_utf8(user_dn)
-        cur_user = self.getUserByDN(utf8_dn)
+        cur_user = self.getUserByDN(user_dn)
 
         if REQUEST is None:
             source = kwargs
@@ -1619,11 +1615,12 @@ class LDAPUserFolder(BasicUserFolder):
         for attr, attr_info in schema.items():
             if attr in source:
                 new = source.get(attr, '')
-                if isinstance(new, basestring):
-                    if attr_info.get('binary', ''):
-                        new = [new]
-                        attr = '%s;binary' % attr
-                    elif not attr_info.get('multivalued', ''):
+
+                if attr_info.get('binary', ''):
+                    new = [new]
+                    attr = '%s;binary' % attr
+                elif isinstance(new, str):
+                    if not attr_info.get('multivalued', ''):
                         new = [new.strip()]
                     else:
                         new = [x.strip() for x in new.split(';')]
@@ -1651,12 +1648,11 @@ class LDAPUserFolder(BasicUserFolder):
 
         # This is not good, but explode_dn mangles non-ASCII
         # characters so I simply cannot use it.
-        old_utf8_rdn = to_utf8('%s=%s' % (rdn, cur_user.getProperty(rdn)))
+        old_rdn = '%s=%s' % (rdn, cur_user.getProperty(rdn))
         new_rdn = '%s=%s' % (rdn, new_cn)
-        new_utf8_rdn = to_utf8(new_rdn)
 
-        if new_cn and new_utf8_rdn != old_utf8_rdn:
-            old_dn = utf8_dn
+        if new_cn and new_rdn != old_rdn:
+            old_dn = user_dn
             old_dn_exploded = self._delegate.explode_dn(old_dn)
             old_dn_exploded[0] = new_rdn
             new_dn = ','.join(old_dn_exploded)
@@ -1690,7 +1686,9 @@ class LDAPUserFolder(BasicUserFolder):
         """ Purge user object from caches """
         user = user or ''
 
-        if not isinstance(user, basestring):
+        if isinstance(user, bytes):
+            user = user.decode(default_encoding)
+        elif isinstance(user, LDAPUser):
             user = user.getUserName()
 
         self._cache('anonymous').invalidate(user)
@@ -1701,7 +1699,7 @@ class LDAPUserFolder(BasicUserFolder):
         # know that password. Only login and uid records are removed.
         for name in (self._login_attr, self._uid_attr):
             negative_cache_key = '%s:%s:%s' % (name, user,
-                                               sha1('').hexdigest())
+                                               sha1(b'').hexdigest())
             self._cache('negative').invalidate(negative_cache_key)
 
     @security.protected(manage_users)
@@ -1775,7 +1773,7 @@ class LDAPUserFolder(BasicUserFolder):
     def getEncryptedBindPassword(self):
         """ Return a hashed bind password for safe use in forms etc.
         """
-        return sha1(self.getProperty('_bindpwd')).hexdigest()
+        return sha1(self.getProperty('_bindpwd').encode()).hexdigest()
 
 
 def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate',

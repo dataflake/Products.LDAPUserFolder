@@ -52,7 +52,8 @@ class TestLDAPUserFolder(LDAPTest):
         ae(acl.getProperty('_uid_attr'), dg('uid_attr'))
         ae(acl.getProperty('users_base'), dg('users_base'))
         ae(acl.getProperty('users_scope'), dg('users_scope'))
-        ae(acl.getProperty('_roles'), [dg('roles')])
+        # _roles was empty, so this should be an empty list
+        ae(acl.getProperty('_roles'), [])
         ae(acl.getProperty('groups_base'), dg('groups_base'))
         ae(acl.getProperty('groups_scope'), dg('groups_scope'))
         ae(acl.getProperty('_binduid'), dg('binduid'))
@@ -807,16 +808,15 @@ class TestLDAPUserFolder(LDAPTest):
 
         # The retrieval above will add the invalid user to the negative cache
         negative_cache_key = '%s:%s:%s' % (acl._uid_attr, 'invalid',
-                                           sha1('').hexdigest())
+                                           sha1(b'').hexdigest())
         self.assertIsNotNone(acl._cache('negative').get(negative_cache_key))
 
         # Expiring the user must remove it from the negative cache
         acl._expireUser('invalid')
         self.assertIsNone(acl._cache('negative').get(negative_cache_key))
 
-        # User IDs that come in as unicode should not break anything.
-        # https://bugs.launchpad.net/bugs/700071
-        acl._expireUser(u'invalid')
+        # User IDs that come in as bytes should not break anything.
+        acl._expireUser(b'invalid')
 
     def test_manage_reinit(self):
         # part of http://www.dataflake.org/tracker/issue_00629

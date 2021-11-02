@@ -271,7 +271,7 @@ def test_suite():
         ))
 
 
-_LDAPUSERFOLDER_BODY = """\
+_LDAPUSERFOLDER_BODY = b"""\
 <?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <property name="title"></property>
@@ -279,9 +279,7 @@ _LDAPUSERFOLDER_BODY = """\
  <property name="_uid_attr"></property>
  <property name="users_base">ou=people,dc=mycompany,dc=com</property>
  <property name="users_scope">2</property>
- <property name="_roles">
-  <element value="Anonymous"/>
- </property>
+ <property name="_roles"></property>
  <property name="groups_base">ou=groups,dc=mycompany,dc=com</property>
  <property name="groups_scope">2</property>
  <property name="_binduid"></property>
@@ -308,7 +306,7 @@ _LDAPUSERFOLDER_BODY = """\
 </object>
 """
 
-_CHANGED_EXPORT = """\
+_CHANGED_EXPORT = b"""\
 <?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <property name="title">changed title</property>
@@ -371,7 +369,7 @@ _CHANGED_EXPORT = """\
 </object>
 """
 
-_SERVERS_SCHEMA_PURGE = """\
+_SERVERS_SCHEMA_PURGE = b"""\
 <?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <ldap-servers purge="True">
@@ -389,7 +387,7 @@ _SERVERS_SCHEMA_PURGE = """\
 </object>
 """
 
-_SERVERS_SCHEMA_NOPURGE = """\
+_SERVERS_SCHEMA_NOPURGE = b"""\
 <?xml version="1.0" encoding="utf-8"?>
 <object name="acl_users" meta_type="LDAPUserFolder">
  <ldap-servers purge="False">

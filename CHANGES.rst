@@ -4,8 +4,17 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
+
 4.0 (unreleased)
 ----------------
+- fixed configuration checkbox for `Read only`
+
+- no longer use `Anonymous` as default value for `Default user Roles`.
+
+- drop support for Python 2 and add support for Python 3.5 through 3.9.
+  This package is now compatible with Zope 4 on Python 3 and Zope 5. If you
+  use Zope 4 on Python 2, please use the LDAPUserFolder 3 release series. If
+  you use Zope 2 please use the LDAPUserFolder 2 release series.
 
 
 3.2 (2021-10-01)

@@ -29,7 +29,6 @@ from .cache import getResource
 from .cache import removeResource
 from .LDAPUser import LDAPUser
 from .utils import BINARY_ATTRIBUTES
-from .utils import from_utf8
 from .utils import registerDelegate
 from .utils import to_utf8
 
@@ -197,10 +196,11 @@ class LDAPDelegate(Persistent):
             conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
-                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS):
+                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS,
+                ldap.UNWILLING_TO_PERFORM):
             pass
 
-        e = None
+        exc = None
 
         for server in self._servers:
             conn_string = self._createConnectionString(server)
@@ -210,9 +210,9 @@ class LDAPDelegate(Persistent):
                                         conn_timeout=server['conn_timeout'],
                                         op_timeout=server['op_timeout'])
                 return newconn
-            except (ldap.SERVER_DOWN, ldap.TIMEOUT,
-                    ldap.INVALID_CREDENTIALS) as e:
-                continue
+            except (ldap.SERVER_DOWN, ldap.TIMEOUT,  # NOQA: F841
+                    ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM) as e:
+                exc = e
 
         # If we get here it means either there are no servers defined or we
         # tried them all. Try to produce a meaningful message and raise
@@ -220,8 +220,8 @@ class LDAPDelegate(Persistent):
         if len(self._servers) == 0:
             logger.critical('No servers defined')
         else:
-            if e is not None:
-                msg_supplement = str(e)
+            if exc is not None:
+                msg_supplement = str(exc)
             else:
                 msg_supplement = 'n/a'
 
@@ -229,8 +229,8 @@ class LDAPDelegate(Persistent):
                         conn_string, msg_supplement)
             logger.critical(err_msg, exc_info=1)
 
-        if e is not None:
-            raise e
+        if exc is not None:
+            raise exc
 
         return None
 
@@ -296,16 +296,16 @@ class LDAPDelegate(Persistent):
             connection.timeout = op_timeout
 
         # Now bind with the credentials given. Let exceptions propagate out.
-        connection.simple_bind_s(user_dn, user_pwd)
+        # Don't bind if no credentials are provided.
+        if user_dn and user_pwd:
+            connection.simple_bind_s(user_dn, user_pwd)
 
         return connection
 
     def search(self, base, scope, filter='(objectClass=*)', attrs=[],
-               bind_dn='', bind_pwd='', convert_filter=True):
+               bind_dn='', bind_pwd=''):
         """ The main search engine """
         result = {'exception': '', 'size': 0, 'results': []}
-        if convert_filter:
-            filter = to_utf8(filter)
         base = self._clean_dn(base)
 
         try:
@@ -342,15 +342,18 @@ class LDAPDelegate(Persistent):
                     continue
 
                 for key, value in items:
-                    if not isinstance(value, str) and \
-                       key.lower() not in BINARY_ATTRIBUTES:
+                    is_binary = key.lower() in BINARY_ATTRIBUTES
+
+                    if not isinstance(value, str):
                         try:
                             for i in range(len(value)):
-                                value[i] = from_utf8(value[i])
+                                if not is_binary and \
+                                   isinstance(value[i], bytes):
+                                    value[i] = value[i].decode('UTF-8')
                         except Exception:
                             pass
 
-                rec_dict['dn'] = from_utf8(rec_dn)
+                rec_dict['dn'] = rec_dn
 
                 result['results'].append(rec_dict)
                 result['size'] += 1
@@ -389,7 +392,7 @@ class LDAPDelegate(Persistent):
 
         msg = ''
 
-        dn = self._clean_dn(to_utf8('%s,%s' % (rdn, base)))
+        dn = self._clean_dn('%s,%s' % (rdn, base))
         attribute_list = []
         attrs = attrs and attrs or {}
 
@@ -400,8 +403,12 @@ class LDAPDelegate(Persistent):
             else:
                 is_binary = False
 
-            if isinstance(attr_val, (str, unicode)) and not is_binary:
-                attr_val = [x.strip() for x in attr_val.split(';')]
+            if not is_binary and isinstance(attr_val, (str, bytes)):
+                if isinstance(attr_val, str):
+                    sep = ';'
+                else:
+                    sep = b';'
+                attr_val = [x.strip() for x in attr_val.split(sep)]
 
             if attr_val != ['']:
                 if not is_binary:
@@ -444,17 +451,17 @@ class LDAPDelegate(Persistent):
             return msg
 
         msg = ''
-        utf8_dn = self._clean_dn(to_utf8(dn))
+        dn = self._clean_dn(dn)
 
         try:
             connection = self.connect()
-            connection.delete_s(utf8_dn)
+            connection.delete_s(dn)
         except ldap.INVALID_CREDENTIALS:
             msg = 'No permission to delete "%s"' % dn
         except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
-                connection.delete_s(utf8_dn)
+                connection.delete_s(dn)
             except ldap.INVALID_CREDENTIALS:
                 msg = 'No permission to delete "%s"' % dn
             except Exception as e:
@@ -474,8 +481,8 @@ class LDAPDelegate(Persistent):
             logger.info(msg)
             return msg
 
-        utf8_dn = self._clean_dn(to_utf8(dn))
-        res = self.search(base=utf8_dn, scope=self.BASE)
+        clean_dn = self._clean_dn(dn)
+        res = self.search(base=clean_dn, scope=self.BASE)
         attrs = attrs and attrs or {}
 
         if res['exception']:
@@ -508,17 +515,17 @@ class LDAPDelegate(Persistent):
 
             new_rdn = attrs.get(self.rdn_attr, [''])[0]
             if new_rdn and new_rdn != cur_rec.get(self.rdn_attr)[0]:
-                raw_utf8_rdn = to_utf8('%s=%s' % (self.rdn_attr, new_rdn))
-                new_utf8_rdn = self._clean_rdn(raw_utf8_rdn)
-                connection.modrdn_s(utf8_dn, new_utf8_rdn)
-                old_dn_exploded = self.explode_dn(utf8_dn)
-                old_dn_exploded[0] = new_utf8_rdn
-                utf8_dn = ','.join(old_dn_exploded)
+                raw_rdn = '%s=%s' % (self.rdn_attr, new_rdn)
+                new_rdn = self._clean_rdn(raw_rdn)
+                connection.modrdn_s(clean_dn, new_rdn)
+                old_dn_exploded = self.explode_dn(clean_dn)
+                old_dn_exploded[0] = new_rdn
+                clean_dn = ','.join(old_dn_exploded)
 
             if mod_list:
-                connection.modify_s(utf8_dn, mod_list)
+                connection.modify_s(clean_dn, mod_list)
             else:
-                debug_msg = 'Nothing to modify: %s' % utf8_dn
+                debug_msg = 'Nothing to modify: %s' % clean_dn
                 logger.debug('LDAPDelegate.modify: %s' % debug_msg)
 
         except ldap.INVALID_CREDENTIALS as e:
@@ -557,9 +564,6 @@ class LDAPDelegate(Persistent):
 
     def _clean_rdn(self, rdn):
         """ Escape all characters that need escaping for a DN, see RFC 2253 """
-        if isinstance(rdn, unicode):
-            rdn = rdn.encode('UTF-8')
-
         if rdn.find('\\') != -1:
             # already escaped, disregard
             return rdn
@@ -581,10 +585,7 @@ class LDAPDelegate(Persistent):
         """ Indirection to avoid need for importing ldap elsewhere """
         exploded = []
         for dn_part in ldap.explode_dn(dn, notypes):
-            if isinstance(dn_part, unicode):
-                exploded.append(dn_part.encode('UTF-8'))
-            else:
-                exploded.append(dn_part)
+            exploded.append(dn_part)
         return exploded
 
     def filter_format(self, filter_template, assertion_values):
