@@ -432,11 +432,9 @@ class LDAPDelegate(Persistent):
                 e_name = e.__class__.__name__
                 msg = '%s No permission to insert "%s"' % (e_name, dn)
             except Exception as e:
-                raise
                 e_name = e.__class__.__name__
                 msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
         except Exception as e:
-            raise
             e_name = e.__class__.__name__
             msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
 
