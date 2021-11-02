@@ -1,2 +1,3 @@
 pkginfo
 repoze.sphinx.autointerface
+sphinx>4
