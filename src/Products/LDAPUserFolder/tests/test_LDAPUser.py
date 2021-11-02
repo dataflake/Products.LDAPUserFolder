@@ -55,7 +55,7 @@ class TestLDAPUser(unittest.TestCase):
         ae(u.getProperty('cn'), ug('cn'))
         ae(u.getProperty('sn'), ug('sn'))
         ae(u.getProperty('mail'), ug('mail'))
-        ae(u.getProperty('givenName'), ug('givenName'))
+        ae(u.getProperty('givenName'), ug('givenName').decode('UTF-8'))
         ae(u._getPassword(), ug('user_pw'))
         ae(u.getId(), ug('cn'))
         ae(u.getUserName(), ug('mail'))
@@ -68,12 +68,11 @@ class TestLDAPUser(unittest.TestCase):
         self.assertTrue(DateTime() >= u.getCreationTime())
 
     def testUnicodeAttributes(self):
-        # Internally, most attributes are stored as unicode.
+        # Internally, most attributes are stored as str.
         # Test some to make sure.
-        self.assertTrue(isinstance(self.u_ob.id, unicode))
-        self.assertTrue(isinstance(self.u_ob.name, unicode))
-        self.assertTrue(isinstance(self.u_ob._properties['givenName'],
-                                   unicode))
+        self.assertTrue(isinstance(self.u_ob.id, str))
+        self.assertTrue(isinstance(self.u_ob.name, str))
+        self.assertTrue(isinstance(self.u_ob._properties['givenName'], str))
 
     def testBinaryAttributes(self):
         # Some attributes are marked binary
@@ -96,8 +95,8 @@ class TestLDAPUser(unittest.TestCase):
         for mv in multivals:
             self.assertTrue(isinstance(u.getProperty(mv), (list, tuple)))
 
-    def testNameIdNotUnicode(self):
-        # Make sure name and ID are never unicode
+    def testNameUnicode(self):
+        # Make sure name and ID are never bytes
         u = self.u_ob
-        self.assertFalse(isinstance(u.getUserName(), unicode))
-        self.assertFalse(isinstance(u.getId(), unicode))
+        self.assertFalse(isinstance(u.getUserName(), bytes))
+        self.assertFalse(isinstance(u.getId(), bytes))

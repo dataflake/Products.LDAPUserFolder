@@ -145,7 +145,8 @@
       <td class="form-label">Read-only</td>
       <td>
         <dtml-let sel="getProperty('read_only') and 'checked' or ''">
-          <input type="checkbox" name="read_only" checked="&dtml-sel;" />
+          <input type="checkbox" name="read_only" 
+           <dtml-if sel>checked="&dtml-sel;"</dtml-if>/>
         </dtml-let>
       </td>
     </tr>

@@ -16,13 +16,12 @@
 from ZPublisher.HTTPRequest import default_encoding
 
 
-umlaut_name = u'G\xfcnther'
+umlaut_name = 'G\xfcnther'
 umlaut_name_encoded = umlaut_name.encode(default_encoding)
 
 defaults = {'title': 'LDAP User Folder', 'server': 'localhost:389',
             'login_attr': 'cn', 'uid_attr': 'cn',
             'users_base': 'ou=people,dc=dataflake,dc=org', 'users_scope': 2,
-            'roles': 'Anonymous',
             'groups_base': 'ou=groups,dc=dataflake,dc=org', 'groups_scope': 2,
             'binduid': 'cn=Manager,dc=dataflake,dc=org', 'bindpwd': 'mypass',
             'binduid_usage': 1, 'rdn_attr': 'cn', 'local_groups': 0,

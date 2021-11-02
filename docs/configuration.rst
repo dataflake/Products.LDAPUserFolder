@@ -122,9 +122,8 @@ following configuration values can be set:
   and "SHA".
 
 - **Default User Roles**: All users authenticated from your ldap tree
-  will be given the roles you put into this comma-delimited list.
-  Zope expects all users - anonymous as well as authenticated - to
-  have the role Anonymous.
+  will be given the roles you put into this comma-delimited list in addition
+  to the roles already defined for the user.
 
 
 LDAP Servers: Define servers

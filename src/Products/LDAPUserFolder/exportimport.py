@@ -92,17 +92,25 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
             prop_value = self.context.getProperty(prop_name)
 
             if isinstance(prop_value, (list, tuple)):
+                if not prop_value:
+                    # Super-ugly workaround for testing. This empty child node
+                    # will ensure an empty element always renders as the full
+                    # <element></element> form and not <element/>. Otheerwise,
+                    # the GenericSetup tests will fail when roundtripping a
+                    # configuration.
+                    node.appendChild(self._doc.createTextNode(''))
+
                 for value in prop_value:
-                    if isinstance(value, str):
+                    if isinstance(value, bytes):
                         value = value.decode(self._encoding)
                     child = self._doc.createElement('element')
                     child.setAttribute('value', value)
                     node.appendChild(child)
             else:
-                if isinstance(prop_value, str):
+                if isinstance(prop_value, bytes):
                     prop_value = prop_value.decode(self._encoding)
-                elif not isinstance(prop_value, basestring):
-                    prop_value = unicode(prop_value)
+                elif not isinstance(prop_value, str):
+                    prop_value = str(prop_value)
                 child = self._doc.createTextNode(prop_value)
                 node.appendChild(child)
             fragment.appendChild(node)
@@ -174,7 +182,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 child = self._doc.createElement('ldap-server')
                 for key, value in server_info.items():
                     if isinstance(value, (int, bool)):
-                        value = unicode(value)
+                        value = str(value)
                     child.setAttribute(key, value)
                 node.appendChild(child)
             fragment.appendChild(node)
@@ -192,7 +200,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
             child = self._doc.createElement('schema-item')
             for key, value in schema_info.items():
                 if isinstance(value, (int, bool)):
-                    value = unicode(value)
+                    value = str(value)
                 child.setAttribute(key, value)
             node.appendChild(child)
         fragment.appendChild(node)
@@ -213,7 +221,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
             if multivalues:
                 value = self._readSequenceValue(multivalues)
             else:
-                value = self._getNodeText(child).encode(self._encoding)
+                value = self._getNodeText(child)
                 if value.lower() in ('true', 'yes'):
                     value = True
                 elif value.lower() in ('false', 'no'):
@@ -233,7 +241,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         for node in nodes:
             if node.nodeName != 'element':
                 continue
-            values.append(node.getAttribute('value').encode(self._encoding))
+            values.append(node.getAttribute('value'))
 
         return values
 
@@ -263,8 +271,8 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 if gchild.nodeName != 'mapped-group':
                     continue
 
-                key = gchild.getAttribute('ldap_group').encode(self._encoding)
-                value = gchild.getAttribute('zope_role').encode(self._encoding)
+                key = gchild.getAttribute('ldap_group')
+                value = gchild.getAttribute('zope_role')
                 group_map[key] = value
 
         self.context._groups_mappings = group_map
@@ -283,7 +291,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 if gchild.nodeName != 'user':
                     continue
 
-                user_dn = gchild.getAttribute('dn').encode(self._encoding)
+                user_dn = gchild.getAttribute('dn')
                 values = [x for x in gchild.childNodes if
                           x.nodeType == child.ELEMENT_NODE]
                 role_dns = self._readSequenceValue(values)
@@ -307,9 +315,9 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 if gchild.nodeName != 'ldap-server':
                     continue
 
-                if gchild.getAttribute('protocol').lower() == u'ldaps':
+                if gchild.getAttribute('protocol').lower() == 'ldaps':
                     use_ssl = 1
-                elif gchild.getAttribute('protocol').lower() == u'ldapi':
+                elif gchild.getAttribute('protocol').lower() == 'ldapi':
                     use_ssl = 2
                 else:
                     use_ssl = 0
@@ -317,7 +325,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
                 if port:
                     port = int(port)
                 self.context.manage_addServer(
-                    gchild.getAttribute('host').encode(self._encoding),
+                    gchild.getAttribute('host'),
                     port=port, use_ssl=use_ssl,
                     conn_timeout=int(gchild.getAttribute('conn_timeout')),
                     op_timeout=int(gchild.getAttribute('op_timeout')))
@@ -340,7 +348,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
 
                 def get(name):
                     attr = gchild.getAttribute(name)
-                    return attr.encode(self._encoding)
+                    return attr
 
                 ldap_name = get('ldap_name')
                 item = self.context._ldapschema.setdefault(ldap_name, {})

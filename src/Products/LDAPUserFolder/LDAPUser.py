@@ -18,9 +18,8 @@ import time
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import access_contents_information
-from AccessControl.User import BasicUser
+from AccessControl.users import BasicUser
 from DateTime import DateTime
-from ZPublisher.HTTPRequest import default_encoding
 
 from .utils import _verifyUnicode
 
@@ -66,7 +65,7 @@ class LDAPUser(BasicUser):
             else:
                 prop = user_attrs.get(key, [None])[0]
 
-            if isinstance(prop, str) and key != 'objectGUID' and \
+            if isinstance(prop, bytes) and key != 'objectGUID' and \
                key not in binary_attrs:
                 prop = _verifyUnicode(prop)
 
@@ -83,9 +82,6 @@ class LDAPUser(BasicUser):
 
     @security.public
     def getId(self):
-        if isinstance(self.id, unicode):
-            return self.id.encode(default_encoding)
-
         return self.id
 
     ######################################################
@@ -100,9 +96,6 @@ class LDAPUser(BasicUser):
     @security.public
     def getUserName(self):
         """ Get the name associated with this user """
-        if isinstance(self.name, unicode):
-            return self.name.encode(default_encoding)
-
         return self.name
 
     @security.public
@@ -128,12 +121,7 @@ class LDAPUser(BasicUser):
         my_props = self._properties
 
         if name in my_props:
-            prop = my_props.get(name)
-
-            if isinstance(prop, unicode):
-                prop = prop.encode(default_encoding)
-
-            return prop
+            return my_props.get(name)
 
         else:
             raise AttributeError(name)
@@ -144,17 +132,11 @@ class LDAPUser(BasicUser):
             if the attribute is indeed public.
         """
         prop = self._properties.get(prop_name, default)
-        if isinstance(prop, unicode):
-            prop = prop.encode(default_encoding)
-
         return prop
 
     @security.protected(access_contents_information)
     def getUserDN(self):
         """ Return the user's full Distinguished Name """
-        if isinstance(self._dn, unicode):
-            return self._dn.encode(default_encoding)
-
         return self._dn
 
     @security.protected(access_contents_information)

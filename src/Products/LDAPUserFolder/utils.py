@@ -17,7 +17,7 @@ import base64
 import codecs
 from hashlib import md5
 
-from AccessControl import AuthEncoding
+from AuthEncoding import AuthEncoding
 from ZPublisher.HTTPRequest import default_encoding
 
 
@@ -54,14 +54,11 @@ VALID_GROUP_ATTRIBUTES = set(['name', 'displayName', 'cn', 'dn',
 #################################################
 
 def _verifyUnicode(st):
-    """ Verify that the string is unicode """
-    if isinstance(st, unicode):
+    """ Verify that the string is not bytes """
+    if isinstance(st, str):
         return st
-    else:
-        try:
-            return unicode(st)
-        except UnicodeError:
-            return unicode(st, default_encoding)
+
+    return st.decode()
 
 
 def _createLDAPPassword(password, encoding='SHA'):
@@ -72,8 +69,8 @@ def _createLDAPPassword(password, encoding='SHA'):
     if encoding in ('SSHA', 'SHA', 'CRYPT'):
         pwd_str = AuthEncoding.pw_encrypt(password, encoding)
     elif encoding == 'MD5':
-        m = md5(password)
-        pwd_str = '{MD5}' + base64.encodestring(m.digest())
+        m = md5(password.encode('UTF-8'))
+        pwd_str = b'{MD5}' + base64.encodebytes(m.digest())
     elif encoding == 'CLEAR':
         pwd_str = password
     else:
@@ -87,15 +84,15 @@ encodeUTF8, decodeUTF8 = codecs.lookup('UTF-8')[:2]
 
 if getattr(reader, '__module__', '') == 'encodings.utf_8':
     # Everything stays UTF-8, so we can make this cheaper
-    to_utf8 = from_utf8 = str
+    def to_utf8(s):
+        if isinstance(s, str):
+            return s.encode('UTF-8')
+        return s
 
 else:
 
-    def from_utf8(s):
-        return encodeLocal(decodeUTF8(s)[0])[0]
-
     def to_utf8(s):
-        if isinstance(s, str):
+        if isinstance(s, bytes):
             s = decodeLocal(s)[0]
         return encodeUTF8(s)[0]
 
