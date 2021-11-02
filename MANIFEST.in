@@ -5,6 +5,7 @@ include buildout4.cfg
 include tox.ini
 
 recursive-include docs Makefile
+recursive-include docs requirements.txt
 recursive-include docs *.py
 recursive-include docs *.rst
 
