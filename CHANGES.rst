@@ -6,6 +6,7 @@ releases, see the file `HISTORY.txt` in this folder.
 
 4.1 (unreleased)
 ----------------
+- python-ldap 3.4 is no longer compatible with Python 3.5
 
 
 4.0 (2021-11-02)
