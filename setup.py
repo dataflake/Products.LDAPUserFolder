@@ -25,7 +25,7 @@ def read(*rnames):
 
 
 setup(name=NAME,
-      version='4.1.dev0',
+      version='4.1',
       description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
       classifiers=[
@@ -43,6 +43,8 @@ setup(name=NAME,
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
