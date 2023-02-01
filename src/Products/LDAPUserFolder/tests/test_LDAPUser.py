@@ -42,8 +42,8 @@ class TestLDAPUser(unittest.TestCase):
                    'objectClasses': ug('objectClasses')}
         self.u_ob = LDAPUser(ug('cn'), ug('mail'), ug('user_pw'),
                              ug('user_roles'), [],
-                             'cn=%s,%s' % (ug('cn'),
-                                           dg('users_base')), u_attrs,
+                             'cn={},{}'.format(ug('cn'),
+                                               dg('users_base')), u_attrs,
                              list(ug('mapped_attrs').items()),
                              ug('multivalued_attrs'),
                              ug('binary_attrs'),
@@ -62,8 +62,8 @@ class TestLDAPUser(unittest.TestCase):
         for role in ug('user_roles'):
             self.assertTrue(role in u.getRoles())
         self.assertTrue('Authenticated' in u.getRoles())
-        ae(u.getProperty('dn'), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
-        ae(u.getUserDN(), 'cn=%s,%s' % (ug('cn'), dg('users_base')))
+        ae(u.getProperty('dn'), 'cn={},{}'.format(ug('cn'), dg('users_base')))
+        ae(u.getUserDN(), 'cn={},{}'.format(ug('cn'), dg('users_base')))
         ae(u._getLDAPGroups(), tuple(ug('ldap_groups')))
         self.assertTrue(DateTime() >= u.getCreationTime())
 

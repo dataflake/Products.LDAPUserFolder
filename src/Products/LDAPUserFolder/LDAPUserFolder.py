@@ -119,7 +119,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     def __init__(self, delegate_type='LDAP delegate'):
         """ Create a new LDAPUserFolder instance """
-        self._hash = '%s%s' % (self.meta_type, str(random.random()))
+        self._hash = f'{self.meta_type}{str(random.random())}'
         self._delegate = _createDelegate(delegate_type)
         self._ldapschema = {'cn': {'ldap_name': 'cn',
                                    'friendly_name': 'Canonical Name',
@@ -195,7 +195,7 @@ class LDAPUserFolder(BasicUserFolder):
             # we can't escape the objectGUID query piece using filter_format
             # because it replaces backslashes, which we need as a result
             # of guid2string
-            ob_flt = ['(%s=%s)' % (name, value)]
+            ob_flt = [f'({name}={value})']
             search_str = self._getUserFilterString(filters=ob_flt)
         else:
             ob_flt = [self._delegate.filter_format('(%s=%s)', (name, value))]
@@ -263,9 +263,8 @@ class LDAPUserFolder(BasicUserFolder):
                                              bind_pwd=user_pwd)
 
             if auth_res['size'] == 0 or auth_res['exception']:
-                msg = '_lookupuserbyattr: "%s" lookup fails bound as "%s"' % (
-                    dn, user_dn)
-                logger.debug(msg)
+                logger.debug(f'_lookupuserbyattr: "{dn}" lookup fails bound'
+                             f' as "{user_dn}"')
                 return None, None, None, None
 
             user_attrs = auth_res['results'][0]
@@ -285,8 +284,8 @@ class LDAPUserFolder(BasicUserFolder):
     def manage_reinit(self, REQUEST=None):
         """ re-initialize and clear out users and log """
         self._clearCaches()
-        self._hash = '%s-%s' % (str(self.getPhysicalPath()),
-                                str(random.random()))
+        self._hash = '{}-{}'.format(str(self.getPhysicalPath()),
+                                    str(random.random()))
         logger.info('manage_reinit: Cleared caches')
 
         if REQUEST:
@@ -404,7 +403,7 @@ class LDAPUserFolder(BasicUserFolder):
                          op_timeout=-1, REQUEST=None):
         """ Add a new server to the list of servers in use """
         self._delegate.addServer(host, port, use_ssl, conn_timeout, op_timeout)
-        msg = 'Server at %s:%s added' % (host, port)
+        msg = f'Server at {host}:{port} added'
 
         if REQUEST:
             return self.manage_servers(manage_tabs_message=msg)
@@ -612,7 +611,7 @@ class LDAPUserFolder(BasicUserFolder):
             return None
 
         cache_type = pwd and 'authenticated' or 'anonymous'
-        negative_cache_key = '%s:%s:%s' % (
+        negative_cache_key = '{}:{}:{}'.format(
             name, value, sha1((pwd or '').encode()).hexdigest())
         if cache:
             if self._cache('negative').get(negative_cache_key) is not None:
@@ -621,8 +620,7 @@ class LDAPUserFolder(BasicUserFolder):
             cached_user = self._cache(cache_type).get(value, pwd)
 
             if cached_user:
-                msg = 'getUserByAttr: "%s" cached in %s cache' % (
-                    value, cache_type)
+                msg = f'getUserByAttr: "{value}" cached in {cache_type} cache'
                 logger.debug(msg)
                 return cached_user
 
@@ -630,20 +628,18 @@ class LDAPUserFolder(BasicUserFolder):
             name=name, value=value, pwd=pwd)
 
         if user_dn is None:
-            logger.debug('getUserByAttr: "%s=%s" not found' % (name, value))
+            logger.debug(f'getUserByAttr: "{name}={value}" not found')
             self._cache('negative').set(negative_cache_key, NonexistingUser())
             return None
 
         if user_attrs is None:
-            msg = 'getUserByAttr: "%s=%s" has no properties, bailing' % (
-                name, value)
+            msg = f'getUserByAttr: "{name}={value}" has no properties, bailing'
             logger.debug(msg)
             self._cache('negative').set(negative_cache_key, NonexistingUser())
             return None
 
         if user_roles is None or user_roles == self._roles:
-            msg = 'getUserByAttr: "%s=%s" only has roles %s' % (
-                name, value, str(user_roles))
+            msg = f'getUserByAttr: "{name}={value}" only roles: {user_roles}'
             logger.debug(msg)
 
         login_name = user_attrs.get(self._login_attr, '')
@@ -793,7 +789,7 @@ class LDAPUserFolder(BasicUserFolder):
 
             if res['exception']:
                 exc = res['exception']
-                logger.info('getGroupDetails: No group "%s" (%s)' % (cn, exc))
+                logger.info(f'getGroupDetails: No group "{cn}" ({exc})')
                 result = (('Exception', exc),)
 
             elif res['size'] > 0:
@@ -1180,8 +1176,7 @@ class LDAPUserFolder(BasicUserFolder):
         self._clearCaches()
 
         if REQUEST:
-            msg = 'Added LDAP group to Zope role mapping: %s -> %s' % (
-                group_name, role_name)
+            msg = f'Mapped LDAP group {group_name} to Zope role {role_name}.'
             return self.manage_grouprecords(manage_tabs_message=msg)
 
     @security.protected(manage_users)
@@ -1346,10 +1341,10 @@ class LDAPUserFolder(BasicUserFolder):
 
         rdn_attr = self._rdnattr
         attr_dict[rdn_attr] = source.get(rdn_attr)
-        rdn = '%s=%s' % (rdn_attr, source.get(rdn_attr))
+        rdn = f'{rdn_attr}={source.get(rdn_attr)}'
         sub_loc = source.get('sub_branch', '')
         if sub_loc:
-            base = '%s,%s' % (rdn, base)
+            base = f'{rdn},{base}'
         password = source.get('user_pw', '')
         confirm = source.get('confirm_pw', '')
 
@@ -1383,7 +1378,7 @@ class LDAPUserFolder(BasicUserFolder):
                 return msg
 
         if not msg:
-            user_dn = '%s,%s' % (rdn, base)
+            user_dn = f'{rdn},{base}'
             try:
                 user_roles = source.get('user_roles', [])
 
@@ -1401,8 +1396,7 @@ class LDAPUserFolder(BasicUserFolder):
                                 elements = 1
 
                             if elements == 1:  # simple string
-                                role = 'cn=%s,%s' % (str(role),
-                                                     self.groups_base)
+                                role = f'cn={role},{self.groups_base}'
 
                             group_dns.append(role)
 
@@ -1422,7 +1416,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if REQUEST:
             return self.manage_userrecords(manage_tabs_message=msg,
-                                           user_dn='%s,%s' % (rdn, base))
+                                           user_dn=f'{rdn},{base}')
 
     @security.protected(manage_users)
     def manage_deleteGroups(self, dns=[], REQUEST=None):
@@ -1523,7 +1517,7 @@ class LDAPUserFolder(BasicUserFolder):
         group_dns = []
         for group in role_dns:
             if group.find('=') == -1:
-                group_dns.append('cn=%s,%s' % (group, self.groups_base))
+                group_dns.append(f'cn={group},{self.groups_base}')
             else:
                 group_dns.append(group)
 
@@ -1573,7 +1567,7 @@ class LDAPUserFolder(BasicUserFolder):
 
         if cur_rec['exception'] or cur_rec['size'] == 0:
             exc = cur_rec['exception']
-            msg = 'manage_setUserProperty: No user "%s" (%s)' % (user_dn, exc)
+            msg = f'manage_setUserProperty: No user "{user_dn}" ({exc})'
             logger.debug(msg)
 
             return
@@ -1648,8 +1642,8 @@ class LDAPUserFolder(BasicUserFolder):
 
         # This is not good, but explode_dn mangles non-ASCII
         # characters so I simply cannot use it.
-        old_rdn = '%s=%s' % (rdn, cur_user.getProperty(rdn))
-        new_rdn = '%s=%s' % (rdn, new_cn)
+        old_rdn = f'{rdn}={cur_user.getProperty(rdn)}'
+        new_rdn = f'{rdn}={new_cn}'
 
         if new_cn and new_rdn != old_rdn:
             old_dn = user_dn
@@ -1698,8 +1692,8 @@ class LDAPUserFolder(BasicUserFolder):
         # were retrieved without a password, since down here we do not
         # know that password. Only login and uid records are removed.
         for name in (self._login_attr, self._uid_attr):
-            negative_cache_key = '%s:%s:%s' % (name, user,
-                                               sha1(b'').hexdigest())
+            negative_cache_key = '{}:{}:{}'.format(name, user,
+                                                   sha1(b'').hexdigest())
             self._cache('negative').invalidate(negative_cache_key)
 
     @security.protected(manage_users)
@@ -1728,7 +1722,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     def _cache(self, cache_type='anonymous'):
         """ Get the specified user cache """
-        cache = getResource('%s-%scache' % (self._hash, cache_type),
+        cache = getResource(f'{self._hash}-{cache_type}cache',
                             UserCache, ())
         cache.setTimeout(self.getCacheTimeout(cache_type))
         return cache
@@ -1796,7 +1790,7 @@ def manage_addLDAPUserFolder(self, delegate_type='LDAP delegate',
     if REQUEST is not None:
         url = this_folder.acl_users.absolute_url()
         qs = 'manage_tabs_message=%s' % msg
-        REQUEST.RESPONSE.redirect('%s/manage_main?%s' % (url, qs))
+        REQUEST.RESPONSE.redirect(f'{url}/manage_main?{qs}')
 
 
 InitializeClass(LDAPUserFolder)

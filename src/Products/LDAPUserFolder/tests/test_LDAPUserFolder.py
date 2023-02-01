@@ -293,7 +293,7 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertEqual(len(result), 0)
 
         # We can also try this through the extra user filter
-        acl._extra_user_filter = "(%s=%s)" % (key, "invalid_cn")
+        acl._extra_user_filter = f'({key}=invalid_cn)'
         result = acl.findUser(key, user_cn)
         self.assertEqual(len(result), 0)
         acl._extra_user_filter = ''
@@ -385,7 +385,7 @@ class TestLDAPUserFolder(LDAPTest):
         # Weird edge case: Someone put "dn" into the LDAP Schema tab and
         # searched for that
         acl.manage_addLDAPSchemaItem('dn', 'DN')
-        user2_dn = 'cn=%s,%s' % (user_cn, acl.users_base)
+        user2_dn = f'cn={user_cn},{acl.users_base}'
         result = acl.searchUsers(dn=user2_dn, exact_match=True)
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].get(key), user_cn)
@@ -807,8 +807,8 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertIsNone(nonexisting)
 
         # The retrieval above will add the invalid user to the negative cache
-        negative_cache_key = '%s:%s:%s' % (acl._uid_attr, 'invalid',
-                                           sha1(b'').hexdigest())
+        negative_cache_key = '{}:{}:{}'.format(acl._uid_attr, 'invalid',
+                                               sha1(b'').hexdigest())
         self.assertIsNotNone(acl._cache('negative').get(negative_cache_key))
 
         # Expiring the user must remove it from the negative cache

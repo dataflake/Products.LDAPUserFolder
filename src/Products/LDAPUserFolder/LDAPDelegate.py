@@ -71,7 +71,7 @@ class LDAPDelegate(Persistent):
     def __init__(self, server='', login_attr='', users_base='', rdn_attr='',
                  use_ssl=0, bind_dn='', bind_pwd='', read_only=0):
         """ Create a new LDAPDelegate instance """
-        self._hash = 'ldap_delegate%s' % str(random.random())
+        self._hash = f'ldap_delegate{random.random()}'
         self._servers = []
         self.edit(login_attr, users_base, rdn_attr, 'top,person', bind_dn,
                   bind_pwd, 1, read_only)
@@ -125,7 +125,7 @@ class LDAPDelegate(Persistent):
         # Delete the cached connection in case the new server was added
         # in response to the existing server failing in a way that leads
         # to nasty timeouts
-        removeResource('%s-connection' % self._hash)
+        removeResource(f'{self._hash}-connection')
 
     def getServers(self):
         """ Return info about all my servers """
@@ -151,7 +151,7 @@ class LDAPDelegate(Persistent):
 
         # Delete the cached connection so that we don't accidentally
         # continue using a server we should not be using anymore
-        removeResource('%s-connection' % self._hash)
+        removeResource(f'{self._hash}-connection')
 
     def edit(self, login_attr, users_base, rdn_attr, objectclasses,
              bind_dn, bind_pwd, binduid_usage, read_only):
@@ -190,7 +190,7 @@ class LDAPDelegate(Persistent):
             else:
                 user_dn = user_pwd = ''
 
-        conn = getResource('%s-connection' % self._hash)
+        conn = getResource(f'{self._hash}-connection')
         try:
             conn.simple_bind_s(user_dn, user_pwd)
             conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
@@ -225,8 +225,8 @@ class LDAPDelegate(Persistent):
             else:
                 msg_supplement = 'n/a'
 
-            err_msg = 'Failure connecting, last attempted server: %s (%s)' % (
-                        conn_string, msg_supplement)
+            err_msg = (f'Failure connecting, last attempted server:'
+                       f' {conn_string} ({msg_supplement})')
             logger.critical(err_msg, exc_info=1)
 
         if exc is not None:
@@ -257,7 +257,7 @@ class LDAPDelegate(Persistent):
             return self._connect(conn_str, user_dn, user_pwd)
 
         else:
-            raise ldap.CONNECT_ERROR('Bad referral "%s"' % str(exception))
+            raise ldap.CONNECT_ERROR(f'Bad referral "{exception}"')
 
     def _connect(self, connection_string, user_dn, user_pwd,
                  conn_timeout=5, op_timeout=-1):
@@ -270,7 +270,7 @@ class LDAPDelegate(Persistent):
         # configured connection strings. This excludes connections
         # resulting from a ldap.REFERRAL exception
         if connection_string in connection_strings:
-            connection = getResource('%s-connection' % self._hash,
+            connection = getResource(f'{self._hash}-connection',
                                      c_factory, (connection_string,))
         else:
             connection = c_factory(connection_string)
@@ -364,7 +364,7 @@ class LDAPDelegate(Persistent):
             result['exception'] = msg
 
         except ldap.NO_SUCH_OBJECT:
-            msg = 'Cannot find %s under %s' % (filter, base)
+            msg = f'Cannot find {filter} under {base}'
             logger.debug(msg, exc_info=1)
             result['exception'] = msg
 
@@ -392,7 +392,7 @@ class LDAPDelegate(Persistent):
 
         msg = ''
 
-        dn = self._clean_dn('%s,%s' % (rdn, base))
+        dn = self._clean_dn(f'{rdn},{base}')
         attribute_list = []
         attrs = attrs and attrs or {}
 
@@ -420,23 +420,23 @@ class LDAPDelegate(Persistent):
             connection.add_s(dn, attribute_list)
         except ldap.INVALID_CREDENTIALS as e:
             e_name = e.__class__.__name__
-            msg = '%s No permission to insert "%s"' % (e_name, dn)
+            msg = f'{e_name} No permission to insert "{dn}"'
         except ldap.ALREADY_EXISTS as e:
             e_name = e.__class__.__name__
-            msg = '%s Record with dn "%s" already exists' % (e_name, dn)
+            msg = f'{e_name} Record with dn "{dn}" already exists'
         except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
                 connection.add_s(dn, attribute_list)
             except ldap.INVALID_CREDENTIALS:
                 e_name = e.__class__.__name__
-                msg = '%s No permission to insert "%s"' % (e_name, dn)
+                msg = f'{e_name} No permission to insert "{dn}"'
             except Exception as e:
                 e_name = e.__class__.__name__
-                msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
+                msg = f'{e_name} LDAPDelegate.insert: {e}'
         except Exception as e:
             e_name = e.__class__.__name__
-            msg = '%s LDAPDelegate.insert: %s' % (e_name, str(e))
+            msg = f'{e_name} LDAPDelegate.insert: {e}'
 
         if msg != '':
             logger.info(msg, exc_info=1)
@@ -457,17 +457,17 @@ class LDAPDelegate(Persistent):
             connection = self.connect()
             connection.delete_s(dn)
         except ldap.INVALID_CREDENTIALS:
-            msg = 'No permission to delete "%s"' % dn
+            msg = f'No permission to delete "{dn}"'
         except ldap.REFERRAL as e:
             try:
                 connection = self.handle_referral(e)
                 connection.delete_s(dn)
             except ldap.INVALID_CREDENTIALS:
-                msg = 'No permission to delete "%s"' % dn
+                msg = f'No permission to delete "{dn}"' % dn
             except Exception as e:
-                msg = 'LDAPDelegate.delete: %s' % str(e)
+                msg = f'LDAPDelegate.delete: {e}'
         except Exception as e:
-            msg = 'LDAPDelegate.delete: %s' % str(e)
+            msg = f'LDAPDelegate.delete: {e}'
 
         if msg != '':
             logger.info(msg, exc_info=1)
@@ -489,7 +489,7 @@ class LDAPDelegate(Persistent):
             return res['exception']
 
         if res['size'] == 0:
-            return 'LDAPDelegate.modify: Cannot find dn "%s"' % dn
+            return f'LDAPDelegate.modify: Cannot find dn "{dn}"'
 
         cur_rec = res['results'][0]
         mod_list = []
@@ -515,7 +515,7 @@ class LDAPDelegate(Persistent):
 
             new_rdn = attrs.get(self.rdn_attr, [''])[0]
             if new_rdn and new_rdn != cur_rec.get(self.rdn_attr)[0]:
-                raw_rdn = '%s=%s' % (self.rdn_attr, new_rdn)
+                raw_rdn = f'{self.rdn_attr}={new_rdn}'
                 new_rdn = self._clean_rdn(raw_rdn)
                 connection.modrdn_s(clean_dn, new_rdn)
                 old_dn_exploded = self.explode_dn(clean_dn)
@@ -530,7 +530,7 @@ class LDAPDelegate(Persistent):
 
         except ldap.INVALID_CREDENTIALS as e:
             e_name = e.__class__.__name__
-            msg = '%s No permission to modify "%s"' % (e_name, dn)
+            msg = f'{e_name} No permission to modify "{dn}"'
 
         except ldap.REFERRAL as e:
             try:
@@ -538,14 +538,14 @@ class LDAPDelegate(Persistent):
                 connection.modify_s(dn, mod_list)
             except ldap.INVALID_CREDENTIALS as e:
                 e_name = e.__class__.__name__
-                msg = '%s No permission to modify "%s"' % (e_name, dn)
+                msg = f'{e_name} No permission to modify "{dn}"'
             except Exception as e:
                 e_name = e.__class__.__name__
-                msg = '%s LDAPDelegate.modify: %s' % (e_name, str(e))
+                msg = f'{e_name} LDAPDelegate.modify: {str(e)}'
 
         except Exception as e:
             e_name = e.__class__.__name__
-            msg = '%s LDAPDelegate.modify: %s' % (e_name, str(e))
+            msg = f'{e_name} LDAPDelegate.modify: {str(e)}'
 
         if msg != '':
             logger.info(msg, exc_info=1)
@@ -571,7 +571,7 @@ class LDAPDelegate(Persistent):
         try:
             key, val = rdn.split('=')
             val = val.lstrip()
-            return '%s=%s' % (key, escape_dn_chars(val))
+            return f'{key}={escape_dn_chars(val)}'
         except ValueError:
             return rdn
 
@@ -609,7 +609,7 @@ class LDAPDelegate(Persistent):
         if protocol == 'ldapi':
             hostport = server_info['host']
         else:
-            hostport = '%s:%s' % (server_info['host'], server_info['port'])
+            hostport = '{}:{}'.format(server_info['host'], server_info['port'])
 
         ldap_url = LDAPUrl(urlscheme=protocol, hostport=hostport)
 

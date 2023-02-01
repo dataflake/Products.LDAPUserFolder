@@ -140,7 +140,7 @@ class TestThreadSafety(unittest.TestCase):
 class CacheThread(threading.Thread):
 
     def __init__(self, cache_class, cache_name, cache_key):
-        super(CacheThread, self).__init__()
+        super().__init__()
         self.cache_class = cache_class
         self.cache_name = cache_name
         self.cache_key = cache_key

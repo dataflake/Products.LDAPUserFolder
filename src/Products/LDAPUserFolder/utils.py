@@ -44,9 +44,8 @@ GROUP_MEMBER_MAP = {'groupOfUniqueNames': 'uniqueMember',
 
 GROUP_MEMBER_ATTRIBUTES = set(list(GROUP_MEMBER_MAP.values()))
 
-VALID_GROUP_ATTRIBUTES = set(['name', 'displayName', 'cn', 'dn',
-                              'objectGUID', 'description',
-                              'mail']).union(GROUP_MEMBER_ATTRIBUTES)
+VALID_GROUP_ATTRIBUTES = {'name', 'displayName', 'cn', 'dn', 'objectGUID',
+                          'description', 'mail'}.union(GROUP_MEMBER_ATTRIBUTES)
 
 
 #################################################

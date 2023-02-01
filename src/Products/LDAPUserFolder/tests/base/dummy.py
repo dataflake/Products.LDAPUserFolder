@@ -48,7 +48,7 @@ class LDAPDummyUser(Implicit):
         return self.domains
 
     def getUserDN(self):
-        return 'cn=%s,%s' % (self.getId(), DN_BASE)
+        return 'cn={},{}'.format(self.getId(), DN_BASE)
 
     def _getPassword(self):
         return self.__
