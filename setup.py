@@ -51,7 +51,7 @@ setup(name=NAME,
       keywords='web application server zope authentication ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url="https://github.com/dataflake/%s" % NAME,
+      url=f"https://github.com/dataflake/{NAME}",
       project_urls={
         'Documentation': 'https://productsldapuserfolder.readthedocs.io/',
         'Issue Tracker': ('https://github.com/dataflake/'
@@ -80,8 +80,8 @@ setup(name=NAME,
           'repoze.sphinx.autointerface',
           'pkginfo'],
         },
-      entry_points="""
+      entry_points=f"""
       [zope2.initialize]
-      {} = {}:initialize
-      """.format(NAME, NAME),
+      {NAME} = {NAME}:initialize
+      """,
       )
