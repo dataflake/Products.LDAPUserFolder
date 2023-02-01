@@ -27,7 +27,7 @@ try:
     from Products.GenericSetup.testing import ExportImportZCMLLayer
     from Products.GenericSetup.tests.common import BaseRegistryTests
 except ImportError:
-    class FakeTests(object):
+    class FakeTests:
         pass
     BaseRegistryTests = BodyAdapterTestCase = FakeTests
     ExportImportZCMLLayer = GenericSetup = None
@@ -44,7 +44,7 @@ class LDAPUserFolderXMLAdapterTests(BodyAdapterTestCase, unittest.TestCase):
 
     def setUp(self):
         import Products.LDAPUserFolder
-        super(LDAPUserFolderXMLAdapterTests, self).setUp()
+        super().setUp()
         zcml.load_config('configure.zcml', Products.LDAPUserFolder)
         self._obj = LDAPUserFolder()
         self._BODY = _LDAPUSERFOLDER_BODY
@@ -240,7 +240,7 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
 
         schema = acl.getSchemaConfig()
         self.assertEqual(len(schema), 2)
-        self.assertEqual(set(schema.keys()), set(['o', 'dc']))
+        self.assertEqual(set(schema.keys()), {'o', 'dc'})
 
     def test_schema_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -257,17 +257,18 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
         schema = acl.getSchemaConfig()
         self.assertEqual(len(schema), 6)
         self.assertEqual(set(schema.keys()),
-                         set(['cn', 'dc', 'o', 'sn', 'mail', 'uid']))
+                         {'cn', 'dc', 'o', 'sn', 'mail', 'uid'})
 
 
 def test_suite():
     if GenericSetup is None:
         return unittest.TestSuite()
     else:
+        loader = unittest.defaultTestLoader
         return unittest.TestSuite((
-            unittest.makeSuite(LDAPUserFolderXMLAdapterTests),
-            unittest.makeSuite(LDAPUserFolderExportTests),
-            unittest.makeSuite(LDAPUserFolderImportTests),
+            loader.loadTestsFromTestCase(LDAPUserFolderXMLAdapterTests),
+            loader.loadTestsFromTestCase(LDAPUserFolderExportTests),
+            loader.loadTestsFromTestCase(LDAPUserFolderImportTests),
         ))
 
 

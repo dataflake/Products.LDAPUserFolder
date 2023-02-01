@@ -25,27 +25,23 @@ def read(*rnames):
 
 
 setup(name=NAME,
-      version='4.2.dev0',
+      version='5.0.dev0',
       description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
       classifiers=[
         "Development Status :: 6 - Mature",
         "Environment :: Web Environment",
         "Framework :: Zope",
-        "Framework :: Zope :: 4",
         "Framework :: Zope :: 5",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Zope Public License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
         "Topic :: Software Development",
@@ -55,7 +51,7 @@ setup(name=NAME,
       keywords='web application server zope authentication ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url="https://github.com/dataflake/%s" % NAME,
+      url=f"https://github.com/dataflake/{NAME}",
       project_urls={
         'Documentation': 'https://productsldapuserfolder.readthedocs.io/',
         'Issue Tracker': ('https://github.com/dataflake/'
@@ -68,15 +64,13 @@ setup(name=NAME,
       namespace_packages=['Products'],
       package_dir={'': 'src'},
       zip_safe=False,
-      python_requires='>=3.5',
+      python_requires='>=3.7',
       install_requires=[
         'setuptools',
-        'six',
         'Zope >= 4.0b5',
         'dataflake.cache',
         'dataflake.fakeldap',
-        'python-ldap >= 3.3, < 3.4; python_version < "3.6"',
-        'python-ldap >= 3.3; python_version >= "3.6"',
+        'python-ldap >= 3.3',
         ],
       extras_require={
         'exportimport': ['Products.GenericSetup >= 2.0b1'],
@@ -86,8 +80,8 @@ setup(name=NAME,
           'repoze.sphinx.autointerface',
           'pkginfo'],
         },
-      entry_points="""
+      entry_points=f"""
       [zope2.initialize]
-      %s = %s:initialize
-      """ % (NAME, NAME),
+      {NAME} = {NAME}:initialize
+      """,
       )

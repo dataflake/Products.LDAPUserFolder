@@ -4,8 +4,9 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
-4.2 (unreleased)
+5.0 (unreleased)
 ----------------
+- Drop support for Python 3.5 and 3.6.
 
 
 4.1 (2023-01-16)

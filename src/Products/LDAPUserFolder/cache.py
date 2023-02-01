@@ -28,7 +28,7 @@ class UserCache(TimeoutCache):
 
     def get(self, id, password=None):
         """ Retrieve a cached object if it is valid """
-        user = super(UserCache, self).get(id)
+        user = super().get(id)
 
         if password is not None and \
            user is not None and \

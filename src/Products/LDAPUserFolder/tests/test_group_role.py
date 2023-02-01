@@ -174,6 +174,6 @@ class TestGroups(LDAPTest):
         # done during insertion will be retained in the real record, unlike
         # a real LDAP server which will store and return unescaped DNs.
         # That means we cannot use the returned DN, we must construct it anew.
-        group_dn = 'cn=%s,%s' % (groupid, acl.groups_base)
+        group_dn = f'cn={groupid},{acl.groups_base}'
         acl.manage_deleteGroups(dns=[group_dn])
         self.assertTrue(len(acl.getGroups()) == 0)
