@@ -22,6 +22,11 @@ additional-rules = [
     "recursive-include src *.zcml",
     ]
 
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_static/*",
+    ]
+
 [coverage]
 fail-under = 81
 
