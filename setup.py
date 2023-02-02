@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2009-2021 Jens Vagelpohl and Contributors. All Rights Reserved.
+# Copyright (c) 2000-2023 Jens Vagelpohl and Contributors. All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
 # Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
@@ -20,11 +20,12 @@ from setuptools import setup
 NAME = 'Products.LDAPUserFolder'
 
 
-def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+def read(name):
+    with open(os.path.join(os.path.dirname(__file__), name)) as fp:
+        return fp.read()
 
 
-setup(name=NAME,
+setup(name='Products.LDAPUserFolder',
       version='5.0.dev0',
       description='A LDAP-enabled Zope user folder',
       long_description=read('README.rst'),
@@ -51,7 +52,7 @@ setup(name=NAME,
       keywords='web application server zope authentication ldap',
       author="Jens Vagelpohl and contributors",
       author_email="jens@dataflake.org",
-      url=f"https://github.com/dataflake/{NAME}",
+      url="https://github.com/dataflake/Products.LDAPUserFolder",
       project_urls={
         'Documentation': 'https://productsldapuserfolder.readthedocs.io/',
         'Issue Tracker': ('https://github.com/dataflake/'
@@ -67,7 +68,7 @@ setup(name=NAME,
       python_requires='>=3.7',
       install_requires=[
         'setuptools',
-        'Zope >= 4.0b5',
+        'Zope >= 5',
         'dataflake.cache',
         'dataflake.fakeldap',
         'python-ldap >= 3.3',
@@ -80,8 +81,8 @@ setup(name=NAME,
           'repoze.sphinx.autointerface',
           'pkginfo'],
         },
-      entry_points=f"""
+      entry_points="""
       [zope2.initialize]
-      {NAME} = {NAME}:initialize
+      Products.LDAPUserFolder = Products.LDAPUserFolder:initialize
       """,
       )
