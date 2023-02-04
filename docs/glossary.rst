@@ -2,32 +2,44 @@
 
 .. _glossary:
 
-============================
 Glossary
-============================
+========
 
 .. glossary::
 
-  Setuptools
-    `Setuptools <http://peak.telecommunity.com/DevCenter/setuptools>`_
-    builds on Python's ``distutils`` to provide easier building,
-    distribution, and installation of packages.
+  Active Directory
+    A non-standards-conformant LDAP server implementation sold by
+    Microsoft.
 
-  Virtualenv
-    An isolated Python environment.  Allows you to control which
-    packages are used on a particular project by cloning your main
-    Python.  `virtualenv <http://pypi.python.org/pypi/virtualenv>`_
-    was created by Ian Bicking.
-
-  pyldap
-    The `pyldap <https://github.com/pyldap/pyldap/>`_ library is 
+  python-ldap
+    The `python-ldap <https://pypi.org/project/python-ldap/>`_ library is 
     used to communicate with LDAP servers.
 
-  Zope
-    `The Z Object Publishing Framework <http://zope.org>`_.  The granddaddy
-    of Python web frameworks.
+  Sphinx
+    The documentation for this package is maintained using
+    `Sphinx <https://www.sphinx-doc.org/>`_, a tool to create documentation
+    in many formats based on reStructuredText files.
+
+  virtual environment
+    The `Python venv module <https://docs.python.org/3/library/venv.html>`_
+    is used to create lightweight “virtual environments”, each with their
+    own independent set of Python packages installed in their site
+    directories. A virtual environment is created on top of an existing
+    Python installation, known as the virtual environment’s “base” Python,
+    and may optionally be isolated from the packages in the base environment,
+    so only those explicitly installed in the virtual environment are
+    available.
+
+  zc.buildout
+    `zc.buildout <http://buildout.org>`_ is a Python-based build system
+    for creating, assembling and deploying applications.
 
   ZMI
-    The Zope Management Interface where you can introspect the ZODB contents
-    with a web browser. Find it at the path ``/manage`` on the host and port of
-    your Zope instance.
+    Zope offers the ZMI (Zope Managment Interface) for managing your
+    Zope site through a browser. You can get to it by going to the
+    path ``/manage`` in your Zope site and logging in with credentials
+    for a user with role ``Manager``.
+
+  Zope
+    `The Z Object Publishing Framework <https://www.zope.dev>`_.
+    The granddaddy of Python web frameworks.

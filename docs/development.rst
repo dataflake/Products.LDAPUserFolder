@@ -1,10 +1,15 @@
-=============
- Development
-=============
+Development
+===========
+
+Bug tracker
+-----------
+For bug reports, suggestions or questions please use the
+GitHub issue tracker at
+https://github.com/dataflake/Products.LDAPUserFolder/issues.
 
 
 Getting the source code
-=======================
+-----------------------
 The source code is maintained on GitHub. To check out the main branch:
 
 .. code-block:: console
@@ -15,94 +20,47 @@ You can also browse the code online at
 https://github.com/dataflake/Products.LDAPUserFolder
 
 
-Bug tracker
-===========
-For bug reports, suggestions or questions please use the GitHub issue tracker at
-https://github.com/dataflake/Products.LDAPUserFolder/issues.
-
-
-Running the tests using  :mod:`zc.buildout`
-===========================================
-:mod:`Products.LDAPUserFolder` ships with a :mod:`zc.buildout` configuration
-for setting up a development buildout. As prerequisite you need to create a
-virtual envuronment first using :mod:`virtualenv`:
+Preparing the development sandbox
+---------------------------------
+The following steps only need to be done once to install all the tools and
+scripts needed for building, packaging and testing. First, create a
+:term:`Virtual environment`. The example here uses Python 3.11, but any Python
+version supported by this package will work. Then install all the required
+tools:
 
 .. code-block:: console
 
-  $ cd Products.LDAPUserFolder
-  $ python3.7 -m virtualenv .
-  $ bin/pip install -U pip wheel
-  $ bin/pip install "setuptools<52" zc.buildout tox twine
-  $ bin/buildout
+    $ cd Products.LDAPUserFolder
+    $ python3.11 -m venv .
+    $ bin/pip install -U pip wheel
+    $ bin/pip install -U setuptools zc.buildout tox twine
 
-Once the buildout has run, the unit tests can be run as follows:
 
-.. code-block:: console
-
-  $ bin/test
-
-Code coverage and linting is done through the script at ``bin/tox``:
-
-.. code-block:: console
-
-  $ bin/tox -pall  # This runs all tests in parallel to save time
-
-Calling it without any arguments will run the unit tests, code coverage
-report and linting. You can see the tests configured for it with the ``-l``
-switch:
+Running the tests
+-----------------
+You can use ``tox`` to run the unit and integration tests in this package. The
+shipped ``tox`` configuration can run the tests for all supported platforms.
+You can read the entire long list of possible options on the
+`tox CLI interface documentation page
+<https://tox.wiki/en/latest/cli_interface.html>`_, but the following examples
+will get you started:
 
 .. code-block:: console
 
-  $ bin/tox -l
-  lint
-  py35
-  py36
-  py37
-  py38
-  py39
-  coverage
-
-``py37`` represents the unit tests, run under Python 3.7. You can run each
-of these by themselves with the ``-e`` switch:
-
-.. code-block:: console
-
-  $ bin/tox -e coverage
-
-Coverage report output is as text to the terminal, and as HTML files under
-``parts/coverage/``.
-
-The result of linting checks are shown as text on the terminal as well as
-HTML files under ``parts/flake8/``
+    $ bin/tox -l       # List all available environments
+    $ bin/tox -pall    # Run tests for all environments in parallel
+    $ bin/tox -epy311  # Run tests on Python 3.11 only
+    $ bin/tox -elint   # Run package sanity checks and lint the code
 
 
-Building the documentation using :mod:`zc.buildout`
-===================================================
-The :mod:`Products.LDAPUserFolder` buildout installs the Sphinx 
-scripts required to build the documentation, including testing 
-its code snippets:
+Building the documentation
+--------------------------
+``tox`` is also used to build the :term:`Sphinx`-based documentation. The
+input files are in the `docs` subfolder and the documentation build step will
+compile them to HTML. The output is stored in `docs/_build/html/`:
 
 .. code-block:: console
 
-    $ cd docs
-    $ make html
-    ...
-    build succeeded.
+    $ bin/tox -edocs
 
-    Build finished. The HTML pages are in _build/html.
-
-
-Making a release
-================
-These instructions assume that you have a development sandbox set 
-up using :mod:`zc.buildout` as the scripts used here are generated 
-by the buildout.
-
-.. code-block:: console
-
-  $ bin/buildout -N
-  $ bin/buildout setup setup.py sdist bdist_wheel
-  $ bin/twine upload dist/Products.LDAPUserFolder-<VERSION>*
-
-The first ``bin/buildout`` step will make sure the correct package information 
-is used.
+If the documentation contains doctests they are run as well.
