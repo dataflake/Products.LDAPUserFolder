@@ -1,9 +1,12 @@
 API documentation
 =================
 
-.. note:: On
-  `ReadTheDocs <https://productsldapuserfolder.readthedocs.io>`_
-  this page will not work correctly.
+.. note::
+
+    On `ReadTheDocs <https://productsldapuserfolder.readthedocs.io>`_
+    this page will not work correctly because the required :term:`python-ldap`
+    module does not install.
+
 
 :mod:`Products.LDAPUserFolder.interfaces.ILDAPUser`
 ---------------------------------------------------
