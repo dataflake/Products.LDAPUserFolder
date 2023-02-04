@@ -1,3 +1,2 @@
 pkginfo
 repoze.sphinx.autointerface
-sphinx
