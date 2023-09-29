@@ -1,14 +1,9 @@
 Change log for Products.LDAPUserFolder
 ======================================
 
-2.29.imio2 (unreleased)
------------------------
 
-- Nothing changed yet.
-
-
-2.29.imio1 (2023-09-29)
------------------------
+2.29 (unreleased)
+-----------------
 - in LDAPDelegate.connect, catch ldap.UNAVAILABLE exceptions
   [gbastien]
 
