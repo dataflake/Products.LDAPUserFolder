@@ -221,6 +221,7 @@ class LDAPDelegate(Persistent):
                 return conn
             except ( AttributeError
                    , ldap.SERVER_DOWN
+                   , ldap.UNAVAILABLE
                    , ldap.NO_SUCH_OBJECT
                    , ldap.TIMEOUT
                    , ldap.INVALID_CREDENTIALS
@@ -241,6 +242,7 @@ class LDAPDelegate(Persistent):
                                        )
                 return newconn
             except ( ldap.SERVER_DOWN
+                   , ldap.UNAVAILABLE
                    , ldap.TIMEOUT
                    , ldap.INVALID_CREDENTIALS
                    ), e:

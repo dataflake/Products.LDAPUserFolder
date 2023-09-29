@@ -3,6 +3,8 @@ Change log for Products.LDAPUserFolder
 
 2.29 (unreleased)
 -----------------
+- in LDAPDelegate.connect, catch ldap.UNAVAILABLE exceptions
+  [gbastien]
 
 
 2.28 (2021-09-17)
