@@ -196,7 +196,7 @@ class LDAPDelegate(Persistent):
             conn.search_s(self.u_base, self.BASE, '(objectClass=*)')
             return conn
         except (AttributeError, ldap.SERVER_DOWN, ldap.NO_SUCH_OBJECT,
-                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS,
+                ldap.TIMEOUT, ldap.INVALID_CREDENTIALS, ldap.UNAVAILABLE,
                 ldap.UNWILLING_TO_PERFORM):
             pass
 
@@ -211,7 +211,8 @@ class LDAPDelegate(Persistent):
                                         op_timeout=server['op_timeout'])
                 return newconn
             except (ldap.SERVER_DOWN, ldap.TIMEOUT,  # NOQA: F841
-                    ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM) as e:
+                    ldap.INVALID_CREDENTIALS, ldap.UNWILLING_TO_PERFORM,
+                    ldap.UNAVAILABLE) as e:
                 exc = e
 
         # If we get here it means either there are no servers defined or we

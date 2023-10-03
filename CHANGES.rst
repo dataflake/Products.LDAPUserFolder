@@ -6,6 +6,8 @@ releases, see the file `HISTORY.txt` in this folder.
 
 5.1 (unreleased)
 ----------------
+- Catch ``ldap.UNAVAILABLE`` exception while connecting to an LDAP server.
+  AD Azure may return such an exception. Contributed by Gauthier Bastien.
 
 
 5.0 (2023-02-02)
