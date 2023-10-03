@@ -4,6 +4,10 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
+5.2 (unreleased)
+----------------
+
+
 5.1 (2023-10-03)
 ----------------
 - Catch ``ldap.UNAVAILABLE`` exception while connecting to an LDAP server.
