@@ -1,4 +1,5 @@
 docutils<0.19
 sphinx
+phinx_rtd_theme
 pkginfo
 repoze.sphinx.autointerface
