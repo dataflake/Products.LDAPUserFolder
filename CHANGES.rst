@@ -6,6 +6,7 @@ releases, see the file `HISTORY.txt` in this folder.
 
 5.2 (unreleased)
 ----------------
+- add support for Python 3.12
 
 
 5.1 (2023-10-03)
