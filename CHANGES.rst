@@ -4,6 +4,10 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
+5.3 (unreleased)
+----------------
+
+
 5.2 (2024-01-03)
 ----------------
 - update to latest zope meta config templates
