@@ -4,13 +4,15 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
-5.3 (unreleased)
-----------------
 
+6.0 (unreleased)
+----------------
+- Convert to PEP 420-style namespace package.
 
 - Add support for Python 3.13, 3.14.
 
 - Drop support for Python 3.7, 3.8, 3.9.
+
 
 5.2 (2024-01-03)
 ----------------
