@@ -60,25 +60,27 @@ class TestLDAPUser(unittest.TestCase):
         ae(u.getId(), ug('cn'))
         ae(u.getUserName(), ug('mail'))
         for role in ug('user_roles'):
-            self.assertTrue(role in u.getRoles())
-        self.assertTrue('Authenticated' in u.getRoles())
+            self.assertIn(role, u.getRoles())
+        self.assertIn('Authenticated', u.getRoles())
         ae(u.getProperty('dn'), 'cn={},{}'.format(ug('cn'), dg('users_base')))
         ae(u.getUserDN(), 'cn={},{}'.format(ug('cn'), dg('users_base')))
         ae(u._getLDAPGroups(), tuple(ug('ldap_groups')))
-        self.assertTrue(DateTime() >= u.getCreationTime())
+        self.assertGreaterEqual(DateTime(), u.getCreationTime())
 
     def testUnicodeAttributes(self):
         # Internally, most attributes are stored as str.
         # Test some to make sure.
-        self.assertTrue(isinstance(self.u_ob.id, str))
-        self.assertTrue(isinstance(self.u_ob.name, str))
-        self.assertTrue(isinstance(self.u_ob._properties['givenName'], str))
+        self.assertIsInstance(self.u_ob.id, str)
+        self.assertIsInstance(self.u_ob.name, str)
+        self.assertIsInstance(self.u_ob._properties['givenName'], str)
 
     def testBinaryAttributes(self):
         # Some attributes are marked binary
         # These must not get encoded by _verifyUnicode
-        self.assertTrue(
-            self.u_ob._properties['jpegPhoto'] == self.image_contents)
+        self.assertEqual(
+            self.u_ob._properties['jpegPhoto'],
+            self.image_contents
+        )
 
     def testMappedAttrs(self):
         ae = self.assertEqual
@@ -93,10 +95,10 @@ class TestLDAPUser(unittest.TestCase):
         multivals = ug('multivalued_attrs')
 
         for mv in multivals:
-            self.assertTrue(isinstance(u.getProperty(mv), (list, tuple)))
+            self.assertIsInstance(u.getProperty(mv), (list, tuple))
 
     def testNameUnicode(self):
         # Make sure name and ID are never bytes
         u = self.u_ob
-        self.assertFalse(isinstance(u.getUserName(), bytes))
-        self.assertFalse(isinstance(u.getId(), bytes))
+        self.assertNotIsInstance(u.getUserName(), bytes)
+        self.assertNotIsInstance(u.getId(), bytes)

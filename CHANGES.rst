@@ -8,6 +8,10 @@ releases, see the file `HISTORY.txt` in this folder.
 ----------------
 
 
+- Add support for Python 3.13, 3.14.
+
+- Drop support for Python 3.7, 3.8, 3.9.
+
 5.2 (2024-01-03)
 ----------------
 - update to latest zope meta config templates

@@ -206,13 +206,13 @@ class TestLDAPUserFolder(LDAPTest):
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
         self.assertTrue(not msg)
         msg = acl.manage_addUser(REQUEST=None, kwargs=user)
-        self.assertTrue(msg.split(' ')[0] == 'ALREADY_EXISTS')
+        self.assertEqual(msg.split(' ')[0], 'ALREADY_EXISTS')
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
         for role in ug('user_roles'):
-            self.assertTrue(role in user_ob.getRoles())
+            self.assertIn(role, user_ob.getRoles())
         for role in acl.getProperty('_roles'):
-            self.assertTrue(role in user_ob.getRoles())
+            self.assertIn(role, user_ob.getRoles())
         ae(user_ob.getProperty('cn'), ug('cn'))
         ae(user_ob.getProperty('sn'), ug('sn'))
         ae(user_ob.getId(), ug(acl.getProperty('_uid_attr')))
@@ -558,12 +558,12 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertTrue(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        self.assertTrue(new_role not in user_ob.getRoles())
+        self.assertNotIn(new_role, user_ob.getRoles())
         user_dn = user_ob.getUserDN()
         acl.manage_editUserRoles(user_dn, ['Manager', new_role])
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        self.assertTrue(new_role in user_ob.getRoles())
+        self.assertIn(new_role, user_ob.getRoles())
 
     def testEditUserRolesReadOnly(self):
         acl = self.folder.acl_users
@@ -575,14 +575,14 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertTrue(not msg)
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        self.assertTrue(new_role not in user_ob.getRoles())
+        self.assertNotIn(new_role, user_ob.getRoles())
         user_dn = user_ob.getUserDN()
         acl._delegate.read_only = 1
         acl.manage_editUserPassword(user_dn, 'newpass')
         acl.manage_editUserRoles(user_dn, ['Manager', new_role])
         user_ob = acl.getUser(ug(acl.getProperty('_login_attr')))
         self.assertNotEqual(user_ob, None)
-        self.assertTrue(new_role not in user_ob.getRoles())
+        self.assertNotIn(new_role, user_ob.getRoles())
 
     def testModRDN(self):
         acl = self.folder.acl_users
@@ -607,9 +607,9 @@ class TestLDAPUserFolder(LDAPTest):
         new_dn = 'cn=new,%s' % acl.getProperty('users_base')
         ae(user_ob.getUserDN(), new_dn)
         for role in ug('user_roles'):
-            self.assertTrue(role in user_ob.getRoles())
+            self.assertIn(role, user_ob.getRoles())
         for role in acl.getProperty('_roles'):
-            self.assertTrue(role in user_ob.getRoles())
+            self.assertIn(role, user_ob.getRoles())
         noSecurityManager()
 
     def testSetUserProperty(self):
@@ -702,7 +702,7 @@ class TestLDAPUserFolder(LDAPTest):
                                             search_string, attributes)
 
         for attr in attributes:
-            self.assertTrue(attr in res)
+            self.assertIn(attr, res)
 
     def testNegativeCaching(self):
         ae = self.assertEqual
@@ -754,18 +754,22 @@ class TestLDAPUserFolder(LDAPTest):
         acl = self.folder.acl_users
         filt_string = acl._getUserFilterString()
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.assertTrue('(objectclass=%s)' % ob_class.lower()
-                            in filt_string.lower())
-        self.assertTrue('(%s=*)' % dg('uid_attr') in filt_string.lower())
+            self.assertIn(
+                '(objectclass=%s)' % ob_class.lower(),
+                filt_string.lower()
+            )
+        self.assertIn('(%s=*)' % dg('uid_attr'), filt_string.lower())
 
         filters = ['(uid=test)', '(cn=test)']
         filt_string = acl._getUserFilterString(filters=filters)
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.assertTrue('(objectclass=%s)' % ob_class.lower()
-                            in filt_string.lower())
+            self.assertIn(
+                '(objectclass=%s)' % ob_class.lower(),
+                filt_string.lower()
+            )
         for filt in filters:
-            self.assertTrue(filt in filt_string)
-        self.assertFalse('(%s=*)' % dg('uid_attr') in filt_string.lower())
+            self.assertIn(filt, filt_string)
+        self.assertNotIn('(%s=*)' % dg('uid_attr'), filt_string.lower())
 
         # Set up some different values
         acl.manage_edit(title=ag('title'), login_attr=ag('login_attr'),
@@ -784,19 +788,23 @@ class TestLDAPUserFolder(LDAPTest):
 
         filt_string = acl._getUserFilterString()
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.assertTrue('(objectclass=%s)' % ob_class.lower()
-                            in filt_string.lower())
-        self.assertTrue(ag('extra_user_filter') in filt_string)
-        self.assertTrue('(%s=*)' % ag('uid_attr') in filt_string)
+            self.assertIn(
+                '(objectclass=%s)' % ob_class.lower(),
+                filt_string.lower()
+            )
+        self.assertIn(ag('extra_user_filter'), filt_string)
+        self.assertIn('(%s=*)' % ag('uid_attr'), filt_string)
 
         filters = ['(uid=test)', '(cn=test)']
         filt_string = acl._getUserFilterString(filters=filters)
         for ob_class in acl.getProperty('_user_objclasses'):
-            self.assertTrue('(objectclass=%s)' % ob_class.lower()
-                            in filt_string.lower())
+            self.assertIn(
+                '(objectclass=%s)' % ob_class.lower(),
+                filt_string.lower()
+            )
         for filt in filters:
-            self.assertTrue(filt in filt_string)
-        self.assertFalse('(%s=*)' % ag('uid_attr') in filt_string)
+            self.assertIn(filt, filt_string)
+        self.assertNotIn('(%s=*)' % ag('uid_attr'), filt_string)
 
     def test_expireUser(self):
         # http://www.dataflake.org/tracker/issue_00617 etc.
@@ -839,4 +847,4 @@ class TestLDAPUserFolder(LDAPTest):
         self.assertFalse(acl._cache('authenticated').get('user1'))
         self.assertFalse(acl._cache('anonymous').get('user1'))
         self.assertFalse(acl._cache('negative').get('user1'))
-        self.assertFalse(acl._hash == old_hash)
+        self.assertNotEqual(acl._hash, old_hash)

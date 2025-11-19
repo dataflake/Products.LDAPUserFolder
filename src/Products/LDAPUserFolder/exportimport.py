@@ -27,7 +27,7 @@ from .interfaces import ILDAPUserFolder
 
 
 PROPERTIES = ('title', '_login_attr', '_uid_attr', 'users_base',
-              'users_scope', '_roles',  'groups_base', 'groups_scope',
+              'users_scope', '_roles', 'groups_base', 'groups_scope',
               '_binduid', '_bindpwd', '_binduid_usage', '_rdnattr',
               '_user_objclasses', '_local_groups', '_implicit_mapping',
               '_pwd_encryption', 'read_only', '_extra_user_filter',
@@ -55,7 +55,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         node.appendChild(self._extractLDAPSchema())
 
         self._logger.info('LDAPUserFolder at %s exported.' % (
-                                    self.context.absolute_url_path()))
+            self.context.absolute_url_path()))
         return node
 
     def _importNode(self, node):
@@ -72,7 +72,7 @@ class LDAPUserFolderXMLAdapter(XMLAdapterBase):
         self._initLDAPSchema(node)
 
         self._logger.info('LDAPUserFolder at %s imported.' % (
-                                    self.context.absolute_url_path()))
+            self.context.absolute_url_path()))
 
     node = property(_exportNode, _importNode)
 

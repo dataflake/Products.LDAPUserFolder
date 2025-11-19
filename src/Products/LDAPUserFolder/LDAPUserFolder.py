@@ -84,7 +84,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     manage_options = (
         ({'label': 'Configure', 'action': 'manage_main'},
-         {'label': 'LDAP Servers',  'action': 'manage_servers'},
+         {'label': 'LDAP Servers', 'action': 'manage_servers'},
          {'label': 'LDAP Schema', 'action': 'manage_ldapschema'},
          {'label': 'Caches', 'action': 'manage_cache'},
          {'label': 'Users', 'action': 'manage_userrecords'},
@@ -222,7 +222,7 @@ class LDAPUserFolder(BasicUserFolder):
                                     bind_dn=bind_dn, bind_pwd=bind_pwd)
 
         if res['size'] == 0 or res['exception']:
-            msg = '_lookupuserbyattr: No user "%s=%s" (%s)' % (
+            msg = '_lookupuserbyattr: No user "{}={}" ({})'.format(
                 name, value, res['exception'] or 'n/a')
             logger.debug(msg)
             return None, None, None, None
@@ -317,7 +317,7 @@ class LDAPUserFolder(BasicUserFolder):
 
     @security.protected(change_ldapuserfolder)
     def manage_edit(self, title, login_attr, uid_attr, users_base,
-                    users_scope, roles,  groups_base, groups_scope,
+                    users_scope, roles, groups_base, groups_scope,
                     binduid, bindpwd, binduid_usage=1, rdn_attr='cn',
                     obj_classes='top,person', local_groups=0,
                     implicit_mapping=0, encryption='SHA', read_only=0,
@@ -653,7 +653,7 @@ class LDAPUserFolder(BasicUserFolder):
             else:
                 login_name = login_name[0]
         elif len(login_name) == 0:
-            msg = 'getUserByAttr: "%s" has no "%s" (Login) value!' % (
+            msg = 'getUserByAttr: "{}" has no "{}" (Login) value!'.format(
                 user_dn, self._login_attr)
             logger.debug(msg)
             self._cache('negative').set(negative_cache_key, NonexistingUser())
@@ -662,8 +662,8 @@ class LDAPUserFolder(BasicUserFolder):
         if self._uid_attr != 'dn' and len(uid) > 0:
             uid = uid[0]
         elif len(uid) == 0:
-            msg = 'getUserByAttr: "%s" has no "%s" (UID Attribute) value!' % (
-                user_dn, self._uid_attr)
+            msg = (f'getUserByAttr: "{user_dn}" has no'
+                   f'"{self._uid_attr}" (UID Attribute) value!')
             logger.debug(msg)
             self._cache('negative').set(negative_cache_key, NonexistingUser())
             return None
@@ -1144,7 +1144,7 @@ class LDAPUserFolder(BasicUserFolder):
                                         scope=self._delegate.BASE,
                                         attrs=['objectClass'])
             if res['exception']:
-                msg = 'getGroupType: No group "%s" (%s)' % (
+                msg = 'getGroupType: No group "{}" ({})'.format(
                     group_dn, res['exception'])
                 logger.info(msg)
 
