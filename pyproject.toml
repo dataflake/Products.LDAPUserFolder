@@ -8,6 +8,57 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "Products.LDAPUserFolder"
+version = "6.1"
+description = "LDAP-enabled Zope user folder"
+keywords = ["zope", "authorization", "authentication", "ldap"]
+readme = "README.rst"
+requires-python = ">=3.10"
+license = "ZPL-2.1"
+license-files = ["LICENSE.txt"]
+authors = [
+  { name = "Jens Vagelpohl and contributors", email = "jens@dataflake.org" },
+]
+classifiers = [
+  "Development Status :: 6 - Mature",
+  "Environment :: Web Environment",
+  "Framework :: Zope",
+  "Framework :: Zope :: 5",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Internet :: WWW/HTTP :: Site Management",
+  "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+]
+dependencies = [
+  "Zope >= 5",
+  "dataflake.cache",
+  "dataflake.fakeldap",
+  "python-ldap",
+]
+
+[project.optional-dependencies]
+docs = [
+  "Sphinx",
+  "repoze.sphinx.autointerface",
+  "furo",
+]
+exportimport = ["Products.GenericSetup"]
+
+[project.urls]
+Documentation = "https://productsldapuserfolder.readthedocs.io"
+Issues = "https://github.com/dataflake/Products.LDAPUserFolder/issues"
+Source = "https://github.com/dataflake/Products.LDAPUserFolder"
+Changelog = "https://productsldapmultiplugins.readthedocs.io/en/latest/changes.html"
+
 [tool.coverage.run]
 branch = true
 source = ["Products.LDAPUserFolder"]
