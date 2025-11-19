@@ -41,7 +41,7 @@ class TestGroups(LDAPTest):
         mapped_roles = acl._mapRoles(have_roles)
         self.assertEqual(len(mapped_roles), 2)
         for role in have_roles:
-            self.assertTrue(role in mapped_roles)
+            self.assertIn(role, mapped_roles)
         acl.manage_edit(title=gp('title'), login_attr=gp('login_attr'),
                         uid_attr=gp('uid_attr'), users_base=gp('users_base'),
                         users_scope=gp('users_scope'), roles=gp('roles'),
@@ -63,7 +63,7 @@ class TestGroups(LDAPTest):
         self.assertEqual(len(acl.getGroupMappings()), 1)
         roles = acl._mapRoles(have_roles)
         self.assertEqual(len(roles), 1)
-        self.assertTrue('Manager' in roles)
+        self.assertIn('Manager', roles)
         acl.manage_deleteGroupMappings('unknown')
         self.assertEqual(len(acl.getGroupMappings()), 1)
         acl.manage_deleteGroupMappings(['ldap_group'])
@@ -92,10 +92,10 @@ class TestGroups(LDAPTest):
 
         # now let's check these groups work
         u = acl.getUser('test2')
-        self.assertFalse('Manager' in u.getRoles())
+        self.assertNotIn('Manager', u.getRoles())
         acl.manage_addGroupMapping(group_cn, 'Manager')
         u = acl.getUser('test2')
-        self.assertFalse('Manager' not in u.getRoles())
+        self.assertIn('Manager', u.getRoles())
 
         # ok, so now we can try group searches by attributes
         # Search on a bogus attribute, must return error result
@@ -142,8 +142,8 @@ class TestGroups(LDAPTest):
         all_groups = acl.getGroups()
 
         # Only one group record should exist, the one we just entered
-        self.assertTrue(len(all_groups) == 1)
-        self.assertTrue(all_groups[0][0] == groupid)
+        self.assertEqual(len(all_groups), 1)
+        self.assertEqual(all_groups[0][0], groupid)
 
         # Now delete the group. The DN we get back from getGroups will have
         # been recoded into whatever is set in utils.py (normally latin-1).
@@ -151,7 +151,7 @@ class TestGroups(LDAPTest):
         # deletion would fail silently and the group would still exist.
         group_dn = all_groups[0][1]
         acl.manage_deleteGroups(dns=[group_dn])
-        self.assertTrue(len(acl.getGroups()) == 0)
+        self.assertEqual(len(acl.getGroups()), 0)
 
     def test_groupsWithCharactersNeedingEscaping(self):
         # http://www.dataflake.org/tracker/issue_00507
@@ -165,8 +165,8 @@ class TestGroups(LDAPTest):
         all_groups = acl.getGroups()
 
         # Only one group record should exist, the one we just entered
-        self.assertTrue(len(all_groups) == 1)
-        self.assertTrue(all_groups[0][0] == groupid)
+        self.assertEqual(len(all_groups), 1)
+        self.assertEqual(all_groups[0][0], groupid)
 
         # Now delete the group.
         group_dn = all_groups[0][1]
@@ -176,4 +176,4 @@ class TestGroups(LDAPTest):
         # That means we cannot use the returned DN, we must construct it anew.
         group_dn = f'cn={groupid},{acl.groups_base}'
         acl.manage_deleteGroups(dns=[group_dn])
-        self.assertTrue(len(acl.getGroups()) == 0)
+        self.assertEqual(len(acl.getGroups()), 0)

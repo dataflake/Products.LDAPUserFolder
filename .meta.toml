@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "acd8d239"
+commit-id = "9fcd3d67"
 
 [python]
 with-windows = false
@@ -26,6 +26,7 @@ additional-rules = [
 [check-manifest]
 additional-ignores = [
     "docs/_build/html/_static/*",
+    "docs/_build/html/_static/scripts/*",
     ]
 
 [coverage]

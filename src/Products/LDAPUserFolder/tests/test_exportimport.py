@@ -170,13 +170,13 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
                 'conn_timeout': 10, 'op_timeout': 10}
         svr2 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 2, 'op_timeout': 2}
-        self.assertTrue(svr1 in servers)
-        self.assertTrue(svr2 in servers)
+        self.assertIn(svr1, servers)
+        self.assertIn(svr2, servers)
 
         local_groups = list(acl._groups_store.items())
         self.assertEqual(len(local_groups), 2)
-        self.assertTrue(('user1', ['posixAdmin', 'foobar']) in local_groups)
-        self.assertTrue(('user2', ['baz']) in local_groups)
+        self.assertIn(('user1', ['posixAdmin', 'foobar']), local_groups)
+        self.assertIn(('user2', ['baz']), local_groups)
 
     def test_servers_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -196,8 +196,8 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
                 'conn_timeout': 1, 'op_timeout': 1}
         svr2 = {'host': '/tmp/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 20, 'op_timeout': 20}
-        self.assertTrue(svr1 in servers)
-        self.assertTrue(svr2 in servers)
+        self.assertIn(svr1, servers)
+        self.assertIn(svr2, servers)
 
     def test_servers_nopurge(self):
         from Products.GenericSetup.tests.common import DummyImportContext
@@ -221,10 +221,10 @@ class LDAPUserFolderImportTests(_LDAPUserFolderSetup):
                 'conn_timeout': 10, 'op_timeout': 10}
         svr4 = {'host': '/var/spool/ldapi', 'port': 0, 'protocol': 'ldapi',
                 'conn_timeout': 2, 'op_timeout': 2}
-        self.assertTrue(svr1 in servers)
-        self.assertTrue(svr2 in servers)
-        self.assertTrue(svr3 in servers)
-        self.assertTrue(svr4 in servers)
+        self.assertIn(svr1, servers)
+        self.assertIn(svr2, servers)
+        self.assertIn(svr3, servers)
+        self.assertIn(svr4, servers)
 
     def test_schema_purge(self):
         from Products.GenericSetup.tests.common import DummyImportContext

@@ -5,9 +5,6 @@
 These are the configuration options sorted by the :term:`ZMI` navigation tab
 they appear on.
 
-.. contents::
-    :local:
-    :depth: 1
 
 Configure: Basic configuration
 ------------------------------
