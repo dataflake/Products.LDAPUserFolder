@@ -6,8 +6,8 @@
 
 <main class="container-fluid">
   <p class="form-help">
-  This view shows all available groups exposed by the LDAP server 
-  as well as all non-anonymous logged-in users in the cache 
+  This view shows all available groups exposed by the LDAP server
+  as well as all non-anonymous logged-in users in the cache
   at this moment.
   </p>
 
@@ -37,7 +37,7 @@
       <div class="col-sm-9 col-md-10">
         <div class="form-inline">
           <input type="hidden" name="cache_type" value="authenticated" />
-          <input type="text" id="timeout_auth" class="form-control text-right code" size="5" 
+          <input type="text" id="timeout_auth" class="form-control text-right code" size="5"
             name="timeout" value="<dtml-var "getCacheTimeout('authenticated')">" />
           <input type="submit" class="form-control" value=" Change " />
         </div>
@@ -53,7 +53,7 @@
       <div class="col-sm-9 col-md-10">
         <div class="form-inline">
           <input type="hidden" name="cache_type" value="anonymous" />
-          <input type="text" id="timeout_anon" class="form-control text-right code" size="5" 
+          <input type="text" id="timeout_anon" class="form-control text-right code" size="5"
             name="timeout" value="<dtml-var "getCacheTimeout('anonymous')">" />
           <input type="submit" class="form-control" value=" Change " />
         </div>
@@ -69,7 +69,7 @@
       <div class="col-sm-9 col-md-10">
         <div class="form-inline">
           <input type="hidden" name="cache_type" value="negative" />
-          <input type="text" id="timeout_neg" class="form-control text-right code" size="5" 
+          <input type="text" id="timeout_neg" class="form-control text-right code" size="5"
             name="timeout" value="<dtml-var "getCacheTimeout('negative')">" />
           <input type="submit" class="form-control" value=" Change " />
         </div>

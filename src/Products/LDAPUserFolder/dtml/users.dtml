@@ -5,7 +5,7 @@
 </dtml-with>
 
 <script type="text/javascript">
-<!-- 
+<!--
 
 isSelected = false;
 
@@ -39,7 +39,7 @@ function toggleSelect() {
   <dtml-in expr="findUser( search_param=search_param
                          , search_term=search_term
                          , exact_match=exact_match
-                         )" 
+                         )"
            mapping sort="sn">
     <dtml-if name="sequence-start">
       <dtml-if expr="_['sequence-length'] > 15">
@@ -57,8 +57,8 @@ function toggleSelect() {
                 </dtml-let>
               </dtml-in>
             </select>
-            <input class="text-monospace text-primary form-control col-3" 
-              type="text" name="search_term" placeholder="Search Term" 
+            <input class="text-monospace text-primary form-control col-3"
+              type="text" name="search_term" placeholder="Search Term"
               value="<dtml-var "REQUEST.get('search_term','')">" />
             <select class="form-control col-3" name="exact_match">
               <option value=""> Wildcard match </option>
@@ -98,7 +98,7 @@ function toggleSelect() {
       <div class="zmi-controls">
         <input class="btn btn-primary" type="submit"name="manage_deleteUsers:method" value="Delete" />
         <script type="text/javascript">
-        <!-- 
+        <!--
           if (document.forms[0]) {
           document.write('<input class="btn btn-primary" type="submit" name="selectButton" value="Select All" onClick="toggleSelect(); return false">')
           }
@@ -112,7 +112,7 @@ function toggleSelect() {
   <dtml-else>
 
     <div class="alert alert-info mb-0">
-      No record match! 
+      No record match!
       Hint: Have you set the user object classes correctly on the Configure tab?
     </div>
 
@@ -132,8 +132,8 @@ function toggleSelect() {
           </dtml-let>
         </dtml-in>
       </select>
-      <input class="text-monospace text-primary form-control col-3" 
-        type="text" name="search_term" placeholder="Search Term" 
+      <input class="text-monospace text-primary form-control col-3"
+        type="text" name="search_term" placeholder="Search Term"
         value="&dtml-search_term;"/>
       <select class="form-control col-3" name="exact_match">
         <option value=""> Wildcard match </option>
@@ -146,9 +146,9 @@ function toggleSelect() {
 <dtml-elif name="user_dn">
 
   <p class="form-help">
-    Edit the details for user 
+    Edit the details for user
     <code class="text-dark font-weight-bold">&dtml-user_dn;</code>:
-    To enter multiple values for attributes designated as multivalue in the 
+    To enter multiple values for attributes designated as multivalue in the
     LDAP Schema configuration separate the values with a semicolon (;).
   </p>
 
@@ -186,7 +186,7 @@ function toggleSelect() {
             <dtml-if expr="sk in binaries">
               <code id="&dtml-sk;"><dtml-var "';'.join(cur_vals.get('objectClass', ['(n/a)']))"></code>
             <dtml-else>
-              <input id="&dtml-sk;" class="form-control" type="text" name="&dtml-sk;" 
+              <input id="&dtml-sk;" class="form-control" type="text" name="&dtml-sk;"
                  value="<dtml-var "cur_val and ';'.join(cur_val) or ''">" />
             </dtml-if>
           </div>
@@ -220,7 +220,7 @@ function toggleSelect() {
       <dtml-let cur_roles="getGroups(dn=user_dn, attr='dn')">
         <dtml-in expr="getGroups()">
           <div class="form-group">
-            <input type="checkbox" name="role_dns:list" value="&dtml-sequence-item;" 
+            <input type="checkbox" name="role_dns:list" value="&dtml-sequence-item;"
               <dtml-if expr="_['sequence-item'] in cur_roles">checked</dtml-if> />
             &dtml-sequence-key; (&dtml-sequence-item;)
           </div>
@@ -266,7 +266,7 @@ function toggleSelect() {
           </dtml-let>
         </dtml-in>
       </select>
-      <input class="text-monospace text-primary form-control col-3" 
+      <input class="text-monospace text-primary form-control col-3"
         type="text" name="search_term" placeholder="Search Term" />
       <select class="form-control col-3" name="exact_match">
         <option value=""> Wildcard match </option>
@@ -297,7 +297,7 @@ function toggleSelect() {
             </dtml-let>
           </dtml-in>
         </select>
-        <input class="text-monospace text-primary form-control col-3" 
+        <input class="text-monospace text-primary form-control col-3"
           type="text" name="search_term" placeholder="Search Term" />
         <select class="form-control col-3" name="exact_match">
           <option value=""> Wildcard match </option>
@@ -335,7 +335,7 @@ function toggleSelect() {
             //-->
             </script>
           </div>
-        </form>  
+        </form>
       </dtml-if>
     </dtml-let>
 
@@ -345,14 +345,14 @@ function toggleSelect() {
 
       <p><i class="fas fa-plus"></i> <b>Add new user</b></p>
       <p class="form-help">
-        The user record will be created on the branch you designated 
-        as the users search base on the configuration screen. 
-        The user attributes on this form depend on the list of 
-        attributes you specified under "LDAP user attributes" on the same 
+        The user record will be created on the branch you designated
+        as the users search base on the configuration screen.
+        The user attributes on this form depend on the list of
+        attributes you specified under "LDAP user attributes" on the same
         configuration screen.
         <i>
-          To enter multiple values for attributes designated as multivalue in 
-          the LDAP Schema configuration separate the values with a 
+          To enter multiple values for attributes designated as multivalue in
+          the LDAP Schema configuration separate the values with a
           semicolon (;).
         </i>
       </p>

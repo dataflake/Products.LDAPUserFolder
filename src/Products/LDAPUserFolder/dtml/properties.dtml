@@ -7,7 +7,7 @@
 <main class="container-fluid">
 
   <p class="form-help">
-    Change the basic properties of your LDAPUserFolder 
+    Change the basic properties of your LDAPUserFolder
     on this form.
   </p>
 
@@ -35,7 +35,7 @@
           </select>
         </td>
       </tr>
-  
+
     <tr>
       <td class="form-label pl-3">User ID Attribute</td>
       <td colspan="3">
@@ -69,7 +69,7 @@
         </select>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Users Base DN</td>
       <td><input class="form-control" type="text" name="users_base" value="<dtml-var name="users_base">" /></td>
@@ -82,7 +82,7 @@
         </select>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Group storage</td>
       <td>
@@ -95,7 +95,7 @@
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Group mapping</td>
       <td>
@@ -109,7 +109,7 @@
       </td>
       <td colspan="2">&nbsp;</td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Groups Base DN</td>
       <td><input class="form-control" type="text" name="groups_base" value="<dtml-var name="groups_base">" /></td>
@@ -122,7 +122,7 @@
         </select>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Manager DN</td>
       <td><input class="form-control" type="text" name="binduid:string" value="<dtml-var expr="getProperty('_binduid')">" /></td>
@@ -145,12 +145,12 @@
       <td class="form-label">Read-only</td>
       <td>
         <dtml-let sel="getProperty('read_only') and 'checked' or ''">
-          <input type="checkbox" name="read_only" 
+          <input type="checkbox" name="read_only"
            <dtml-if sel>checked="&dtml-sel;"</dtml-if>/>
         </dtml-let>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">User object classes</td>
       <td>
@@ -167,7 +167,7 @@
         <small class="ml-1 text-danger">Danger! See the online help for details.</small>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">User password encryption</td>
       <td>
@@ -180,7 +180,7 @@
         </select>
       </td>
     </tr>
-  
+
     <tr>
       <td class="form-label pl-3">Default User Roles</td>
       <td colspan="3">
@@ -191,7 +191,7 @@
     </tr>
 
   </table>
-   
+
   <div class="zmi-controls mb-5">
     <input class="btn btn-primary" type="submit" value=" Apply Changes " />
   </div>
@@ -200,4 +200,3 @@
 
 </main>
 <dtml-var manage_page_footer>
-

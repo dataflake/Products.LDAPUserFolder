@@ -21,6 +21,6 @@
  Products.LDAPUserFolder
 =========================
 
-This product is a replacement for a Zope user folder. It does not store its 
+This product is a replacement for a Zope user folder. It does not store its
 own user objects but uses an LDAP backend to store user and group/role
 information.

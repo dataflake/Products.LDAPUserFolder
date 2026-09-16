@@ -8,8 +8,8 @@
 
   <p class="form-help">
     This view shows all LDAP group records found on the LDAP server
-    and allows deletion and addition. You can also map LDAP groups 
-    to Zope roles, thereby conferring a Zope role on members of a 
+    and allows deletion and addition. You can also map LDAP groups
+    to Zope roles, thereby conferring a Zope role on members of a
     LDAP group.
   </p>
 
@@ -37,8 +37,8 @@
     </form>
   <dtml-else>
     <div class="alert alert-info">
-      No groups found in LDAP. 
-      Please check the settings "Group base DN" and "Groups search scope" 
+      No groups found in LDAP.
+      Please check the settings "Group base DN" and "Groups search scope"
       and make sure your LDAP tree contains suitable group records.
     </div>
   </dtml-if>

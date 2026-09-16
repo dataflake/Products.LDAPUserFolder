@@ -6,6 +6,7 @@ releases, see the file `HISTORY.txt` in this folder.
 
 6.2 (unreleased)
 ----------------
+- Add support for Python 3.15.
 
 
 6.1 (2025-11-19)
@@ -108,8 +109,8 @@ releases, see the file `HISTORY.txt` in this folder.
 
 - moved documentation to Sphinx
 
-- sanitized buildout test script generation to always use the 
-  ``exportimport`` extra and always test the `GenericSetup` 
+- sanitized buildout test script generation to always use the
+  ``exportimport`` extra and always test the `GenericSetup`
   export/import support
 
 - Add ``tox`` configuration to support automated testing
@@ -125,7 +126,7 @@ releases, see the file `HISTORY.txt` in this folder.
 - ensure bind passwords used for the LDAP delegate and the user
   folder do not get out of sync
 
-- Refactor some definitions in the utils module to make them easier 
+- Refactor some definitions in the utils module to make them easier
   to override (Patch by Godefroid Chapelle)
 
 - Fixed a missing string conversion in getGroupedUsers (Patch by
@@ -134,14 +135,14 @@ releases, see the file `HISTORY.txt` in this folder.
 - Fix python-ldap error when receiving sets instead of lists for
   attributes to search on (Patch by Godefroid Chapelle)
 
-- When comparing a login value to login values found on the LDAP 
+- When comparing a login value to login values found on the LDAP
   server strip the login value first. This follows OpenLDAP behavior
-  which considers values as matches even with trailing or leading 
+  which considers values as matches even with trailing or leading
   spaces in the value query filter.
   (https://bugs.launchpad.net/bugs/1060080)
 
-- LDAPDelegate: When using a user from the Zope security machinery 
-  for the purpose of finding a suitable bind DN and password for 
+- LDAPDelegate: When using a user from the Zope security machinery
+  for the purpose of finding a suitable bind DN and password for
   connecting to a LDAP server, discard it when it's not been created
   as the result of a real login and thus has an invalid password
   (https://bugs.launchpad.net/bugs/1060112)

@@ -7,7 +7,7 @@ Narrative documentation explaining how to use :mod:`Products.LDAPUserFolder`.
 
 .. toctree::
     :maxdepth: 2
-    
+
     installation
     configuration
     faq
@@ -21,7 +21,7 @@ Technical documentation for programming interfaces and APIs.
 
 .. toctree::
     :maxdepth: 2
-    
+
     api
 
 
