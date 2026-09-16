@@ -8,6 +8,9 @@ releases, see the file `HISTORY.txt` in this folder.
 ----------------
 - Add support for Python 3.15.
 
+- Fix user record creation in sub-branches.
+  (`#11 <self.assertTrue(not msg)>`_)
+
 
 6.1 (2025-11-19)
 ----------------

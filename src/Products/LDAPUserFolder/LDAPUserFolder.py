@@ -1344,7 +1344,7 @@ class LDAPUserFolder(BasicUserFolder):
         rdn = f'{rdn_attr}={source.get(rdn_attr)}'
         sub_loc = source.get('sub_branch', '')
         if sub_loc:
-            base = f'{rdn},{base}'
+            base = f'{sub_loc},{base}'
         password = source.get('user_pw', '')
         confirm = source.get('confirm_pw', '')
 
