@@ -11,7 +11,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Products.LDAPUserFolder"
-version = "6.2"
+version = "6.3.dev0"
 description = "LDAP-enabled Zope user folder"
 keywords = ["zope", "authorization", "authentication", "ldap"]
 readme = "README.rst"
@@ -26,6 +26,7 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Zope",
   "Framework :: Zope :: 5",
+  "Framework :: Zope :: 6",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
