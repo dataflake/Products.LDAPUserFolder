@@ -4,12 +4,13 @@ Change log
 This change log covers releases starting with version 3.0. For earlier
 releases, see the file `HISTORY.txt` in this folder.
 
-6.2 (unreleased)
+
+6.2 (2026-09-16)
 ----------------
 - Add support for Python 3.15.
 
 - Fix user record creation in sub-branches.
-  (`#11 <self.assertTrue(not msg)>`_)
+  (`#11 <https://github.com/dataflake/Products.LDAPUserFolder/issues/11>`_)
 
 
 6.1 (2025-11-19)
