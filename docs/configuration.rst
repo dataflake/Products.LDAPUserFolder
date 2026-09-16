@@ -162,7 +162,7 @@ The following settings apply when adding new server connections:
   operation timeout value can guard against a hanging site by watching
   how long it takes for a LDAP request to return.
 
-  .. note:: 
+  .. note::
      Please use this setting
      with caution and make sure you know how long your LDAP server might
      take to respond under high load. With this setting a long response
@@ -200,15 +200,15 @@ The following values can be defined for an LDAP schema item:
   to an attribute name of your choosing on the user object. This is
   useful if you have code that expects certain attributes on the user
   object, like the Tracker product which expects "email". In this case
-  you would need an LDAP schema item that carries email addresses and 
+  you would need an LDAP schema item that carries email addresses and
   map it to "email".
 
 - **Multi-valued**: In the underlying libraries, all user record attributes
   that are returned as part of the LDAP record are sequences of values.
-  By default, in order to stay compatible with "normal" user folders, 
+  By default, in order to stay compatible with "normal" user folders,
   Zope user objects do not have sequences as standard user attributes,
-  so when a LDAPUser object is created only the first value in the 
-  sequence of values for a given attribute is used to populate the 
+  so when a LDAPUser object is created only the first value in the
+  sequence of values for a given attribute is used to populate the
   equivalent attribute on the user object. By declaring a schema item
   to be multi-valued the entire value sequence as delivered by the LDAP server
   is stored on the user object.

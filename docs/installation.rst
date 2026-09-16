@@ -12,7 +12,7 @@ is OpenLDAP.
 Install with ``pip``
 --------------------
 
-.. code:: 
+.. code::
 
     $ pip install Products.LDAPUserFolder
 

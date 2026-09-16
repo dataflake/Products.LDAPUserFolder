@@ -7,15 +7,15 @@
 <main class="container-fluid">
 
   <p class="form-help">
-    This form is used to input the attributes for user records 
-    as defined by your LDAP schema. 
+    This form is used to input the attributes for user records
+    as defined by your LDAP schema.
     The attributes you define here drive all the select boxes
     that deal with user attributes in the management interface, like the attribute
-    to search by on the "Search" tab, the attributes you can choose as the 
+    to search by on the "Search" tab, the attributes you can choose as the
     Login Name on the "Properties" tab or the attributes you can map to special
-    user object attributes on the "Advanced" tab. 
-    Adding or removing attributes on this page does not affect your LDAP schema 
-    in any way, it will only affect what the LDAPUserFolder knows about your schema. 
+    user object attributes on the "Advanced" tab.
+    Adding or removing attributes on this page does not affect your LDAP schema
+    in any way, it will only affect what the LDAPUserFolder knows about your schema.
   </p>
 
   <form method="post" action="&dtml-URL1;">
@@ -54,7 +54,7 @@
     </table>
 
     <div class="zmi-controls">
-      <input class="btn btn-primary" type="submit" 
+      <input class="btn btn-primary" type="submit"
         name="manage_deleteLDAPSchemaItems:method" value=" Delete " />
     </div>
 

@@ -12,7 +12,7 @@ Glossary
     Microsoft.
 
   python-ldap
-    The `python-ldap <https://pypi.org/project/python-ldap/>`_ library is 
+    The `python-ldap <https://pypi.org/project/python-ldap/>`_ library is
     used to communicate with LDAP servers.
 
   Sphinx
